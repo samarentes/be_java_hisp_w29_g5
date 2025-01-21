@@ -1,42 +1,42 @@
 [
   {
     "userId": 1,
-    "userName": "Ana Torres"
+    "name": "Ana Torres"
   },
   {
     "userId": 2,
-    "userName": "Luis García"
+    "name": "Luis García"
   },
   {
     "userId": 3,
-    "userName": "María Pérez"
+    "name": "María Pérez"
   },
   {
     "userId": 4,
-    "userName": "Carlos Mendoza"
+    "name": "Carlos Mendoza"
   },
   {
     "userId": 5,
-    "userName": "Sofía Romero"
+    "name": "Sofía Romero"
   },
   {
     "userId": 6,
-    "userName": "Javier López"
+    "name": "Javier López"
   },
   {
     "userId": 7,
-    "userName": "Laura Fernández"
+    "name": "Laura Fernández"
   },
   {
     "userId": 8,
-    "userName": "Diego Sánchez"
+    "name": "Diego Sánchez"
   },
   {
     "userId": 9,
-    "userName": "Isabel Martínez"
+    "name": "Isabel Martínez"
   },
   {
     "userId": 10,
-    "userName": "Fernando Ruiz"
+    "name": "Fernando Ruiz"
   }
 ]

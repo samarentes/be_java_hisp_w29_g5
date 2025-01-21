@@ -19,7 +19,12 @@ public class FollowRepositoryImpl implements IFollowRepository {
     private Map<UUID, Follow> follows;
 
     public FollowRepositoryImpl() throws IOException {
-        loadDataBase();
+        try {
+
+            loadDataBase();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void loadDataBase() throws IOException {
@@ -28,7 +33,8 @@ public class FollowRepositoryImpl implements IFollowRepository {
         List<Follow> followList;
 
         file = ResourceUtils.getFile("classpath:follows.json");
-        followList = objectMapper.readValue(file, new TypeReference<>(){});
+        followList = objectMapper.readValue(file, new TypeReference<>() {
+        });
 
         follows = followList.stream().collect(Collectors.toMap(follow -> UUID.randomUUID(), follow -> follow));
     }

@@ -18,7 +18,12 @@ public class PostRepositoryImpl implements IPostRepository {
     private Map<UUID, Post> posts;
 
     public PostRepositoryImpl() throws IOException {
-        loadDataBase();
+        try {
+            loadDataBase();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void loadDataBase() throws IOException {
@@ -26,8 +31,9 @@ public class PostRepositoryImpl implements IPostRepository {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Post> postList;
 
-        file= ResourceUtils.getFile("classpath:posts.json");
-        postList = objectMapper.readValue(file, new TypeReference<>(){});
+        file = ResourceUtils.getFile("classpath:posts.json");
+        postList = objectMapper.readValue(file, new TypeReference<>() {
+        });
 
         posts = postList.stream().collect(Collectors.toMap(post -> UUID.randomUUID(), post -> post));
     }

@@ -12,5 +12,131 @@
     },
     "category": 2,
     "price": 29.99
+  },
+  {
+    "userId": 2,
+    "date": "2023-10-03",
+    "product": {
+      "productId": 2,
+      "productName": "Pantalones Deportivos",
+      "type": "Ropa",
+      "brand": "Nike",
+      "color": "Negro",
+      "notes": "Comodidad y estilo."
+    },
+    "category": 2,
+    "price": 39.99
+  },
+  {
+    "userId": 3,
+    "date": "2023-10-03",
+    "product": {
+      "productId": 3,
+      "productName": "Zapatillas Running",
+      "type": "Calzado",
+      "brand": "Puma",
+      "color": "Blanco",
+      "notes": "Amortiguación avanzada."
+    },
+    "category": 1,
+    "price": 79.99
+  },
+  {
+    "userId": 4,
+    "date": "2023-10-03",
+    "product": {
+      "productId": 4,
+      "productName": "Gorra Deportiva",
+      "type": "Accesorio",
+      "brand": "Reebok",
+      "color": "Azul",
+      "notes": "Protección solar y estilo."
+    },
+    "category": 3,
+    "price": 19.99
+  },
+  {
+    "userId": 5,
+    "date": "2023-10-03",
+    "product": {
+      "productId": 5,
+      "productName": "Botella de Agua",
+      "type": "Accesorio",
+      "brand": "CamelBak",
+      "color": "Transparente",
+      "notes": "Ideal para hidratarse en el deporte."
+    },
+    "category": 3,
+    "price": 12.99
+  },
+  {
+    "userId": 6,
+    "date": "2023-10-03",
+    "product": {
+      "productId": 6,
+      "productName": "Mochila Deportiva",
+      "type": "Accesorio",
+      "brand": "Under Armour",
+      "color": "Gris",
+      "notes": "Espaciosa y cómoda."
+    },
+    "category": 3,
+    "price": 49.99
+  },
+  {
+    "userId": 7,
+    "date": "2023-10-03",
+    "product": {
+      "productId": 7,
+      "productName": "Calcetines Técnicos",
+      "type": "Ropa",
+      "brand": "Nike",
+      "color": "Blanco",
+      "notes": "Evita ampollas durante el deporte."
+    },
+    "category": 2,
+    "price": 9.99
+  },
+  {
+    "userId": 8,
+    "date": "2023-10-03",
+    "product": {
+      "productId": 8,
+      "productName": "Reloj Deportivo",
+      "type": "Accesorio",
+      "brand": "Garmin",
+      "color": "Negro",
+      "notes": "Monitorea tu actividad física."
+    },
+    "category": 4,
+    "price": 149.99
+  },
+  {
+    "userId": 9,
+    "date": "2023-10-03",
+    "product": {
+      "productId": 9,
+      "productName": "Pantalones Cortos",
+      "type": "Ropa",
+      "brand": "Adidas",
+      "color": "Azul",
+      "notes": "Perfecto para entrenamientos intensos."
+    },
+    "category": 2,
+    "price": 24.99
+  },
+  {
+    "userId": 10,
+    "date": "2023-10-03",
+    "product": {
+      "productId": 10,
+      "productName": "Camiseta Térmica",
+      "type": "Ropa",
+      "brand": "The North Face",
+      "color": "Negro",
+      "notes": "Mantén el calor en clima frío."
+    },
+    "category": 2,
+    "price": 34.99
   }
 ]
