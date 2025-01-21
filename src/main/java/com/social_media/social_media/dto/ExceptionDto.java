@@ -1,12 +1,12 @@
 package com.social_media.social_media.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 public class ExceptionDto {
     private String message;
 }
