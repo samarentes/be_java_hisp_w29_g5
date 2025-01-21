@@ -1,0 +1,16 @@
+[
+  {
+    "userId": 1,
+    "date": "2023-10-03",
+    "product": {
+      "productId": 1,
+      "productName": "Camiseta Deportiva",
+      "type": "Ropa",
+      "brand": "Adidas",
+      "color": "Rojo",
+      "notes": "Ideal para correr y hacer ejercicio."
+    },
+    "category": 2,
+    "price": 29.99
+  }
+]

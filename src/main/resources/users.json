@@ -1,0 +1,42 @@
+[
+  {
+    "userId": 1,
+    "userName": "Ana Torres"
+  },
+  {
+    "userId": 2,
+    "userName": "Luis García"
+  },
+  {
+    "userId": 3,
+    "userName": "María Pérez"
+  },
+  {
+    "userId": 4,
+    "userName": "Carlos Mendoza"
+  },
+  {
+    "userId": 5,
+    "userName": "Sofía Romero"
+  },
+  {
+    "userId": 6,
+    "userName": "Javier López"
+  },
+  {
+    "userId": 7,
+    "userName": "Laura Fernández"
+  },
+  {
+    "userId": 8,
+    "userName": "Diego Sánchez"
+  },
+  {
+    "userId": 9,
+    "userName": "Isabel Martínez"
+  },
+  {
+    "userId": 10,
+    "userName": "Fernando Ruiz"
+  }
+]
