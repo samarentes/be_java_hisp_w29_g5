@@ -124,19 +124,5 @@
     },
     "category": 2,
     "price": 24.99
-  },
-  {
-    "userId": 10,
-    "date": "2023-10-03",
-    "product": {
-      "productId": 10,
-      "productName": "Camiseta Térmica",
-      "type": "Ropa",
-      "brand": "The North Face",
-      "color": "Negro",
-      "notes": "Mantén el calor en clima frío."
-    },
-    "category": 2,
-    "price": 34.99
   }
 ]
