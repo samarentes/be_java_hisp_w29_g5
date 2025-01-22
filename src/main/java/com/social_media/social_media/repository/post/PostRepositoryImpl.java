@@ -37,4 +37,10 @@ public class PostRepositoryImpl implements IPostRepository {
 
         posts = postList.stream().collect(Collectors.toMap(post -> UUID.randomUUID(), post -> post));
     }
+
+    @Override
+    public Boolean isSeller(Long userId) {
+        return posts.values().stream()
+                .anyMatch(post -> post.getUserId().equals(userId));
+    }
 }
