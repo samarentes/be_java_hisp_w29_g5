@@ -9,6 +9,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -37,5 +38,17 @@ public class FollowRepositoryImpl implements IFollowRepository {
         });
 
         follows = followList.stream().collect(Collectors.toMap(follow -> UUID.randomUUID(), follow -> follow));
+    }
+
+    @Override
+    public List<Follow> findFollowed(Long userId) {
+        List<Follow> followedsFind = new ArrayList<>();
+        this.follows.forEach((__, follow) -> {
+            if (follow.getFollowerId().equals(userId)) {
+                followedsFind.add(follow);
+            }
+        });
+
+        return followedsFind;
     }
 }
