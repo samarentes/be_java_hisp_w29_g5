@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,4 +39,35 @@ public class FollowRepositoryImpl implements IFollowRepository {
 
         follows = followList.stream().collect(Collectors.toMap(follow -> UUID.randomUUID(), follow -> follow));
     }
+
+
+    @Override
+    public boolean unfollowFollow(Long userId, Long userIdToUnfollow) {
+        // Validar que el registro de seguimiento exista
+        Optional<Map.Entry<UUID, Follow>> followEntry = follows.entrySet().stream()
+                .filter(entry -> entry.getValue().getFollowerId().equals(userId)
+                        && entry.getValue().getFollowedId().equals(userIdToUnfollow))
+                .findFirst();
+
+        UUID followId = followEntry.get().getKey();
+        follows.remove(followId);
+        return true;
+    }
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public boolean existsByFollowerAndFollowed(Long userId, Long userIdToFollow) {
+        return follows.values().stream()
+                .anyMatch(f -> f.getFollowerId().equals(userId) && f.getFollowedId().equals(userIdToFollow));
+    }
+
+
 }
