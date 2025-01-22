@@ -1,10 +1,10 @@
 package com.social_media.social_media.controller;
 
+import com.social_media.social_media.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.social_media.social_media.dto.responseDto.FollowedResponseDto;
-import com.social_media.social_media.service.user.IUserService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
