@@ -9,6 +9,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository {
-    private Map<UUID, Post> posts;
+    private Map<Long, Post> posts;
 
     public PostRepositoryImpl() throws IOException {
         try {
@@ -31,19 +32,26 @@ public class PostRepositoryImpl implements IPostRepository {
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-
         List<Post> postList;
 
         file = ResourceUtils.getFile("classpath:posts.json");
-        postList = objectMapper.readValue(file, new TypeReference<>() {
-        });
+        postList = objectMapper.readValue(file, new TypeReference<>() {});
 
-        posts = postList.stream().collect(Collectors.toMap(post -> UUID.randomUUID(), post -> post));
+        posts = postList.stream().collect(Collectors.toMap(Post::getPostId, post -> post));
     }
 
     @Override
     public Post create(Post post) {
-        posts.put(UUID.randomUUID(), post);
+        posts.put(post.getPostId(), post);
         return post;
     }
+
+    @Override
+    public List<Post> findAll() {
+        List<Post> postList = new ArrayList<>();
+        posts.forEach((key, post) -> postList.add(post));
+        return postList;
+    }
+
+
 }

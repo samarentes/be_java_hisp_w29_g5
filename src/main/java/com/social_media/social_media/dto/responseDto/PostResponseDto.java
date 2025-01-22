@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PostResponseDto {
+    private Long post_id;
     private Long user_id;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;

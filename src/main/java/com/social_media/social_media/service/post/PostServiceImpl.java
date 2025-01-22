@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.social_media.social_media.repository.post.IPostRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_NOT_EXIST;
 
 @RequiredArgsConstructor
@@ -23,9 +26,11 @@ public class PostServiceImpl implements IPostService {
     @Override
     public PostResponseDto createPost(PostProductRequestDto postProductRequestDto) {
 
-        if(userRepository.findById(postProductRequestDto.getUser_id()).isEmpty()) throw new NotFoundException(SELLER_ID_NOT_EXIST);
+        if (userRepository.findById(postProductRequestDto.getUser_id()).isEmpty())
+            throw new NotFoundException(SELLER_ID_NOT_EXIST);
 
         Post post = Post.builder()
+                .postId((long) (postRepository.findAll().size() + 1))
                 .userId(postProductRequestDto.getUser_id())
                 .date(postProductRequestDto.getDate())
                 .product(Product.builder()
@@ -43,6 +48,7 @@ public class PostServiceImpl implements IPostService {
         Post newPost = postRepository.create(post);
 
         return PostResponseDto.builder()
+                .post_id(newPost.getPostId())
                 .user_id(newPost.getUserId())
                 .date(newPost.getDate())
                 .product(ProductResponseDto.builder()

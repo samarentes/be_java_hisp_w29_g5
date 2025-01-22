@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Post {
+    private Long postId;
     private Long userId;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
     private Product product;
     private Integer category;
     private Double price;
-
 }
