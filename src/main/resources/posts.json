@@ -1,7 +1,7 @@
 [
   {
     "userId": 1,
-    "date": "2023-10-03",
+    "date": "03-10-23",
     "product": {
       "productId": 1,
       "productName": "Camiseta Deportiva",
@@ -15,7 +15,7 @@
   },
   {
     "userId": 2,
-    "date": "2023-10-03",
+    "date": "03-10-23",
     "product": {
       "productId": 2,
       "productName": "Pantalones Deportivos",
@@ -29,7 +29,7 @@
   },
   {
     "userId": 3,
-    "date": "2023-10-03",
+    "date": "03-10-23",
     "product": {
       "productId": 3,
       "productName": "Zapatillas Running",
@@ -43,7 +43,7 @@
   },
   {
     "userId": 4,
-    "date": "2023-10-03",
+    "date": "03-10-23",
     "product": {
       "productId": 4,
       "productName": "Gorra Deportiva",
@@ -57,7 +57,7 @@
   },
   {
     "userId": 5,
-    "date": "2023-10-03",
+    "date": "03-10-23",
     "product": {
       "productId": 5,
       "productName": "Botella de Agua",
@@ -71,7 +71,7 @@
   },
   {
     "userId": 6,
-    "date": "2023-10-03",
+    "date": "03-10-23",
     "product": {
       "productId": 6,
       "productName": "Mochila Deportiva",
@@ -85,7 +85,7 @@
   },
   {
     "userId": 7,
-    "date": "2023-10-03",
+    "date": "03-10-23",
     "product": {
       "productId": 7,
       "productName": "Calcetines Técnicos",
@@ -99,7 +99,7 @@
   },
   {
     "userId": 8,
-    "date": "2023-10-03",
+    "date": "03-10-23",
     "product": {
       "productId": 8,
       "productName": "Reloj Deportivo",
@@ -113,7 +113,7 @@
   },
   {
     "userId": 9,
-    "date": "2023-10-03",
+    "date": "03-10-23",
     "product": {
       "productId": 9,
       "productName": "Pantalones Cortos",
@@ -127,7 +127,7 @@
   },
   {
     "userId": 10,
-    "date": "2023-10-03",
+    "date": "03-10-23",
     "product": {
       "productId": 10,
       "productName": "Camiseta Térmica",

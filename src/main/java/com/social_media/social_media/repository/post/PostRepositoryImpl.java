@@ -2,6 +2,7 @@ package com.social_media.social_media.repository.post;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.social_media.social_media.entity.Post;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
@@ -29,6 +30,8 @@ public class PostRepositoryImpl implements IPostRepository {
     private void loadDataBase() throws IOException {
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
         List<Post> postList;
 
         file = ResourceUtils.getFile("classpath:posts.json");
@@ -36,5 +39,11 @@ public class PostRepositoryImpl implements IPostRepository {
         });
 
         posts = postList.stream().collect(Collectors.toMap(post -> UUID.randomUUID(), post -> post));
+    }
+
+    @Override
+    public Post create(Post post) {
+        posts.put(UUID.randomUUID(), post);
+        return post;
     }
 }
