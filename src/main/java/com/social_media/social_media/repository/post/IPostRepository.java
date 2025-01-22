@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public interface IPostRepository {
+    Post create(Post post);
     List<Post> findAll();
     List<Post> findByIdSince(Long followedId, LocalDate lastTwoWeeks);
 }

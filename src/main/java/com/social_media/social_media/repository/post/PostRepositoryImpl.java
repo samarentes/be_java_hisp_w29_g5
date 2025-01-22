@@ -10,6 +10,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,8 +41,16 @@ public class PostRepositoryImpl implements IPostRepository {
     }
 
     @Override
+    public Post create(Post post) {
+        posts.put(post.getPostId(), post);
+        return post;
+    }
+
+    @Override
     public List<Post> findAll() {
-        return posts.values().stream().toList();
+        List<Post> postList = new ArrayList<>();
+        posts.forEach((key, post) -> postList.add(post));
+        return postList;
     }
 
     @Override
