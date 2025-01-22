@@ -1,6 +1,6 @@
 package com.social_media.social_media.controller;
 
-import com.social_media.social_media.service.IPostService;
+import com.social_media.social_media.service.post.IPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 

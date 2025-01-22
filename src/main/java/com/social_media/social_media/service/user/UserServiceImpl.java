@@ -1,4 +1,4 @@
-package com.social_media.social_media.service;
+package com.social_media.social_media.service.user;
 
 import com.social_media.social_media.dto.responseDto.FollowingResponseDto;
 import com.social_media.social_media.entity.Follow;
