@@ -8,6 +8,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,5 +37,16 @@ public class PostRepositoryImpl implements IPostRepository {
         });
 
         posts = postList.stream().collect(Collectors.toMap(post -> UUID.randomUUID(), post -> post));
+    }
+
+    @Override
+    public List<Post> findSellerById(Long userIdToFollow) {
+        List<Post> filteredPosts = new ArrayList<>();
+        for (Post post : posts.values()) {
+            if (post.getUserId().equals(userIdToFollow)) {
+                filteredPosts.add(post);
+            }
+        }
+        return filteredPosts;
     }
 }
