@@ -1,9 +1,10 @@
-package com.social_media.social_media.service;
+package com.social_media.social_media.service.user;
 
 import com.social_media.social_media.dto.responseDto.FollowersResponseDto;
 import com.social_media.social_media.dto.responseDto.UserResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.User;
+import com.social_media.social_media.exception.NotFoundException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.repository.post.IPostRepository;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.social_media.social_media.repository.user.IUserRepository;
+import com.social_media.social_media.utils.MessagesExceptions;
 
 @RequiredArgsConstructor
 @Service
@@ -25,7 +27,12 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public FollowersResponseDto searchFollowers(Long userId) {
-        User followedUser = this.userRepository.findById(userId).get();
+        Optional<User> followedUser = this.userRepository.findById(userId);
+
+        if (followedUser.isEmpty()) {
+            throw new NotFoundException(MessagesExceptions.SELLER_ID_NOT_EXIST);
+        }
+
         List<Follow> followersFind = this.followRepository.findFollowers(userId);
         List<UserResponseDto> followers = followersFind.stream().map(follow -> {
             Optional<User> followerFound = this.userRepository.findById(follow.getFollowerId());
@@ -39,7 +46,7 @@ public class UserServiceImpl implements IUserService {
             }
         }).toList();
 
-        return new FollowersResponseDto(followedUser.getUserId(), followedUser.getName(), followers);
+        return new FollowersResponseDto(followedUser.get().getUserId(), followedUser.get().getName(), followers);
 
     }
 

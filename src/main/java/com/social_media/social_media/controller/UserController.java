@@ -1,9 +1,12 @@
 package com.social_media.social_media.controller;
 
 import com.social_media.social_media.dto.responseDto.FollowersResponseDto;
-import com.social_media.social_media.service.IUserService;
+import com.social_media.social_media.service.user.IUserService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +24,8 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/follower/list")
-    public FollowersResponseDto getFollowers(@PathVariable Long userId) {
-        return this.userService.searchFollowers(userId);
+    public ResponseEntity<FollowersResponseDto> getFollowers(@PathVariable Long userId) {
+        return new ResponseEntity<>(this.userService.searchFollowers(userId), HttpStatus.OK);
     }
 
 }
