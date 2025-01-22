@@ -2,6 +2,8 @@ package com.social_media.social_media.repository.post;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.social_media.social_media.dto.responseDto.PostResponseDto;
+import com.social_media.social_media.dto.responseDto.ProductResponseDto;
 import com.social_media.social_media.entity.Post;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
@@ -36,5 +38,11 @@ public class PostRepositoryImpl implements IPostRepository {
         });
 
         posts = postList.stream().collect(Collectors.toMap(post -> UUID.randomUUID(), post -> post));
+    }
+
+    @Override
+    public List<Post> searchAllPosts() {
+
+        return posts.values().stream().toList();
     }
 }
