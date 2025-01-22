@@ -53,7 +53,9 @@ public class PostServiceImpl implements IPostService {
                         .category(post.getCategory())
                         .price(post.getPrice())
                         .build()
-                ).toList();
+                ).sorted(Comparator.comparing(PostResponseWithIdDto::getDate).reversed()
+                        .thenComparing(PostResponseWithIdDto::getPost_id))
+                .toList();
         return SellersPostsByFollowerResponseDto.builder().user_id(userId).posts(postsDto).build();
     }
 }
