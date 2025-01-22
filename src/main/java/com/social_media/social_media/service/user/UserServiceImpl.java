@@ -1,6 +1,5 @@
-package com.social_media.social_media.service;
+package com.social_media.social_media.service.user;
 
-import com.social_media.social_media.dto.responseDto.UserResponseDto;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.repository.post.IPostRepository;
 
@@ -8,9 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.social_media.social_media.repository.user.IUserRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service

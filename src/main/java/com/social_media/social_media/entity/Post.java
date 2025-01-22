@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Post {
     private Long postId;
     private Long userId;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
     private Product product;
     private Integer category;

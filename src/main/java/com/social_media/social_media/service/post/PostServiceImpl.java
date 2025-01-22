@@ -1,6 +1,5 @@
-package com.social_media.social_media.service;
+package com.social_media.social_media.service.post;
 
-import com.social_media.social_media.dto.responseDto.PostResponseDto;
 import com.social_media.social_media.dto.responseDto.PostResponseWithIdDto;
 import com.social_media.social_media.dto.responseDto.ProductResponseDto;
 import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;

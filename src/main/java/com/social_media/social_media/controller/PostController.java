@@ -1,7 +1,7 @@
 package com.social_media.social_media.controller;
 
 import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
-import com.social_media.social_media.service.IPostService;
+import com.social_media.social_media.service.post.IPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
