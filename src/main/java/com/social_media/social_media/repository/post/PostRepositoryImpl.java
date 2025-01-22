@@ -8,6 +8,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,8 +40,17 @@ public class PostRepositoryImpl implements IPostRepository {
     }
 
     @Override
-    public Boolean isSeller(Long userId) {
-        return posts.values().stream()
-                .anyMatch(post -> post.getUserId().equals(userId));
+    public List<Post> findSellerById(Long userIdToFollow) {
+        List<Post> filteredPosts = new ArrayList<>();
+        for (Post post : posts.values()) {
+            if (post.getUserId().equals(userIdToFollow)) {
+                filteredPosts.add(post);
+            }
+        }
+        return filteredPosts;
     }
+
+
+
+
 }

@@ -1,5 +1,9 @@
 package com.social_media.social_media.repository.post;
 
+import com.social_media.social_media.entity.Post;
+
+import java.util.List;
+
 public interface IPostRepository {
-    Boolean isSeller(Long userId);
+    List<Post> findSellerById(Long userIdToFollow);
 }

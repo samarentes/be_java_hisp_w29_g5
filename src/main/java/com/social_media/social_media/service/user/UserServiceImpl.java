@@ -27,15 +27,15 @@ public class UserServiceImpl implements IUserService {
     private final IFollowRepository followRepository;
 
     @Override
-    public FollowersCountResponseDto getFollowersCount(Long userId) {
+    public FollowersCountResponseDto searchFollowersCount(Long userId) {
 
         Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isEmpty()) throw new NotFoundException(SELLER_ID_NOT_EXIST);
 
-        if (!postRepository.isSeller(userId)) throw new NotSellerException(FOLLOWED_USER_NOT_SELLER);
+        if (postRepository.findSellerById(userId).isEmpty()) throw new NotSellerException(FOLLOWED_USER_NOT_SELLER);
 
-        List<Follow> listFilteredFollower = followRepository.findListFollowerByFollowedId(userId);
+        List<Follow> listFilteredFollower = followRepository.findFollowers(userId);
 
         User user = userOptional.get();
 

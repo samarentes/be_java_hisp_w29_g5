@@ -9,6 +9,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -28,7 +29,6 @@ public class FollowRepositoryImpl implements IFollowRepository {
     }
 
 
-
     private void loadDataBase() throws IOException {
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
@@ -42,9 +42,16 @@ public class FollowRepositoryImpl implements IFollowRepository {
     }
 
     @Override
-    public List<Follow> findListFollowerByFollowedId(Long followedId) {
-        return follows.values().stream()
-                .filter(follow -> follow.getFollowedId().equals(followedId))
-                .collect(Collectors.toList());
+    public List<Follow> findFollowers(Long userId) {
+        List<Follow> followersFind = new ArrayList<>();
+        this.follows.forEach((__, follow) -> {
+            if (follow.getFollowedId().equals(userId)) {
+                followersFind.add(follow);
+            }
+        });
+
+        return followersFind;
     }
+
+
 }
