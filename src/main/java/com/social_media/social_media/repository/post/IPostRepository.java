@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IPostRepository {
     List<Post> findById(Long userId);
+    Post create(Post post);
+    List<Post> findAll();
 }
