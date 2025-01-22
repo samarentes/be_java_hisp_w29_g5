@@ -7,6 +7,7 @@ import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.exception.NotFoundException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
+import com.social_media.social_media.utils.MessagesExceptions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +27,14 @@ public class PostServiceImpl implements IPostService {
         LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
 
         List<Long> followedIds = followRepository.findFollowed(userId).stream().map(Follow::getFollowedId).toList();
-        if (followedIds.isEmpty()){
-            throw new NotFoundException("No se encontraron seguidores para el usuario con ID: " + userId);
+        if (followedIds.isEmpty()) {
+            throw new NotFoundException(MessagesExceptions.NO_FOLLOWERS_FOUND + userId);
         }
         List<Post> posts = followedIds.stream().flatMap(followedId ->
                 postRepository.findByIdSince(followedId, lastTwoWeeks).stream()).toList();
 
         if (posts.isEmpty()) {
-            throw new NotFoundException("No se encontraron publicaciones recientes para los seguidores del usuario con ID: " + userId);
+            throw new NotFoundException(MessagesExceptions.NO_RECENT_POSTS_FOUND + userId);
         }
 
         List<PostResponseWithIdDto> postsDto = posts.stream()
