@@ -5,7 +5,7 @@ import com.social_media.social_media.entity.Follow;
 
 public interface IFollowRepository {
 
-    Follow addFollow(Long userId, Long userIdToFollow);
+    Follow addFollow(Long followerId, Long followedId);
 
     boolean existsByFollowerAndFollowed(Long userId, Long userIdToFollow);
 }

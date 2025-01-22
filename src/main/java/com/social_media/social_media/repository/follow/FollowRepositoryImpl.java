@@ -40,14 +40,13 @@ public class FollowRepositoryImpl implements IFollowRepository {
     }
 
     @Override
-    public Follow addFollow(Long userId, Long userIdToFollow) {
-        Follow newFollow = new Follow();
-        newFollow.setFollowerId(userId);
-        newFollow.setFollowedId(userIdToFollow);
-
+    public Follow addFollow(Long followerId, Long followedId) {
+        Follow newFollow = Follow.builder()
+                .followedId(followerId)
+                .followedId(followedId)
+                .build();
         follows.put(UUID.randomUUID(), newFollow);
 
-        System.out.println(follows);
         return newFollow;
     }
 

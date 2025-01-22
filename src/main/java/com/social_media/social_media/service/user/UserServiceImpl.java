@@ -32,7 +32,7 @@ public class UserServiceImpl implements IUserService {
         }
 
         //validar que el usuario que intenta seguir si es un seller buscando si existe al menos un post
-        if (postRepository.findSellerById(userIdToFollow).isEmpty()){
+        if (postRepository.findById(userIdToFollow).isEmpty()){
             throw new BadRequestFollowException(MessagesExceptions.FOLLOWED_USER_NOT_SELLER);
         }
 
