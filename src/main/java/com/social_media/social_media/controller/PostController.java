@@ -18,12 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
     private final IPostService postService;
 
-    @GetMapping("/products/followed/{userId}/list")
+    @GetMapping("/followed/{userId}/list")
     public ResponseEntity<SellersPostsByFollowerResponseDto> getFollowedPostsFromLastTwoWeeks(@PathVariable long userId) {
+        SellersPostsByFollowerResponseDto responseDto = postService.searchFollowedPostsFromLastTwoWeeks(userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
+    @GetMapping("/post")
     public ResponseEntity<?> createNewPost(@RequestBody PostProductRequestDto postProductRequestDto){
+        return new ResponseEntity<>(postService.createPost(postProductRequestDto), HttpStatus.CREATED);
     }
 
 }

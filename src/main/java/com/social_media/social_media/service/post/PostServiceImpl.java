@@ -26,6 +26,7 @@ import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_N
 public class PostServiceImpl implements IPostService {
     private final IPostRepository postRepository;
     private final IUserRepository userRepository;
+    private final IFollowRepository followRepository;
 
     @Override
     public PostResponseDto createPost(PostProductRequestDto postProductRequestDto) {
