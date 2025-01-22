@@ -2,22 +2,21 @@ package com.social_media.social_media.repository.post;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.social_media.social_media.dto.responseDto.PostResponseDto;
-import com.social_media.social_media.dto.responseDto.ProductResponseDto;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.social_media.social_media.entity.Post;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.UUID;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository {
-    private Map<UUID, Post> posts;
+    private Map<Long, Post> posts;
 
     public PostRepositoryImpl() throws IOException {
         try {
@@ -31,18 +30,23 @@ public class PostRepositoryImpl implements IPostRepository {
     private void loadDataBase() throws IOException {
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         List<Post> postList;
 
         file = ResourceUtils.getFile("classpath:posts.json");
-        postList = objectMapper.readValue(file, new TypeReference<>() {
-        });
+        postList = objectMapper.readValue(file, new TypeReference<>() {});
 
-        posts = postList.stream().collect(Collectors.toMap(post -> UUID.randomUUID(), post -> post));
+        posts = postList.stream().collect(Collectors.toMap(Post::getPostId, post -> post));
     }
 
     @Override
-    public List<Post> searchAllPosts() {
-
+    public List<Post> findAll() {
         return posts.values().stream().toList();
+    }
+
+    @Override
+    public List<Post> findByIdSince(Long userId, LocalDate lastTwoWeeks) {
+        return posts.values().stream().filter(post -> post.getUserId().equals(userId)
+            && !post.getDate().isBefore(lastTwoWeeks)).toList();
     }
 }

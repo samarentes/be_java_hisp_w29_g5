@@ -1,17 +1,21 @@
 package com.social_media.social_media.dto.responseDto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SellersPostsByFollowerResponseDto {
+public class PostResponseWithIdDto {
     private Long user_id;
-    private List<PostResponseWithIdDto> posts;
+    private Long post_id;
+    private LocalDate date;
+    private ProductResponseDto product;
+    private Integer category;
+    private Double price;
 }

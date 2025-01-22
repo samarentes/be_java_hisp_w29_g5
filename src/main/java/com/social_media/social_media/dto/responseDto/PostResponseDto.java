@@ -1,6 +1,6 @@
 package com.social_media.social_media.dto.responseDto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostResponseDto {
     private Long user_id;
-    private Date date;
+    private LocalDate date;
     private ProductResponseDto product;
     private Integer category;
     private Double price;

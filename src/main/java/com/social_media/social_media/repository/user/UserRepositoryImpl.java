@@ -39,9 +39,4 @@ public class UserRepositoryImpl implements IUserRepository {
 
         users = userList.stream().collect(Collectors.toMap(User::getUserId, user -> user));
     }
-
-    @Override
-    public List<User> searchAllUsers() {
-
-        return users.values().stream().toList();}
 }

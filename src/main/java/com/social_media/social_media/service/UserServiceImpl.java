@@ -18,17 +18,4 @@ public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
     private final IPostRepository postRepository;
     private final IFollowRepository followRepository;
-
-    @Override
-    public List<UserResponseDto> searchAllUsers() {
-
-        return userRepository.searchAllUsers().stream()
-                .map(user -> new UserResponseDto(
-                        user.getUserId(),
-                        user.getName()
-                ))
-                .collect(Collectors.toList());
-    }
-
-
 }
