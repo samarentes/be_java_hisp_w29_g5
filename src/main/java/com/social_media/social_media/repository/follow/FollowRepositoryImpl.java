@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,16 @@ public class FollowRepositoryImpl implements IFollowRepository {
         follows = followList.stream().collect(Collectors.toMap(follow -> UUID.randomUUID(), follow -> follow));
     }
 
+
+    @Override
+    public void deleteFollow(Optional<Follow> follow) {
+        Follow followToDelete = follow.get();
+
+        // Encuentra la ky (UUID) y elimina el registro
+        follows.entrySet().removeIf(entry -> entry.getValue().equals(followToDelete));
+    }
+
+
     @Override
     public Follow addFollow(Long followerId, Long followedId) {
         Follow newFollow = Follow.builder()
@@ -51,11 +62,13 @@ public class FollowRepositoryImpl implements IFollowRepository {
     }
 
     @Override
-    public boolean existsByFollowerAndFollowed(Long userId, Long userIdToFollow) {
+    public Optional<Follow> existsByFollowerAndFollowed(Long userId, Long userIdToFollow) {
         return follows.values().stream()
-                .anyMatch(f -> f.getFollowerId().equals(userId) && f.getFollowedId().equals(userIdToFollow));
+                .filter(f -> f.getFollowerId().equals(userId) && f.getFollowedId().equals(userIdToFollow))
+                .findFirst();
     }
 
+    @Override
     public List<Follow> findFollowed(Long userId) {
         List<Follow> followedsFind = new ArrayList<>();
         follows.forEach((__, follow) -> {
