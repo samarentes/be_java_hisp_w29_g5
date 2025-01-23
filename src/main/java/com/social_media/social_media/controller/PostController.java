@@ -19,7 +19,8 @@ public class PostController {
     private final IPostService postService;
 
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<SellersPostsByFollowerResponseDto> getFollowedPostsFromLastTwoWeeks(@PathVariable long userId) {
+    public ResponseEntity<SellersPostsByFollowerResponseDto> getFollowedPostsFromLastTwoWeeks(
+            @PathVariable long userId) {
         SellersPostsByFollowerResponseDto responseDto = postService.searchFollowedPostsFromLastTwoWeeks(userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }

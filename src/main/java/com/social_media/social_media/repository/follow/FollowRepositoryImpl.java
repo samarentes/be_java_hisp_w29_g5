@@ -39,10 +39,6 @@ public class FollowRepositoryImpl implements IFollowRepository {
         follows = followList.stream().collect(Collectors.toMap(follow -> UUID.randomUUID(), follow -> follow));
     }
 
-    public List<Follow> findAll() {
-        return follows.values().stream().toList();
-    }
-
     @Override
     public List<Follow> findFollowed(Long userId) {
         List<Follow> followedsFind = new ArrayList<>();
