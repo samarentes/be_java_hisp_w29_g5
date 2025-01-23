@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostProductRequestDto {
+public class PostRequestDto implements IPostRequestDto {
     private Long user_id;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;

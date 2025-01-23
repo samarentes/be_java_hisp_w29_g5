@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.social_media.social_media.entity.Post;
+import com.social_media.social_media.enums.PostType;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -13,13 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.UUID;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository {
     private Map<Long, Post> posts;
 
-    public PostRepositoryImpl() throws IOException {
+    public PostRepositoryImpl() {
         try {
             loadDataBase();
 
@@ -47,11 +47,15 @@ public class PostRepositoryImpl implements IPostRepository {
     }
 
     @Override
-    public List<Post> findAll() {
+    public List<Post> findAll(PostType postType) {
         List<Post> postList = new ArrayList<>();
-        posts.forEach((key, post) -> postList.add(post));
+        posts.forEach((__, post) -> {
+            if (postType == PostType.ALL ||
+                    (postType == PostType.NORMAL && post.getDiscount() == 0) ||
+                    (postType == PostType.PROMO && post.getDiscount() != 0)) {
+                postList.add(post);
+            }
+        });
         return postList;
     }
-
-
 }
