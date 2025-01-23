@@ -54,13 +54,13 @@ public class PostRepositoryImpl implements IPostRepository {
     }
 
     @Override
-    public List<Post> findSellerById(Long userIdToFollow) {
+    public List<Post> findPostBySellerId(Long userIdToFollow) {
         List<Post> filteredPosts = new ArrayList<>();
-        for (Post post : posts.values()) {
+        posts.forEach((__, post) -> {
             if (post.getUserId().equals(userIdToFollow)) {
                 filteredPosts.add(post);
             }
-        }
+        });
         return filteredPosts;
     }
 

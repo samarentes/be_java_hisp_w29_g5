@@ -5,7 +5,7 @@ import com.social_media.social_media.entity.Post;
 import java.util.List;
 
 public interface IPostRepository {
-    List<Post> findSellerById(Long userIdToFollow);
+    List<Post> findPostBySellerId(Long userIdToFollow);
     Post create(Post post);
     List<Post> findAll();
 }

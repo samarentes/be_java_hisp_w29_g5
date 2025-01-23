@@ -33,7 +33,7 @@ public class UserServiceImpl implements IUserService {
 
         if (userOptional.isEmpty()) throw new NotFoundException(SELLER_ID_NOT_EXIST);
 
-        if (postRepository.findSellerById(userId).isEmpty()) throw new NotSellerException(FOLLOWED_USER_NOT_SELLER);
+        if (postRepository.findPostBySellerId(userId).isEmpty()) throw new NotSellerException(FOLLOWED_USER_NOT_SELLER);
 
         List<Follow> listFilteredFollower = followRepository.findFollowers(userId);
 
