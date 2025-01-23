@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class FollowRepositoryImpl implements IFollowRepository {
     private Map<UUID, Follow> follows;
 
-    public FollowRepositoryImpl() throws IOException {
+    public FollowRepositoryImpl() {
         try {
 
             loadDataBase();

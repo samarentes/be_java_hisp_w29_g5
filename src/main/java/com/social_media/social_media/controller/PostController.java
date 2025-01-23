@@ -1,7 +1,8 @@
 package com.social_media.social_media.controller;
 
 import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
-import com.social_media.social_media.dto.request.PostProductRequestDto;
+import com.social_media.social_media.dto.request.PostRequestDto;
+import com.social_media.social_media.dto.request.PostPromoRequestDto;
 import com.social_media.social_media.service.post.IPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,7 +29,13 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<?> createNewPost(@RequestBody PostProductRequestDto postProductRequestDto) {
+    public ResponseEntity<?> postNew(@RequestBody PostRequestDto postProductRequestDto) {
         return new ResponseEntity<>(postService.createPost(postProductRequestDto), HttpStatus.CREATED);
     }
+
+    @PostMapping("/promo-post")
+    public ResponseEntity<?> postNewPromo(@RequestBody PostPromoRequestDto postPromoRequestDto) {
+        return new ResponseEntity<>(postService.createPostPromo(postPromoRequestDto), HttpStatus.CREATED);
+    }
+
 }

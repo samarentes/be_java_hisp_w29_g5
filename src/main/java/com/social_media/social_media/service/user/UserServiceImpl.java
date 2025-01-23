@@ -134,28 +134,6 @@ public class UserServiceImpl implements IUserService {
                 .build();
     }
 
-    @Override
-    public FollowedResponseDto searchFollowed(Long userId) {
-        Optional<User> followerUser = this.userRepository.findById(userId);
-
-        if (followerUser.isEmpty()) {
-            throw new NotFoundException(MessagesExceptions.USER_NOT_FOUND);
-        }
-
-        List<Follow> followedFind = this.followRepository.findFollowed(userId);
-        List<UserResponseDto> followeds = followedFind.stream().map(follow -> {
-            User followedFound = this.userRepository.findById(follow.getFollowedId()).orElse(null);
-
-            return UserResponseDto.builder().user_id(followedFound.getUserId())
-                    .user_name(followedFound.getName()).build();
-
-        }).filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        ;
-
-        return new FollowedResponseDto(followerUser.get().getUserId(), followerUser.get().getName(), followeds);
-    }
-
     public FollowersResponseDto searchFollowers(Long userId) {
         Optional<User> followedUser = this.userRepository.findById(userId);
 
