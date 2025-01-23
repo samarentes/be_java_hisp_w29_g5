@@ -40,6 +40,18 @@ public class FollowRepositoryImpl implements IFollowRepository {
     }
 
     @Override
+    public List<Follow> findFollowed(Long userId) {
+        List<Follow> followedsFind = new ArrayList<>();
+        follows.forEach((__, follow) -> {
+            if (follow.getFollowerId().equals(userId)) {
+                followedsFind.add(follow);
+            }
+        });
+
+        return followedsFind;
+    }
+
+    @Override
     public List<Follow> findFollowers(Long userId) {
         List<Follow> followersFind = new ArrayList<>();
         this.follows.forEach((__, follow) -> {
@@ -51,15 +63,4 @@ public class FollowRepositoryImpl implements IFollowRepository {
         return followersFind;
     }
 
-    @Override
-    public List<Follow> findFollowed(Long userId) {
-        List<Follow> followedsFind = new ArrayList<>();
-        this.follows.forEach((__, follow) -> {
-            if (follow.getFollowerId().equals(userId)) {
-                followedsFind.add(follow);
-            }
-        });
-
-        return followedsFind;
-    }
 }
