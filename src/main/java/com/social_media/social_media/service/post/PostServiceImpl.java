@@ -6,7 +6,6 @@ import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerRespo
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.utils.MessagesExceptions;
-import com.social_media.social_media.dto.request.PostProductRequestDto;
 import com.social_media.social_media.dto.request.PostRequestDto;
 import com.social_media.social_media.dto.request.PostPromoRequestDto;
 import com.social_media.social_media.dto.request.IPostRequestDto;
@@ -21,6 +20,7 @@ import com.social_media.social_media.repository.user.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.social_media.social_media.repository.post.IPostRepository;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -79,19 +79,6 @@ public class PostServiceImpl implements IPostService {
     // Method to build a PostResponseDto object from a Post object
     private PostResponseDto buildPostResponseDto(Post post) {
         return PostResponseDto.builder()
-                .post_id(newPost.getPostId())
-                .user_id(newPost.getUserId())
-                .date(newPost.getDate())
-                .product(ProductResponseDto.builder()
-                        .product_id(newPost.getProduct().getProductId())
-                        .product_name(newPost.getProduct().getProductName())
-                        .type(newPost.getProduct().getType())
-                        .brand(newPost.getProduct().getBrand())
-                        .color(newPost.getProduct().getColor())
-                        .notes(newPost.getProduct().getNotes())
-                        .build())
-                .category(newPost.getCategory())
-                .price(newPost.getPrice())
                 .post_id(post.getPostId())
                 .user_id(post.getUserId())
                 .date(post.getDate())

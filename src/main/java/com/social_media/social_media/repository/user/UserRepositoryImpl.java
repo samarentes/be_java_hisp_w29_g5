@@ -2,9 +2,7 @@ package com.social_media.social_media.repository.user;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.social_media.social_media.dto.responseDto.UserResponseDto;
 import com.social_media.social_media.entity.User;
-import com.social_media.social_media.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -19,7 +17,7 @@ import java.util.stream.Collectors;
 public class UserRepositoryImpl implements IUserRepository {
     private Map<Long, User> users;
 
-    public UserRepositoryImpl() throws IOException {
+    public UserRepositoryImpl() {
         System.out.println("test");
         try {
 

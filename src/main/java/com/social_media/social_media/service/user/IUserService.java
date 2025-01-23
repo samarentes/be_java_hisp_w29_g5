@@ -10,14 +10,12 @@ public interface IUserService {
 
     Boolean unfollowSeller(Long userId, Long userIdToUnfollow);
 
-    public FollowedResponseDto searchFollowed(Long userId, String order);
+    FollowedResponseDto searchFollowed(Long userId, String order);
 
-    public FollowingResponseDto followSeller(Long userId, Long userIdToFollow);
+    FollowingResponseDto followSeller(Long userId, Long userIdToFollow);
 
-    public FollowedResponseDto searchFollowed(Long userId);
+    FollowersResponseDto searchFollowers(Long userId, String order);
 
-    public FollowersResponseDto searchFollowers(Long userId, String order);
-
-    public FollowersCountResponseDto searchFollowersCount(Long userId);
+    FollowersCountResponseDto searchFollowersCount(Long userId);
 
 }
