@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FollowersCountResponseDto {
+public class FollowingResponseDto {
     private Long user_id;
-    private String user_name;
-    private Integer followers_count;
+    private Long userIdToFollow;
 }

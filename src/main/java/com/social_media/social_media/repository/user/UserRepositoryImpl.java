@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class UserRepositoryImpl implements IUserRepository {
     private Map<Long, User> users;
 
-    public UserRepositoryImpl() throws IOException {
+    public UserRepositoryImpl() {
         System.out.println("test");
         try {
 

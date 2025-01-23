@@ -1,13 +1,20 @@
 package com.social_media.social_media.repository.post;
 
 import com.social_media.social_media.entity.Post;
+import com.social_media.social_media.enums.PostType;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
 public interface IPostRepository {
-    Post create(Post post);
-    List<Post> findAll();
+    List<Post> findById(Long userId);
+
+    List<Post> findPostBySellerId(Long userIdToFollow);
+
     List<Post> findByIdSince(Long followedId, LocalDate lastTwoWeeks);
+
+    Post add(Post post);
+
+    List<Post> findAll(PostType postType);
 }

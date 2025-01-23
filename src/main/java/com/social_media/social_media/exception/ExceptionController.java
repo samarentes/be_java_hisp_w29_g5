@@ -20,4 +20,16 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
     }
 
+    @ExceptionHandler(BadRequestFollowException.class)
+    public ResponseEntity<ExceptionDto> badRequest(BadRequestFollowException e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotSellerException.class)
+    public ResponseEntity<?> notSeller(NotSellerException e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.FORBIDDEN);
+    }
+
 }
