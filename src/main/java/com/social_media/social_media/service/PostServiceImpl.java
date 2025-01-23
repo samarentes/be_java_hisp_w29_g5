@@ -1,4 +1,4 @@
-package com.social_media.social_media.service.post;
+package com.social_media.social_media.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
