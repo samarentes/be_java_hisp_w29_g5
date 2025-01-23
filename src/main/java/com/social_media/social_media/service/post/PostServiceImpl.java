@@ -89,6 +89,7 @@ public class PostServiceImpl implements IPostService {
                 .category(post.getCategory())
                 .price(post.getPrice())
                 .discount(post.getDiscount())
+                .has_promo(true)
                 .build();
     }
 
