@@ -6,4 +6,6 @@ import com.social_media.social_media.entity.Follow;
 
 public interface IFollowRepository {
     public List<Follow> findFollowers(Long userId);
+
+    public List<Follow> findFollowed(Long userId);
 }

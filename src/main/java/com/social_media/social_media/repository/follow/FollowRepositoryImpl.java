@@ -50,4 +50,16 @@ public class FollowRepositoryImpl implements IFollowRepository {
 
         return followersFind;
     }
+
+    @Override
+    public List<Follow> findFollowed(Long userId) {
+        List<Follow> followedsFind = new ArrayList<>();
+        this.follows.forEach((__, follow) -> {
+            if (follow.getFollowerId().equals(userId)) {
+                followedsFind.add(follow);
+            }
+        });
+
+        return followedsFind;
+    }
 }

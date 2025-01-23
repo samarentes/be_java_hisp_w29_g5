@@ -1,6 +1,7 @@
 package com.social_media.social_media.service.user;
 
 import com.social_media.social_media.dto.responseDto.FollowersResponseDto;
+import com.social_media.social_media.dto.responseDto.FollowedResponseDto;
 import com.social_media.social_media.dto.responseDto.UserResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.User;
@@ -48,6 +49,30 @@ public class UserServiceImpl implements IUserService {
 
         return new FollowersResponseDto(followedUser.get().getUserId(), followedUser.get().getName(), followers);
 
+    }
+
+    @Override
+    public FollowedResponseDto searchFollowed(Long userId) {
+        Optional<User> followerUser = this.userRepository.findById(userId);
+
+        if (followerUser.isEmpty()) {
+            throw new NotFoundException(MessagesExceptions.USER_NOT_FOUND);
+        }
+
+        List<Follow> followedFind = this.followRepository.findFollowed(userId);
+        List<UserResponseDto> followeds = followedFind.stream().map(follow -> {
+            Optional<User> followedFound = this.userRepository.findById(follow.getFollowedId());
+            if (followedFound.isPresent()) {
+
+                return UserResponseDto.builder().user_id(followedFound.get().getUserId())
+                        .user_name(followedFound.get().getName()).build();
+
+            } else {
+                return null;
+            }
+        }).toList();
+
+        return new FollowedResponseDto(followerUser.get().getUserId(), followerUser.get().getName(), followeds);
     }
 
 }
