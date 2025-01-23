@@ -5,5 +5,5 @@ import com.social_media.social_media.entity.User;
 import java.util.Optional;
 
 public interface IUserRepository {
-    Optional<User> findById(Long userId);
+     Optional<User> findById(Long userId);
 }

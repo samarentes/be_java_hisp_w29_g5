@@ -28,6 +28,7 @@ public class FollowRepositoryImpl implements IFollowRepository {
         }
     }
 
+
     private void loadDataBase() throws IOException {
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
@@ -54,5 +55,17 @@ public class FollowRepositoryImpl implements IFollowRepository {
         });
 
         return followedsFind;
+    }
+
+    @Override
+    public List<Follow> findFollowers(Long userId) {
+        List<Follow> followersFind = new ArrayList<>();
+        this.follows.forEach((__, follow) -> {
+            if (follow.getFollowedId().equals(userId)) {
+                followersFind.add(follow);
+            }
+        });
+
+        return followersFind;
     }
 }
