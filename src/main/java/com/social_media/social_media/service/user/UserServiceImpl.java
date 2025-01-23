@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -37,26 +39,19 @@ public class UserServiceImpl implements IUserService {
 
         List<Follow> followersFind = this.followRepository.findFollowers(userId);
         List<UserResponseDto> followers = followersFind.stream().map(follow -> {
-            Optional<User> followerFound = this.userRepository.findById(follow.getFollowerId());
-            if (followerFound.isPresent()) {
+            User followerFound = this.userRepository.findById(follow.getFollowerId()).orElse(null);
 
-                return UserResponseDto.builder().user_id(followerFound.get().getUserId())
-                        .user_name(followerFound.get().getName()).build();
+            return UserResponseDto.builder().user_id(followerFound.getUserId())
+                    .user_name(followerFound.getName()).build();
 
-            } else {
-                return null;
-            }
-        }).toList();
+        }).filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
-        try {
-            if (order.equals("name_asc")) {
-                followers.sort(Comparator.comparing(UserResponseDto::getUser_name));
-            } else if (order.equals("name_desc")) {
-                followers.sort(Comparator.comparing(UserResponseDto::getUser_name).reversed());
+        if (order.equals("name_asc")) {
+            followers.sort(Comparator.comparing(UserResponseDto::getUser_name));
+        } else if (order.equals("name_desc")) {
+            followers.sort(Comparator.comparing(UserResponseDto::getUser_name).reversed());
 
-            }
-        } catch (Exception e) {
-            System.out.println(e.getClass());
         }
 
         return new FollowersResponseDto(followedUser.get().getUserId(), followedUser.get().getName(), followers);
@@ -73,16 +68,13 @@ public class UserServiceImpl implements IUserService {
 
         List<Follow> followedFind = this.followRepository.findFollowed(userId);
         List<UserResponseDto> followeds = followedFind.stream().map(follow -> {
-            Optional<User> followedFound = this.userRepository.findById(follow.getFollowedId());
-            if (followedFound.isPresent()) {
+            User followedFound = this.userRepository.findById(follow.getFollowedId()).orElse(null);
 
-                return UserResponseDto.builder().user_id(followedFound.get().getUserId())
-                        .user_name(followedFound.get().getName()).build();
+            return UserResponseDto.builder().user_id(followedFound.getUserId())
+                    .user_name(followedFound.getName()).build();
 
-            } else {
-                return null;
-            }
-        }).toList();
+        }).filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
         if (order.equals("name_asc")) {
             followeds.sort(Comparator.comparing(UserResponseDto::getUser_name));
