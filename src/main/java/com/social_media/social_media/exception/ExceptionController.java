@@ -9,9 +9,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionController {
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<?> notFound(NotFoundException e) {
+    public ResponseEntity<ExceptionDto> notFound(NotFoundException e) {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
-        return new ResponseEntity<>(exceptionDto, HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDto);
+    }
+
+    @ExceptionHandler(InvalidOrderException.class)
+    public ResponseEntity<ExceptionDto> invalidOrder(InvalidOrderException e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDto);
     }
 
 }

@@ -4,6 +4,7 @@ import com.social_media.social_media.dto.responseDto.PostResponseWithIdDto;
 import com.social_media.social_media.dto.responseDto.ProductResponseDto;
 import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
 import com.social_media.social_media.entity.Follow;
+import com.social_media.social_media.exception.InvalidOrderException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.utils.MessagesExceptions;
 import com.social_media.social_media.dto.request.PostProductRequestDto;
@@ -100,10 +101,18 @@ public class PostServiceImpl implements IPostService {
                         .category(post.getCategory())
                         .price(post.getPrice())
                         .build()
-                ).sorted(order.equalsIgnoreCase("date_asc") ?
-                        Comparator.comparing(PostResponseWithIdDto::getDate) :
-                        Comparator.comparing(PostResponseWithIdDto::getDate).reversed())
+                ).sorted(getComparator(order))
                 .toList();
         return SellersPostsByFollowerResponseDto.builder().user_id(userId).posts(postsDto).build();
+    }
+
+    private Comparator<PostResponseWithIdDto> getComparator(String order) {
+        Comparator<PostResponseWithIdDto> comparator = Comparator.comparing(PostResponseWithIdDto::getDate);
+        comparator = switch (order) {
+            case "date_asc" -> comparator;
+            case "date_desc" -> comparator.reversed();
+            default -> throw new InvalidOrderException(MessagesExceptions.INVALID_ORDER);
+        };
+        return comparator.thenComparing(PostResponseWithIdDto::getPost_id);
     }
 }

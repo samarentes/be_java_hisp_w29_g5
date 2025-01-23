@@ -15,12 +15,11 @@ public class PostController {
     private final IPostService postService;
 
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<SellersPostsByFollowerResponseDto> getFollowedPosts(
+    public ResponseEntity<SellersPostsByFollowerResponseDto> getFollowedRecentPosts(
             @PathVariable long userId,
             @RequestParam(defaultValue = "date_desc") String order) {
-
         SellersPostsByFollowerResponseDto responseDto = postService.searchFollowedPostsFromLastTwoWeeks(userId, order);
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @GetMapping("/post")
