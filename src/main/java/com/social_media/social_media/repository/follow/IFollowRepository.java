@@ -6,11 +6,12 @@ import java.util.List;
 
 public interface IFollowRepository {
 
+    public List<Follow> findFollowed(Long userId);
+
     Follow addFollow(Long followerId, Long followedId);
 
     boolean existsByFollowerAndFollowed(Long userId, Long userIdToFollow);
 
     public List<Follow> findFollowers(Long followedId);
 
-    List<Follow> findFollowed(Long userId);
 }
