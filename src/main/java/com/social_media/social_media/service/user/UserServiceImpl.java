@@ -13,7 +13,9 @@ import com.social_media.social_media.repository.post.IPostRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -43,16 +45,13 @@ public class UserServiceImpl implements IUserService {
 
         List<Follow> followersFind = this.followRepository.findFollowers(userId);
         List<UserResponseDto> followers = followersFind.stream().map(follow -> {
-            Optional<User> followerFound = this.userRepository.findById(follow.getFollowerId());
-            if (followerFound.isPresent()) {
+            User followerFound = this.userRepository.findById(follow.getFollowerId()).orElse(null);
 
-                return UserResponseDto.builder().user_id(followerFound.get().getUserId())
-                        .user_name(followerFound.get().getName()).build();
+            return UserResponseDto.builder().user_id(followerFound.getUserId())
+                    .user_name(followerFound.getName()).build();
 
-            } else {
-                return null;
-            }
-        }).toList();
+        }).filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
         return new FollowersResponseDto(followedUser.get().getUserId(), followedUser.get().getName(), followers);
 
