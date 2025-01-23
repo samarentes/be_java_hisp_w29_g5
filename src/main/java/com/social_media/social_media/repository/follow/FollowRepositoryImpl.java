@@ -3,7 +3,6 @@ package com.social_media.social_media.repository.follow;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.social_media.social_media.entity.Follow;
-import com.social_media.social_media.entity.Post;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -43,7 +42,7 @@ public class FollowRepositoryImpl implements IFollowRepository {
     @Override
     public List<Follow> findFollowed(Long userId) {
         List<Follow> followedsFind = new ArrayList<>();
-        this.follows.forEach((__, follow) -> {
+        follows.forEach((__, follow) -> {
             if (follow.getFollowerId().equals(userId)) {
                 followedsFind.add(follow);
             }
@@ -51,4 +50,17 @@ public class FollowRepositoryImpl implements IFollowRepository {
 
         return followedsFind;
     }
+
+    @Override
+    public List<Follow> findFollowers(Long userId) {
+        List<Follow> followersFind = new ArrayList<>();
+        this.follows.forEach((__, follow) -> {
+            if (follow.getFollowedId().equals(userId)) {
+                followersFind.add(follow);
+            }
+        });
+
+        return followersFind;
+    }
+
 }
