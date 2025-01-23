@@ -1,7 +1,8 @@
 [
   {
+    "postId": 1,
     "userId": 1,
-    "date": "2023-10-03",
+    "date": "03-10-2023",
     "product": {
       "productId": 1,
       "productName": "Camiseta Deportiva",
@@ -14,8 +15,9 @@
     "price": 29.99
   },
   {
+    "postId": 2,
     "userId": 2,
-    "date": "2023-10-03",
+    "date": "03-10-2023",
     "product": {
       "productId": 2,
       "productName": "Pantalones Deportivos",
@@ -28,8 +30,9 @@
     "price": 39.99
   },
   {
+    "postId": 3,
     "userId": 3,
-    "date": "2023-10-03",
+    "date": "03-10-2023",
     "product": {
       "productId": 3,
       "productName": "Zapatillas Running",
@@ -42,8 +45,9 @@
     "price": 79.99
   },
   {
+    "postId": 4,
     "userId": 4,
-    "date": "2023-10-03",
+    "date": "03-10-2023",
     "product": {
       "productId": 4,
       "productName": "Gorra Deportiva",
@@ -56,8 +60,9 @@
     "price": 19.99
   },
   {
+    "postId": 5,
     "userId": 5,
-    "date": "2023-10-03",
+    "date": "03-10-2023",
     "product": {
       "productId": 5,
       "productName": "Botella de Agua",
@@ -70,8 +75,9 @@
     "price": 12.99
   },
   {
+    "postId": 6,
     "userId": 6,
-    "date": "2023-10-03",
+    "date": "08-01-2025",
     "product": {
       "productId": 6,
       "productName": "Mochila Deportiva",
@@ -84,8 +90,9 @@
     "price": 49.99
   },
   {
+    "postId": 7,
     "userId": 7,
-    "date": "2023-10-03",
+    "date": "03-10-2023",
     "product": {
       "productId": 7,
       "productName": "Calcetines Técnicos",
@@ -98,8 +105,9 @@
     "price": 9.99
   },
   {
+    "postId": 8,
     "userId": 8,
-    "date": "2023-10-03",
+    "date": "03-10-2023",
     "product": {
       "productId": 8,
       "productName": "Reloj Deportivo",
@@ -112,8 +120,9 @@
     "price": 149.99
   },
   {
+    "postId": 9,
     "userId": 9,
-    "date": "2023-10-03",
+    "date": "03-10-2023",
     "product": {
       "productId": 9,
       "productName": "Pantalones Cortos",
@@ -126,8 +135,9 @@
     "price": 24.99
   },
   {
+    "postId": 10,
     "userId": 10,
-    "date": "2023-10-03",
+    "date": "03-10-2023",
     "product": {
       "productId": 10,
       "productName": "Camiseta Térmica",
@@ -138,6 +148,230 @@
     },
     "category": 2,
     "price": 34.99
+  },
+  {
+    "postId": 11,
+    "userId": 6,
+    "date": "05-01-2025",
+    "product": {
+      "productId": 1,
+      "productName": "Gorra Deportiva",
+      "type": "Accesorio",
+      "brand": "Adidas",
+      "color": "Negro",
+      "notes": "Protección contra el sol."
+    },
+    "category": 3,
+    "price": 19.99
+  },
+  {
+    "postId": 12,
+    "userId": 7,
+    "date": "06-01-2025",
+    "product": {
+      "productId": 2,
+      "productName": "Zapatillas Running",
+      "type": "Calzado",
+      "brand": "Puma",
+      "color": "Azul",
+      "notes": "Excelente amortiguación."
+    },
+    "category": 1,
+    "price": 89.99
+  },
+  {
+    "postId": 13,
+    "userId": 8,
+    "date": "07-01-2025",
+    "product": {
+      "productId": 3,
+      "productName": "Camiseta Deportiva",
+      "type": "Ropa",
+      "brand": "Nike",
+      "color": "Rojo",
+      "notes": "Ideal para entrenamientos intensos."
+    },
+    "category": 2,
+    "price": 24.99
+  },
+  {
+    "postId": 14,
+    "userId": 9,
+    "date": "04-01-2025",
+    "product": {
+      "productId": 4,
+      "productName": "Botella de Agua",
+      "type": "Accesorio",
+      "brand": "CamelBak",
+      "color": "Transparente",
+      "notes": "Mantente hidratado."
+    },
+    "category": 3,
+    "price": 14.99
+  },
+  {
+    "postId": 15,
+    "userId": 6,
+    "date": "03-01-2025",
+    "product": {
+      "productId": 5,
+      "productName": "Mochila Deportiva",
+      "type": "Accesorio",
+      "brand": "Reebok",
+      "color": "Gris",
+      "notes": "Perfecta para el gimnasio."
+    },
+    "category": 3,
+    "price": 49.99
+  },
+  {
+    "postId": 16,
+    "userId": 7,
+    "date": "08-01-2025",
+    "product": {
+      "productId": 6,
+      "productName": "Pantalones Deportivos",
+      "type": "Ropa",
+      "brand": "Adidas",
+      "color": "Negro",
+      "notes": "Cómodos y ligeros."
+    },
+    "category": 2,
+    "price": 29.99
+  },
+  {
+    "postId": 17,
+    "userId": 8,
+    "date": "09-01-2025",
+    "product": {
+      "productId": 7,
+      "productName": "Camiseta Térmica",
+      "type": "Ropa",
+      "brand": "The North Face",
+      "color": "Blanco",
+      "notes": "Calidez en clima frío."
+    },
+    "category": 2,
+    "price": 39.99
+  },
+  {
+    "postId": 18,
+    "userId": 9,
+    "date": "10-01-2025",
+    "product": {
+      "productId": 8,
+      "productName": "Calcetines Técnicos",
+      "type": "Ropa",
+      "brand": "Nike",
+      "color": "Negro",
+      "notes": "Evita rozaduras durante el ejercicio."
+    },
+    "category": 2,
+    "price": 9.99
+  },
+  {
+    "postId": 19,
+    "userId": 6,
+    "date": "11-01-2025",
+    "product": {
+      "productId": 9,
+      "productName": "Cinturón Deportivo",
+      "type": "Accesorio",
+      "brand": "Under Armour",
+      "color": "Verde",
+      "notes": "Ideal para llevar tus cosas mientras corres."
+    },
+    "category": 3,
+    "price": 19.99
+  },
+  {
+    "postId": 20,
+    "userId": 7,
+    "date": "12-01-2025",
+    "product": {
+      "productId": 10,
+      "productName": "Reloj Deportivo",
+      "type": "Accesorio",
+      "brand": "Garmin",
+      "color": "Negro",
+      "notes": "Monitorea tu actividad física."
+    },
+    "category": 4,
+    "price": 149.99
+  },
+  {
+    "postId": 21,
+    "userId": 8,
+    "date": "13-01-2025",
+    "product": {
+      "productId": 11,
+      "productName": "Gorra para Correr",
+      "type": "Accesorio",
+      "brand": "Adidas",
+      "color": "Azul",
+      "notes": "Evita el sudor mientras corres."
+    },
+    "category": 3,
+    "price": 14.99
+  },
+  {
+    "postId": 22,
+    "userId": 9,
+    "date": "14-01-2025",
+    "product": {
+      "productId": 12,
+      "productName": "Camiseta de Compresión",
+      "type": "Ropa",
+      "brand": "Under Armour",
+      "color": "Rojo",
+      "notes": "Apoyo muscular avanzado."
+    },
+    "category": 2,
+    "price": 34.99
+  },
+  {
+    "postId": 23,
+    "userId": 6,
+    "date": "15-01-2025",
+    "product": {
+      "productId": 13,
+      "productName": "Mallas Deportivas",
+      "type": "Ropa",
+      "brand": "Nike",
+      "color": "Gris",
+      "notes": "Ajuste perfecto para entrenamiento."
+    },
+    "category": 2,
+    "price": 29.99
+  },
+  {
+    "postId": 24,
+    "userId": 7,
+    "date": "16-01-2025",
+    "product": {
+      "productId": 14,
+      "productName": "Pantalones Cortos",
+      "type": "Ropa",
+      "brand": "Puma",
+      "color": "Negro",
+      "notes": "Ligereza y movilidad."
+    },
+    "category": 2,
+    "price": 24.99
+  },
+  {
+    "postId": 25,
+    "userId": 8,
+    "date": "17-01-2025",
+    "product": {
+      "productId": 15,
+      "productName": "Zapatillas para Entrenamiento",
+      "type": "Calzado",
+      "brand": "Reebok",
+      "color": "Blanco",
+      "notes": "Gran soporte en actividades intensas."
+    },
+    "category": 1,
+    "price": 99.99
   }
-
 ]

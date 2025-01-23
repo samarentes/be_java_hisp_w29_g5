@@ -1,20 +1,19 @@
-package com.social_media.social_media.entity;
+package com.social_media.social_media.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Product {
-    private Long productId;
-    private String productName;
+public class ProductRequestDto {
+    private Long product_id;
+    private String product_name;
     private String type;
     private String brand;
     private String color;
     private String notes;
-
 }

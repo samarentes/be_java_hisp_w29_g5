@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IPostRepository {
     List<Post> findSellerById(Long userIdToFollow);
+    Post create(Post post);
+    List<Post> findAll();
 }
