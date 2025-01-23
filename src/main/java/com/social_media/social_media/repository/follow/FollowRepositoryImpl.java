@@ -3,7 +3,6 @@ package com.social_media.social_media.repository.follow;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.social_media.social_media.entity.Follow;
-import com.social_media.social_media.entity.Post;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -27,7 +26,6 @@ public class FollowRepositoryImpl implements IFollowRepository {
             System.out.println(e.getMessage());
         }
     }
-
 
     private void loadDataBase() throws IOException {
         File file;
@@ -68,4 +66,5 @@ public class FollowRepositoryImpl implements IFollowRepository {
 
         return followersFind;
     }
+
 }

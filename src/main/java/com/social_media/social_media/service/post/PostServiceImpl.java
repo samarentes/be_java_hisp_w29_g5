@@ -62,8 +62,7 @@ public class PostServiceImpl implements IPostService {
                         .brand(newPost.getProduct().getBrand())
                         .color(newPost.getProduct().getColor())
                         .notes(newPost.getProduct().getNotes())
-                        .build()
-                )
+                        .build())
                 .category(newPost.getCategory())
                 .price(newPost.getPrice())
                 .build();
