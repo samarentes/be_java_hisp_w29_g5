@@ -11,6 +11,7 @@ import com.social_media.social_media.repository.post.IPostRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class UserServiceImpl implements IUserService {
     private final IFollowRepository followRepository;
 
     @Override
-    public FollowersResponseDto searchFollowers(Long userId) {
+    public FollowersResponseDto searchFollowers(Long userId, String order) {
         Optional<User> followedUser = this.userRepository.findById(userId);
 
         if (followedUser.isEmpty()) {
@@ -47,12 +48,23 @@ public class UserServiceImpl implements IUserService {
             }
         }).toList();
 
+        try {
+            if (order.equals("name_asc")) {
+                followers.sort(Comparator.comparing(UserResponseDto::getUser_name));
+            } else if (order.equals("name_desc")) {
+                followers.sort(Comparator.comparing(UserResponseDto::getUser_name).reversed());
+
+            }
+        } catch (Exception e) {
+            System.out.println(e.getClass());
+        }
+
         return new FollowersResponseDto(followedUser.get().getUserId(), followedUser.get().getName(), followers);
 
     }
 
     @Override
-    public FollowedResponseDto searchFollowed(Long userId) {
+    public FollowedResponseDto searchFollowed(Long userId, String order) {
         Optional<User> followerUser = this.userRepository.findById(userId);
 
         if (followerUser.isEmpty()) {
@@ -71,6 +83,13 @@ public class UserServiceImpl implements IUserService {
                 return null;
             }
         }).toList();
+
+        if (order.equals("name_asc")) {
+            followeds.sort(Comparator.comparing(UserResponseDto::getUser_name));
+        } else if (order.equals("name_desc")) {
+            followeds.sort(Comparator.comparing(UserResponseDto::getUser_name).reversed());
+
+        }
 
         return new FollowedResponseDto(followerUser.get().getUserId(), followerUser.get().getName(), followeds);
     }

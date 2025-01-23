@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,12 +27,14 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/follower/list")
-    public ResponseEntity<FollowersResponseDto> getFollowers(@PathVariable Long userId) {
-        return new ResponseEntity<>(this.userService.searchFollowers(userId), HttpStatus.OK);
+    public ResponseEntity<FollowersResponseDto> getFollowers(@PathVariable Long userId,
+            @RequestParam(required = false) String order) {
+        return new ResponseEntity<>(this.userService.searchFollowers(userId, order), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/followed/list")
-    public ResponseEntity<FollowedResponseDto> getFollowed(@PathVariable Long userId) {
-        return new ResponseEntity<>(this.userService.searchFollowed(userId), HttpStatus.OK);
+    public ResponseEntity<FollowedResponseDto> getFollowed(@PathVariable Long userId,
+            @RequestParam(required = false) String order) {
+        return new ResponseEntity<>(this.userService.searchFollowed(userId, order), HttpStatus.OK);
     }
 }
