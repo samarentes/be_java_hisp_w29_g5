@@ -17,9 +17,7 @@ public class PostController {
     private final IPostService postService;
 
     @GetMapping("/post")
-    public ResponseEntity<?> createNewPost(@RequestBody PostProductRequestDto postProductRequestDto){
+    public ResponseEntity<?> createNewPost(@RequestBody PostProductRequestDto postProductRequestDto) {
         return new ResponseEntity<>(postService.createPost(postProductRequestDto), HttpStatus.CREATED);
     }
-
-
 }
