@@ -42,25 +42,12 @@ public class FollowRepositoryImpl implements IFollowRepository {
 
 
     @Override
-    public boolean unfollowFollow(Long userId, Long userIdToUnfollow) {
-        // Validar que el registro de seguimiento exista
-        Optional<Map.Entry<UUID, Follow>> followEntry = follows.entrySet().stream()
-                .filter(entry -> entry.getValue().getFollowerId().equals(userId)
-                        && entry.getValue().getFollowedId().equals(userIdToUnfollow))
-                .findFirst();
+    public void deleteFollow(Optional<Follow> follow) {
+        Follow followToDelete = follow.get();
 
-        UUID followId = followEntry.get().getKey();
-        follows.remove(followId);
-        return true;
+        // Encuentra la ky (UUID) y elimina el registro
+        follows.entrySet().removeIf(entry -> entry.getValue().equals(followToDelete));
     }
-
-
-
-
-
-
-
-
 
 
     @Override
@@ -75,11 +62,13 @@ public class FollowRepositoryImpl implements IFollowRepository {
     }
 
     @Override
-    public boolean existsByFollowerAndFollowed(Long userId, Long userIdToFollow) {
+    public Optional<Follow> existsByFollowerAndFollowed(Long userId, Long userIdToFollow) {
         return follows.values().stream()
-                .anyMatch(f -> f.getFollowerId().equals(userId) && f.getFollowedId().equals(userIdToFollow));
+                .filter(f -> f.getFollowerId().equals(userId) && f.getFollowedId().equals(userIdToFollow))
+                .findFirst();
     }
 
+    @Override
     public List<Follow> findFollowed(Long userId) {
         List<Follow> followedsFind = new ArrayList<>();
         follows.forEach((__, follow) -> {

@@ -1,5 +1,6 @@
 package com.social_media.social_media.service.user;
 
+import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.exception.BadRequestFollowException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.repository.post.IPostRepository;
@@ -45,23 +46,26 @@ public class UserServiceImpl implements IUserService {
     @Override
     public Boolean unfollowSeller(Long userId, Long userIdToUnfollow) {
         //validar si el user id ya está siguiendo al seller especificado(si existe registro)
-        if (!followRepository.existsByFollowerAndFollowed(userId, userIdToUnfollow)) {
+        Optional<Follow> follow = followRepository.existsByFollowerAndFollowed(userId, userIdToUnfollow);
+        if (follow.isEmpty()) {
             throw new BadRequestFollowException(MessagesExceptions.NOT_FOLLOW_ALREADY_EXISTS);
         }
 
-        followRepository.unfollowFollow(userId, userIdToUnfollow);
+        followRepository.deleteFollow(follow);
         return true;
     }
 
     @Override
     public FollowingResponseDto followSeller(Long userId, Long userIdToFollow) {
+        Optional<Follow> followExist = followRepository.existsByFollowerAndFollowed(userId, userIdToFollow);
+
         // validar que el mismo id de user no se siga
         if (userId.equals(userIdToFollow)) {
             throw new BadRequestFollowException(MessagesExceptions.THE_USER_CANNOT_FOLLOW_THEMSELVES);
         }
 
         // validar si el user id ya está siguiendo al seller especificado
-        if (followRepository.existsByFollowerAndFollowed(userId, userIdToFollow)) {
+        if (followExist.isPresent()) {
             throw new BadRequestFollowException(MessagesExceptions.FOLLOW_ALREADY_EXISTS);
         }
 
