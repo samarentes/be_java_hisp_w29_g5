@@ -2,6 +2,7 @@ package com.social_media.social_media.service.user;
 
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.exception.BadRequestFollowException;
+import com.social_media.social_media.exception.InvalidOrderException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.repository.post.IPostRepository;
 
@@ -68,11 +69,13 @@ public class UserServiceImpl implements IUserService {
         }).filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        if (order != null && order.equals("name_asc")) {
+        if (order.equals("name_asc")) {
             followers.sort(Comparator.comparing(UserResponseDto::getUser_name));
-        } else if (order != null && order.equals("name_desc")) {
+        } else if (order.equals("name_desc")) {
             followers.sort(Comparator.comparing(UserResponseDto::getUser_name).reversed());
 
+        } else {
+            throw new InvalidOrderException(MessagesExceptions.INVALID_ORDER_NAME);
         }
 
         return new FollowersResponseDto(followedUser.get().getUserId(), followedUser.get().getName(), followers);
@@ -97,11 +100,13 @@ public class UserServiceImpl implements IUserService {
         }).filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        if (order != null && order.equals("name_asc")) {
+        if (order.equals("name_asc")) {
             followeds.sort(Comparator.comparing(UserResponseDto::getUser_name));
-        } else if (order != null && order.equals("name_desc")) {
+        } else if (order.equals("name_desc")) {
             followeds.sort(Comparator.comparing(UserResponseDto::getUser_name).reversed());
 
+        } else {
+            throw new InvalidOrderException(MessagesExceptions.INVALID_ORDER_NAME);
         }
 
         return new FollowedResponseDto(followerUser.get().getUserId(), followerUser.get().getName(), followeds);
