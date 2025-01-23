@@ -5,5 +5,5 @@ import com.social_media.social_media.dto.responseDto.PostResponseDto;
 
 public interface IPostService {
     PostResponseDto createPost(PostProductRequestDto postProductRequestDto);
-    SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId);
+    SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId, String order);
 }

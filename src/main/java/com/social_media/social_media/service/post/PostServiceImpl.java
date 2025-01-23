@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import com.social_media.social_media.repository.post.IPostRepository;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.ArrayList;
 import java.util.List;
 import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_NOT_EXIST;
 
@@ -71,7 +70,7 @@ public class PostServiceImpl implements IPostService {
     }
 
     @Override
-    public SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId) {
+    public SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId, String order) {
         LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
 
         List<Long> followedIds = followRepository.findFollowed(userId).stream().map(Follow::getFollowedId).toList();
@@ -101,8 +100,9 @@ public class PostServiceImpl implements IPostService {
                         .category(post.getCategory())
                         .price(post.getPrice())
                         .build()
-                ).sorted(Comparator.comparing(PostResponseWithIdDto::getDate).reversed()
-                        .thenComparing(PostResponseWithIdDto::getPost_id))
+                ).sorted(order.equalsIgnoreCase("date_asc") ?
+                        Comparator.comparing(PostResponseWithIdDto::getDate) :
+                        Comparator.comparing(PostResponseWithIdDto::getDate).reversed())
                 .toList();
         return SellersPostsByFollowerResponseDto.builder().user_id(userId).posts(postsDto).build();
     }

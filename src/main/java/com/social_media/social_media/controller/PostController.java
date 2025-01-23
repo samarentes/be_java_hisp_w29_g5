@@ -6,11 +6,7 @@ import com.social_media.social_media.service.post.IPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,9 +15,12 @@ public class PostController {
     private final IPostService postService;
 
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<SellersPostsByFollowerResponseDto> getFollowedPostsFromLastTwoWeeks(@PathVariable long userId) {
-        SellersPostsByFollowerResponseDto responseDto = postService.searchFollowedPostsFromLastTwoWeeks(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    public ResponseEntity<SellersPostsByFollowerResponseDto> getFollowedPosts(
+            @PathVariable long userId,
+            @RequestParam(defaultValue = "date_desc") String order) {
+
+        SellersPostsByFollowerResponseDto responseDto = postService.searchFollowedPostsFromLastTwoWeeks(userId, order);
+        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/post")
