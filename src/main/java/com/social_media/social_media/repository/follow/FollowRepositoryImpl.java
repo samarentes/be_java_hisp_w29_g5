@@ -3,12 +3,12 @@ package com.social_media.social_media.repository.follow;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.social_media.social_media.entity.Follow;
-import com.social_media.social_media.entity.Post;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -42,7 +42,7 @@ public class FollowRepositoryImpl implements IFollowRepository {
     @Override
     public Follow addFollow(Long followerId, Long followedId) {
         Follow newFollow = Follow.builder()
-                .followedId(followerId)
+                .followerId(followerId)
                 .followedId(followedId)
                 .build();
         follows.put(UUID.randomUUID(), newFollow);
@@ -55,4 +55,28 @@ public class FollowRepositoryImpl implements IFollowRepository {
         return follows.values().stream()
                 .anyMatch(f -> f.getFollowerId().equals(userId) && f.getFollowedId().equals(userIdToFollow));
     }
+
+    public List<Follow> findFollowed(Long userId) {
+        List<Follow> followedsFind = new ArrayList<>();
+        follows.forEach((__, follow) -> {
+            if (follow.getFollowerId().equals(userId)) {
+                followedsFind.add(follow);
+            }
+        });
+
+        return followedsFind;
+    }
+
+    @Override
+    public List<Follow> findFollowers(Long userId) {
+        List<Follow> followersFind = new ArrayList<>();
+        this.follows.forEach((__, follow) -> {
+            if (follow.getFollowedId().equals(userId)) {
+                followersFind.add(follow);
+            }
+        });
+
+        return followersFind;
+    }
+
 }
