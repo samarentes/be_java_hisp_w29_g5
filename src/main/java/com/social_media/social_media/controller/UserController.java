@@ -30,28 +30,26 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
-    public ResponseEntity<Boolean> postUnfollowSeller(@PathVariable Long userId, @PathVariable Long userIdToUnfollow){
+    public ResponseEntity<Boolean> postUnfollowSeller(@PathVariable Long userId, @PathVariable Long userIdToUnfollow) {
         return new ResponseEntity<>(userService.unfollowSeller(userId, userIdToUnfollow), HttpStatus.NO_CONTENT);
     }
+
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<FollowingResponseDto> postFollowSeller(@PathVariable Long userId,
-            @PathVariable Long userIdToFollow) {
+                                                                 @PathVariable Long userIdToFollow) {
         return new ResponseEntity<>(userService.followSeller(userId, userIdToFollow), HttpStatus.OK);
 
     }
 
     @GetMapping("/{userId}/follower/list")
-    public ResponseEntity<FollowersResponseDto> getFollowers(@PathVariable Long userId,
-            @RequestParam(required = false) String order) {
+    public ResponseEntity<FollowersResponseDto> getFollowers(@PathVariable Long userId, @RequestParam(required = false, defaultValue = "name_asc") String order) {
         return new ResponseEntity<>(this.userService.searchFollowers(userId, order), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/followed/list")
-    public ResponseEntity<FollowedResponseDto> getFollowed(@PathVariable Long userId,
-            @RequestParam(required = false) String order) {
+    public ResponseEntity<FollowedResponseDto> getFollowed(@PathVariable Long userId, @RequestParam(required = false, defaultValue = "name_asc") String order) {
         return new ResponseEntity<>(this.userService.searchFollowed(userId, order), HttpStatus.OK);
     }
-
 
 
 }
