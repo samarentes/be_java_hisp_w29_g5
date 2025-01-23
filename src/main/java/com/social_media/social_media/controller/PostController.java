@@ -30,8 +30,8 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
-    @GetMapping("/post")
-    public ResponseEntity<?> createNewPost(@RequestBody PostRequestDto postProductRequestDto){
+    @PostMapping("/post")
+    public ResponseEntity<?> createNewPost(@RequestBody PostRequestDto postProductRequestDto) {
         return new ResponseEntity<>(postService.createPost(postProductRequestDto), HttpStatus.CREATED);
     }
 
