@@ -40,6 +40,22 @@ public class FollowRepositoryImpl implements IFollowRepository {
     }
 
     @Override
+    public Follow addFollow(Long followerId, Long followedId) {
+        Follow newFollow = Follow.builder()
+                .followerId(followerId)
+                .followedId(followedId)
+                .build();
+        follows.put(UUID.randomUUID(), newFollow);
+
+        return newFollow;
+    }
+
+    @Override
+    public boolean existsByFollowerAndFollowed(Long userId, Long userIdToFollow) {
+        return follows.values().stream()
+                .anyMatch(f -> f.getFollowerId().equals(userId) && f.getFollowedId().equals(userIdToFollow));
+    }
+
     public List<Follow> findFollowed(Long userId) {
         List<Follow> followedsFind = new ArrayList<>();
         follows.forEach((__, follow) -> {

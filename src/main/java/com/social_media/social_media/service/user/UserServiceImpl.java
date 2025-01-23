@@ -1,15 +1,19 @@
 package com.social_media.social_media.service.user;
 
-import com.social_media.social_media.dto.responseDto.FollowersResponseDto;
-import com.social_media.social_media.dto.responseDto.FollowedResponseDto;
-import com.social_media.social_media.dto.responseDto.UserResponseDto;
+import com.social_media.social_media.dto.responseDto.FollowingResponseDto;
 import com.social_media.social_media.entity.Follow;
+import com.social_media.social_media.exception.BadRequestFollowException;
+import com.social_media.social_media.repository.follow.IFollowRepository;
+import com.social_media.social_media.repository.post.IPostRepository;
+
+import com.social_media.social_media.utils.MessagesExceptions;
+import com.social_media.social_media.dto.responseDto.FollowedResponseDto;
+import com.social_media.social_media.dto.responseDto.FollowersResponseDto;
+import com.social_media.social_media.dto.responseDto.UserResponseDto;
 import com.social_media.social_media.entity.User;
 import com.social_media.social_media.exception.NotFoundException;
 import com.social_media.social_media.dto.responseDto.FollowersCountResponseDto;
 import com.social_media.social_media.exception.NotSellerException;
-import com.social_media.social_media.repository.follow.IFollowRepository;
-import com.social_media.social_media.repository.post.IPostRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +26,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.social_media.social_media.repository.user.IUserRepository;
-import com.social_media.social_media.utils.MessagesExceptions;
 
 import static com.social_media.social_media.utils.MessagesExceptions.FOLLOWED_USER_NOT_SELLER;
 import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_NOT_EXIST;
@@ -89,6 +92,31 @@ public class UserServiceImpl implements IUserService {
         }
 
         return new FollowedResponseDto(followerUser.get().getUserId(), followerUser.get().getName(), followeds);
+    }
+
+    public FollowingResponseDto followSeller(Long userId, Long userIdToFollow) {
+        // validar que el mismo id de user no se siga
+        if (userId.equals(userIdToFollow)) {
+            throw new BadRequestFollowException(MessagesExceptions.THE_USER_CANNOT_FOLLOW_THEMSELVES);
+        }
+
+        // validar si el user id ya está siguiendo al seller especificado
+        if (followRepository.existsByFollowerAndFollowed(userId, userIdToFollow)) {
+            throw new BadRequestFollowException(MessagesExceptions.FOLLOW_ALREADY_EXISTS);
+        }
+
+        // validar que el usuario que intenta seguir si es un seller buscando si existe
+        // al menos un post
+        if (postRepository.findById(userIdToFollow).isEmpty()) {
+            throw new BadRequestFollowException(MessagesExceptions.FOLLOWED_USER_NOT_SELLER);
+        }
+
+        Follow follow = followRepository.addFollow(userId, userIdToFollow);
+
+        return FollowingResponseDto.builder()
+                .user_id(follow.getFollowerId())
+                .userIdToFollow(follow.getFollowedId())
+                .build();
     }
 
     public FollowedResponseDto searchFollowed(Long userId) {
