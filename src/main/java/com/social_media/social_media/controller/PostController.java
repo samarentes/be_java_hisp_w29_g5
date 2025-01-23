@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,14 +23,15 @@ public class PostController {
     private final IPostService postService;
 
     @GetMapping("/followed/{userId}/list")
-    public ResponseEntity<SellersPostsByFollowerResponseDto> getFollowedPostsFromLastTwoWeeks(
-            @PathVariable long userId) {
-        SellersPostsByFollowerResponseDto responseDto = postService.searchFollowedPostsFromLastTwoWeeks(userId);
+    public ResponseEntity<SellersPostsByFollowerResponseDto> getFollowedRecentPosts(
+            @PathVariable long userId,
+            @RequestParam(defaultValue = "date_desc") String order) {
+        SellersPostsByFollowerResponseDto responseDto = postService.searchFollowedPostsFromLastTwoWeeks(userId, order);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
-    @PostMapping("/post")
-    public ResponseEntity<?> postNew(@RequestBody PostRequestDto postProductRequestDto) {
+    @GetMapping("/post")
+    public ResponseEntity<?> createNewPost(@RequestBody PostRequestDto postProductRequestDto){
         return new ResponseEntity<>(postService.createPost(postProductRequestDto), HttpStatus.CREATED);
     }
 

@@ -5,6 +5,7 @@ import com.social_media.social_media.enums.PostType;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface IPostRepository {
     List<Post> findById(Long userId);

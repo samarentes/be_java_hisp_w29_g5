@@ -11,5 +11,5 @@ public interface IPostService {
 
     PostPromoResponseDto createPostPromo(PostPromoRequestDto postPromoRequestDto);
 
-    SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId);
+    SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId,String order);
 }

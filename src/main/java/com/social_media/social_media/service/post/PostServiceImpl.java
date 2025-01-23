@@ -12,6 +12,7 @@ import com.social_media.social_media.dto.request.IPostRequestDto;
 import com.social_media.social_media.dto.request.ProductRequestDto;
 import com.social_media.social_media.dto.responseDto.PostPromoResponseDto;
 import com.social_media.social_media.dto.responseDto.PostResponseDto;
+import com.social_media.social_media.exception.InvalidOrderException;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import com.social_media.social_media.enums.PostType;
@@ -20,11 +21,9 @@ import com.social_media.social_media.repository.user.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.social_media.social_media.repository.post.IPostRepository;
-
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-
 import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_NOT_EXIST;
 
 @RequiredArgsConstructor
@@ -40,6 +39,7 @@ public class PostServiceImpl implements IPostService {
         postRepository.add(post);
         return buildPostResponseDto(post);
     }
+
 
     @Override
     public PostPromoResponseDto createPostPromo(PostPromoRequestDto postPromoRequestDto) {
@@ -114,8 +114,10 @@ public class PostServiceImpl implements IPostService {
                 .build();
     }
 
+
+
     @Override
-    public SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId) {
+    public SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId, String order) {
         LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
 
         List<Long> followedIds = followRepository.findFollowed(userId).stream().map(Follow::getFollowedId).toList();
@@ -124,6 +126,10 @@ public class PostServiceImpl implements IPostService {
         }
         List<Post> posts = followedIds.stream().flatMap(followedId ->
                 postRepository.findByIdSince(followedId, lastTwoWeeks).stream()).toList();
+
+        if (posts.isEmpty()) {
+            throw new NotFoundException(MessagesExceptions.NO_RECENT_POSTS_FOUND + userId);
+        }
 
         List<PostResponseWithIdDto> postsDto = posts.stream()
                 .map(post -> PostResponseWithIdDto.builder()
@@ -141,9 +147,18 @@ public class PostServiceImpl implements IPostService {
                         .category(post.getCategory())
                         .price(post.getPrice())
                         .build()
-                ).sorted(Comparator.comparing(PostResponseWithIdDto::getDate).reversed()
-                        .thenComparing(PostResponseWithIdDto::getPost_id))
+                ).sorted(getComparator(order))
                 .toList();
         return SellersPostsByFollowerResponseDto.builder().user_id(userId).posts(postsDto).build();
+    }
+
+    private Comparator<PostResponseWithIdDto> getComparator(String order) {
+        Comparator<PostResponseWithIdDto> comparator = Comparator.comparing(PostResponseWithIdDto::getDate);
+        comparator = switch (order) {
+            case "date_asc" -> comparator;
+            case "date_desc" -> comparator.reversed();
+            default -> throw new InvalidOrderException(MessagesExceptions.INVALID_ORDER);
+        };
+        return comparator.thenComparing(PostResponseWithIdDto::getPost_id);
     }
 }

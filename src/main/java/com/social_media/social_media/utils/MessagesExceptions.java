@@ -12,4 +12,6 @@ public final class MessagesExceptions {
     public static final String FOLLOW_ALREADY_EXISTS = "Este usuario ya está siguiendo al usuario especificado.";
     public static final String USER_NOT_FOUND = "El usuario no fue encontrado";
     public static final String NO_FOLLOWERS_FOUND = "No se encontraron seguidores para el usuario con ID: ";
+    public static final String NO_RECENT_POSTS_FOUND = "No se encontraron publicaciones recientes para los seguidores del usuario con ID: ";
+    public static final String INVALID_ORDER = "El orden indicado es inválido: el mismo debe ser 'date_asc' o 'date_desc'.";
 }

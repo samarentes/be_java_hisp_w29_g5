@@ -49,5 +49,4 @@ public class UserController {
             @RequestParam(required = false) String order) {
         return new ResponseEntity<>(this.userService.searchFollowed(userId, order), HttpStatus.OK);
     }
-
 }
