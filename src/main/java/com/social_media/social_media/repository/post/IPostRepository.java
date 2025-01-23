@@ -6,6 +6,6 @@ import com.social_media.social_media.enums.PostType;
 import java.util.List;
 
 public interface IPostRepository {
-    Post create(Post post);
+    Post add(Post post);
     List<Post> findAll(PostType postType);
 }

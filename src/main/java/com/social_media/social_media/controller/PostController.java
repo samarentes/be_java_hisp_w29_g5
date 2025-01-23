@@ -15,14 +15,13 @@ public class PostController {
     private final IPostService postService;
 
     @PostMapping("/post")
-    public ResponseEntity<?> createNewPost(@RequestBody PostRequestDto postProductRequestDto) {
+    public ResponseEntity<?> postNew(@RequestBody PostRequestDto postProductRequestDto) {
         return new ResponseEntity<>(postService.createPost(postProductRequestDto), HttpStatus.CREATED);
     }
 
     @PostMapping("/promo-post")
-    public ResponseEntity<?> createNewPromoPost(@RequestBody PostPromoRequestDto postPromoRequestDto) {
+    public ResponseEntity<?> postNewPromo(@RequestBody PostPromoRequestDto postPromoRequestDto) {
         return new ResponseEntity<>(postService.createPostPromo(postPromoRequestDto), HttpStatus.CREATED);
     }
-
 
 }

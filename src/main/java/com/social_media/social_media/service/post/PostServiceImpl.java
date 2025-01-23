@@ -28,24 +28,24 @@ public class PostServiceImpl implements IPostService {
     @Override
     public PostResponseDto createPost(PostRequestDto postProductRequestDto) {
         Post post = createPostCommon(postProductRequestDto, 0.0);
-        postRepository.create(post);
+        postRepository.add(post);
         return buildPostResponseDto(post);
     }
 
     @Override
     public PostPromoResponseDto createPostPromo(PostPromoRequestDto postPromoRequestDto) {
         Post post = createPostCommon(postPromoRequestDto, postPromoRequestDto.getDiscount());
-        postRepository.create(post);
+        postRepository.add(post);
         return buildPostPromoResponseDto(post);
     }
 
-    private <T extends IPostRequestDto> Post createPostCommon(T postRequestDto, Double discount) {
-        if (userRepository.findById(postRequestDto.getUser_id()).isEmpty()){
+    private Post createPostCommon(IPostRequestDto postRequestDto, Double discount) {
+        if (userRepository.findById(postRequestDto.getUser_id()).isEmpty()) {
             throw new NotFoundException(SELLER_ID_NOT_EXIST);
         }
 
         return Post.builder()
-                .postId((long) (postRepository.findAll(PostType.ALL).size() + 1))
+                .postId(Integer.toUnsignedLong(postRepository.findAll(PostType.ALL).size() + 1))
                 .userId(postRequestDto.getUser_id())
                 .date(postRequestDto.getDate())
                 .product(buildProduct(postRequestDto.getProduct()))
