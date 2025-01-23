@@ -43,16 +43,14 @@ public class UserServiceImpl implements IUserService {
 
         List<Follow> followedFind = this.followRepository.findFollowed(userId);
         List<UserResponseDto> followeds = followedFind.stream().map(follow -> {
-            Optional<User> followedFound = this.userRepository.findById(follow.getFollowedId());
-            if (followedFound.isPresent()) {
+            User followedFound = this.userRepository.findById(follow.getFollowedId()).orElse(null);
 
-                return UserResponseDto.builder().user_id(followedFound.get().getUserId())
-                        .user_name(followedFound.get().getName()).build();
+            return UserResponseDto.builder().user_id(followedFound.getUserId())
+                    .user_name(followedFound.getName()).build();
 
-            } else {
-                return null;
-            }
-        }).toList();
+        }).filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        ;
 
         return new FollowedResponseDto(followerUser.get().getUserId(), followerUser.get().getName(), followeds);
     }
