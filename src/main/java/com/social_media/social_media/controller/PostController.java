@@ -40,4 +40,8 @@ public class PostController {
         return new ResponseEntity<>(postService.createPostPromo(postPromoRequestDto), HttpStatus.CREATED);
     }
 
+    @GetMapping("/promo-post/count")
+    public ResponseEntity<?> postPromoCount(@RequestParam Long user_id) {
+        return new ResponseEntity<>(postService.searchSellersWithPromoPosts(user_id), HttpStatus.OK);
+    }
 }

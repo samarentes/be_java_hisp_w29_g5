@@ -1,6 +1,8 @@
 package com.social_media.social_media.controller;
 
+import com.social_media.social_media.dto.request.PostPromoRequestDto;
 import com.social_media.social_media.dto.responseDto.FollowingResponseDto;
+import com.social_media.social_media.service.post.IPostService;
 import com.social_media.social_media.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,10 +30,9 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
-    public ResponseEntity<Boolean> postUnfollowSeller(@PathVariable Long userId, @PathVariable Long userIdToUnfollow) {
+    public ResponseEntity<Boolean> postUnfollowSeller(@PathVariable Long userId, @PathVariable Long userIdToUnfollow){
         return new ResponseEntity<>(userService.unfollowSeller(userId, userIdToUnfollow), HttpStatus.NO_CONTENT);
     }
-
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<FollowingResponseDto> postFollowSeller(@PathVariable Long userId,
             @PathVariable Long userIdToFollow) {
@@ -41,13 +42,16 @@ public class UserController {
 
     @GetMapping("/{userId}/follower/list")
     public ResponseEntity<FollowersResponseDto> getFollowers(@PathVariable Long userId,
-            @RequestParam(required = false, defaultValue = "name_asc") String order) {
+            @RequestParam(required = false) String order) {
         return new ResponseEntity<>(this.userService.searchFollowers(userId, order), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/followed/list")
     public ResponseEntity<FollowedResponseDto> getFollowed(@PathVariable Long userId,
-            @RequestParam(required = false, defaultValue = "name_asc") String order) {
+            @RequestParam(required = false) String order) {
         return new ResponseEntity<>(this.userService.searchFollowed(userId, order), HttpStatus.OK);
     }
+
+
+
 }

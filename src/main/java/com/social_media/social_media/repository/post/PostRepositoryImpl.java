@@ -61,12 +61,16 @@ public class PostRepositoryImpl implements IPostRepository {
     }
 
     @Override
-    public List<Post> findAll(PostType postType) {
+    public List<Post> findAll(PostType postType, Long userId) {
         List<Post> postList = new ArrayList<>();
         posts.forEach((__, post) -> {
-            if (postType == PostType.ALL ||
+            boolean matchesType = postType == PostType.ALL ||
                     (postType == PostType.NORMAL && post.getDiscount() == 0) ||
-                    (postType == PostType.PROMO && post.getDiscount() != 0)) {
+                    (postType == PostType.PROMO && post.getDiscount() != 0);
+
+            boolean matchesUser = (userId == null || post.getUserId().equals(userId));
+
+            if (matchesType && matchesUser) {
                 postList.add(post);
             }
         });
