@@ -41,6 +41,15 @@ public class PostRepositoryImpl implements IPostRepository {
     }
 
     @Override
+    public List<Post> findById(Long userId) {
+        List<Post> filteredPosts = new ArrayList<>();
+        this.posts.forEach((__, post) -> {
+            if (post.getUserId().equals(userId)) {
+                filteredPosts.add(post);
+            }
+        });
+        return filteredPosts;
+    }
     public Post create(Post post) {
         posts.put(post.getPostId(), post);
         return post;
