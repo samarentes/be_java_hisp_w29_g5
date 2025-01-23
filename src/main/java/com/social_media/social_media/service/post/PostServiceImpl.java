@@ -16,8 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.social_media.social_media.repository.post.IPostRepository;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_NOT_EXIST;
 
@@ -80,10 +79,6 @@ public class PostServiceImpl implements IPostService {
         }
         List<Post> posts = followedIds.stream().flatMap(followedId ->
                 postRepository.findByIdSince(followedId, lastTwoWeeks).stream()).toList();
-
-        if (posts.isEmpty()) {
-            throw new NotFoundException(MessagesExceptions.NO_RECENT_POSTS_FOUND + userId);
-        }
 
         List<PostResponseWithIdDto> postsDto = posts.stream()
                 .map(post -> PostResponseWithIdDto.builder()

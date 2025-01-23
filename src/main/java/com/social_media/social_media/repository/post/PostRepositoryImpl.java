@@ -55,7 +55,12 @@ public class PostRepositoryImpl implements IPostRepository {
 
     @Override
     public List<Post> findByIdSince(Long userId, LocalDate lastTwoWeeks) {
-        return posts.values().stream().filter(post -> post.getUserId().equals(userId)
-            && !post.getDate().isBefore(lastTwoWeeks)).toList();
+        List<Post> postsFind = new ArrayList<>();
+        posts.forEach((__, post) -> {
+            if (post.getUserId().equals(userId) && !post.getDate().isBefore(lastTwoWeeks)) {
+                postsFind.add(post);
+            }
+        });
+        return postsFind;
     }
 }
