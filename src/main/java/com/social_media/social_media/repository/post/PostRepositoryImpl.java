@@ -9,11 +9,11 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.UUID;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository {
@@ -54,6 +54,17 @@ public class PostRepositoryImpl implements IPostRepository {
     }
 
     @Override
+    public List<Post> findByIdSince(Long userId, LocalDate lastTwoWeeks) {
+        List<Post> postsFind = new ArrayList<>();
+        posts.forEach((__, post) -> {
+            if (post.getUserId().equals(userId) && !post.getDate().isBefore(lastTwoWeeks)) {
+                postsFind.add(post);
+            }
+        });
+        return postsFind;
+    }
+
+    @Override
     public List<Post> findPostBySellerId(Long userIdToFollow) {
         List<Post> filteredPosts = new ArrayList<>();
         posts.forEach((__, post) -> {
@@ -63,10 +74,4 @@ public class PostRepositoryImpl implements IPostRepository {
         });
         return filteredPosts;
     }
-
-
-
-
-
-
 }

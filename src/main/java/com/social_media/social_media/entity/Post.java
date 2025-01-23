@@ -1,7 +1,6 @@
 package com.social_media.social_media.entity;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

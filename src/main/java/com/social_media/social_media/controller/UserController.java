@@ -19,5 +19,4 @@ public class UserController {
     public ResponseEntity<?> getFollowersCount(@PathVariable Long userId) {
         return new ResponseEntity<>(userService.searchFollowersCount(userId), HttpStatus.OK);
     }
-
 }
