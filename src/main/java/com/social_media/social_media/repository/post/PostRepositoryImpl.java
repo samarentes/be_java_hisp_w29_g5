@@ -9,11 +9,11 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.UUID;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository {
@@ -41,6 +41,15 @@ public class PostRepositoryImpl implements IPostRepository {
     }
 
     @Override
+    public List<Post> findById(Long userId) {
+        List<Post> filteredPosts = new ArrayList<>();
+        this.posts.forEach((__, post) -> {
+            if (post.getUserId().equals(userId)) {
+                filteredPosts.add(post);
+            }
+        });
+        return filteredPosts;
+    }
     public Post create(Post post) {
         posts.put(post.getPostId(), post);
         return post;
@@ -53,5 +62,25 @@ public class PostRepositoryImpl implements IPostRepository {
         return postList;
     }
 
+    @Override
+    public List<Post> findByIdSince(Long userId, LocalDate lastTwoWeeks) {
+        List<Post> postsFind = new ArrayList<>();
+        posts.forEach((__, post) -> {
+            if (post.getUserId().equals(userId) && !post.getDate().isBefore(lastTwoWeeks)) {
+                postsFind.add(post);
+            }
+        });
+        return postsFind;
+    }
 
+    @Override
+    public List<Post> findPostBySellerId(Long userIdToFollow) {
+        List<Post> filteredPosts = new ArrayList<>();
+        posts.forEach((__, post) -> {
+            if (post.getUserId().equals(userIdToFollow)) {
+                filteredPosts.add(post);
+            }
+        });
+        return filteredPosts;
+    }
 }
