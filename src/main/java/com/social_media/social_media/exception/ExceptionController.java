@@ -33,7 +33,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(InvalidPromotionEndDateException.class)
-    public ResponseEntity<?> InvalidPromotionEndDate(InvalidPromotionEndDateException e) {
+    public ResponseEntity<ExceptionDto> InvalidPromotionEndDate(InvalidPromotionEndDateException e) {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.FORBIDDEN);
     }

@@ -36,9 +36,8 @@ public class PostServiceImpl implements IPostService {
     @Override
     public PostPromoEndDateResponseDto createPostPromoEndDate(PostPromoEndDateRequestDto postPromoEndDateRequestDto) {
         if (postPromoEndDateRequestDto.getPromotionEndDate().isBefore(postPromoEndDateRequestDto.getDate())) {
-            throw new InvalidPromotionEndDateException(
-                    "La fecha de finalización de la promoción no puede ser anterior a la fecha de publicación."
-            );
+            throw new InvalidPromotionEndDateException(END_DATE_BEFORE_PUBLICATION_DATE );
+
         }
         Post post = createPostCommon(postPromoEndDateRequestDto, postPromoEndDateRequestDto.getDiscount(), postPromoEndDateRequestDto.getPromotionEndDate());
         postRepository.add(post);
