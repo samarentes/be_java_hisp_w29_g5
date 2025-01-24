@@ -192,6 +192,8 @@ public class PostServiceImpl implements IPostService {
                         .build())
                 .category(postFound.get().getCategory())
                 .price(postFound.get().getPrice())
+                .discount(postFound.get().getDiscount() == null ? 0 : postFound.get().getDiscount())
+                .has_promo(postFound.get().getDiscount() == null ? false : true)
                 .stock(stockFound != null ? StockResponseDto.builder().units(stockFound.getUnits()).build() : null)
                 .build();
     }
