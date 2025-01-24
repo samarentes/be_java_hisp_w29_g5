@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.social_media.social_media.dto.responseDto.UserResponseDto;
 import com.social_media.social_media.entity.User;
+import com.social_media.social_media.exception.DataLoadException;
 import com.social_media.social_media.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
@@ -15,17 +16,19 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.social_media.social_media.utils.MessagesExceptions.INVALID_FOLLOW_ENTITY;
+import static com.social_media.social_media.utils.MessagesExceptions.INVALID_USER_ENTITY;
+
 @Repository
 public class UserRepositoryImpl implements IUserRepository {
     private Map<Long, User> users;
 
     public UserRepositoryImpl() {
-        System.out.println("test");
         try {
 
             loadDataBase();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new DataLoadException(INVALID_USER_ENTITY);
         }
     }
 

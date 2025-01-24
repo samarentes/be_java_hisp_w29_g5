@@ -14,4 +14,8 @@ public final class MessagesExceptions {
     public static final String NO_RECENT_POSTS_FOUND = "No se encontraron publicaciones recientes para los seguidores del usuario con ID: ";
    public static final String END_DATE_BEFORE_PUBLICATION_DATE = "La fecha de finalización de la promoción no puede ser anterior a la fecha de publicación.";
     public static final String INVALID_ORDER = "El orden indicado es inválido.";
+    public static final String INVALID_FOLLOW_ENTITY = "La entidad Follow es inválida";
+    public static final String INVALID_POST_ENTITY = "La entidad Post es inválida";
+    public static final String INVALID_USER_ENTITY = "La entidad User es inválida";
+
 }
