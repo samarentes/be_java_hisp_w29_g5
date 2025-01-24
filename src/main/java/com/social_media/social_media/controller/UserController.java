@@ -6,12 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -52,9 +46,8 @@ public class UserController {
 
     @GetMapping("/{userId}/suggestions?limit={limit}")
     public ResponseEntity<List<FollowSuggestionResponseDto>> getFollowSuggestions(@PathVariable Long userId,
-            @RequestParam(defaultValue = "3") Integer limit) {
+                                                                                  @RequestParam(defaultValue = "3") Integer limit) {
         return new ResponseEntity<>(userService.searchFollowSuggestions(userId, limit), HttpStatus.OK);
-        }
     }
 
     @PostMapping("/{userId}/favorites/{postId}")
