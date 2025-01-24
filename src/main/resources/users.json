@@ -2,12 +2,12 @@
   {
     "userId": 1,
     "name": "Ana Torres",
-    "favoritePosts": []
+    "favoritePosts": [1,2]
   },
   {
     "userId": 2,
     "name": "Luis García",
-    "favoritePosts": []
+    "favoritePosts": [3,4]
   },
   {
     "userId": 3,
