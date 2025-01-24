@@ -23,7 +23,7 @@ public class StockServiceImpl implements IStockService {
     @Override
     public StockResponseDto createStock(Long postId, StockRequestDto stockRequestDto) {
 
-        Post postFinded = this.postRepository.findOne(postId).orElse(null);
+        Post postFinded = this.postRepository.findById(postId).orElse(null);
 
         if (postFinded == null) {
             throw new NotFoundException(MessagesExceptions.POST_NOT_FOUND);

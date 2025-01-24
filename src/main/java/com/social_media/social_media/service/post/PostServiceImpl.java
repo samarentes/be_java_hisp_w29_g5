@@ -174,7 +174,7 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public PostDetailResponseDto searchById(Long postId) {
-        Optional<Post> postFound = this.postRepository.findOne(postId);
+        Optional<Post> postFound = this.postRepository.findById(postId);
 
         if (postFound.isEmpty()) {
             throw new NotFoundException(MessagesExceptions.POST_NOT_FOUND);

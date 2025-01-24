@@ -10,15 +10,15 @@ import java.util.stream.Stream;
 import java.util.Optional;
 
 public interface IPostRepository {
-    List<Post> findById(Long userId);
+    Optional<Post> findById(Long postId);
+
+    List<Post> findByUserId(Long userId);
 
     List<Post> findPostBySellerId(Long userIdToFollow);
 
     List<Post> findByIdSince(Long followedId, LocalDate lastTwoWeeks);
 
     Post add(Post post);
-
-    Optional<Post> findOne(Long postId);
 
     List<Post> findWithFilters(PostType postType, Long userId);
 
