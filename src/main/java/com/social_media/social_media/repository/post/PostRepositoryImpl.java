@@ -61,7 +61,7 @@ public class PostRepositoryImpl implements IPostRepository {
     }
 
     @Override
-    public List<Post> findAll(PostType postType, Long userId) {
+    public List<Post> findWithFilters(PostType postType, Long userId) {
         List<Post> postList = new ArrayList<>();
         posts.forEach((__, post) -> {
             boolean matchesType = postType == PostType.ALL ||

@@ -55,7 +55,7 @@ public class PostServiceImpl implements IPostService {
         }
 
         return Post.builder()
-                .postId(Integer.toUnsignedLong(postRepository.findAll(PostType.ALL, null).size() + 1))
+                .postId(Integer.toUnsignedLong(postRepository.findWithFilters(PostType.ALL, null).size() + 1))
                 .userId(postRequestDto.getUser_id())
                 .date(postRequestDto.getDate())
                 .product(buildProduct(postRequestDto.getProduct()))
@@ -173,7 +173,7 @@ public class PostServiceImpl implements IPostService {
             throw new NotSellerException(FOLLOWED_USER_NOT_SELLER);
         }
 
-        List<Post> post = postRepository.findAll(PostType.PROMO, userId);
+        List<Post> post = postRepository.findWithFilters(PostType.PROMO, userId);
         return PromoProductsResponseDto.builder()
                 .user_id(userId)
                 .user_name(userRepository.findById(userId).get().getName())
