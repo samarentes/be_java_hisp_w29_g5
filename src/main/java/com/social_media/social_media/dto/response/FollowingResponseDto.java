@@ -1,4 +1,4 @@
-package com.social_media.social_media.dto.responseDto;
+package com.social_media.social_media.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StockResponseDto {
-    private Long units;
+public class FollowingResponseDto {
+    private Long user_id;
+    private Long userIdToFollow;
 }

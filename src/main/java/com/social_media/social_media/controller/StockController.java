@@ -4,10 +4,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.social_media.social_media.dto.request.StockRequestDto;
-import com.social_media.social_media.dto.responseDto.StockResponseDto;
+import com.social_media.social_media.dto.response.StockResponseDto;
 import com.social_media.social_media.service.stock.IStockService;
 
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;

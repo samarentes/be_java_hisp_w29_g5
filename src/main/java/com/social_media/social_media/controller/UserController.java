@@ -1,6 +1,6 @@
 package com.social_media.social_media.controller;
 
-import com.social_media.social_media.dto.responseDto.*;
+import com.social_media.social_media.dto.response.*;
 import com.social_media.social_media.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,36 +27,37 @@ public class UserController {
 
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<FollowingResponseDto> postFollowSeller(@PathVariable Long userId,
-                                                                 @PathVariable Long userIdToFollow) {
+            @PathVariable Long userIdToFollow) {
         return new ResponseEntity<>(userService.followSeller(userId, userIdToFollow), HttpStatus.OK);
 
     }
 
     @GetMapping("/{userId}/follower/list")
     public ResponseEntity<FollowersResponseDto> getFollowers(@PathVariable Long userId,
-                                                             @RequestParam(required = false, defaultValue = "name_asc") String order) {
-        return new ResponseEntity<>(this.userService.searchFollowers(userId, order), HttpStatus.OK);
+            @RequestParam(required = false, defaultValue = "name_asc") String order) {
+        return new ResponseEntity<>(userService.searchFollowers(userId, order), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/followed/list")
     public ResponseEntity<FollowedResponseDto> getFollowed(@PathVariable Long userId,
-                                                           @RequestParam(required = false, defaultValue = "name_asc") String order) {
-        return new ResponseEntity<>(this.userService.searchFollowed(userId, order), HttpStatus.OK);
+            @RequestParam(required = false, defaultValue = "name_asc") String order) {
+        return new ResponseEntity<>(userService.searchFollowed(userId, order), HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/suggestions?limit={limit}")
+    @GetMapping("/{userId}/suggestions")
     public ResponseEntity<List<FollowSuggestionResponseDto>> getFollowSuggestions(@PathVariable Long userId,
-                                                                                  @RequestParam(defaultValue = "3") Integer limit) {
+            @RequestParam(defaultValue = "3") Integer limit) {
         return new ResponseEntity<>(userService.searchFollowSuggestions(userId, limit), HttpStatus.OK);
     }
 
     @PostMapping("/{userId}/favorites/{postId}")
-    public ResponseEntity<UserWithFavoritesPostResponseDto> postUpdateFavorites(@PathVariable Long userId, @PathVariable Long postId) {
-        return new ResponseEntity<>(this.userService.updateUserFavoritesPost(userId, postId), HttpStatus.OK);
+    public ResponseEntity<UserWithFavoritesPostResponseDto> postUpdateFavorites(@PathVariable Long userId,
+            @PathVariable Long postId) {
+        return new ResponseEntity<>(userService.updateUserFavoritesPost(userId, postId), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/favorites/list")
     public ResponseEntity<UserFavoritesResponseDto> getFavorites(@PathVariable Long userId) {
-        return new ResponseEntity<>(this.userService.searchUserFavoritesPost(userId), HttpStatus.OK);
+        return new ResponseEntity<>(userService.searchUserFavoritesPost(userId), HttpStatus.OK);
     }
 }

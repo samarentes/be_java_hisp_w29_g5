@@ -1,6 +1,6 @@
 package com.social_media.social_media.service.user;
 
-import com.social_media.social_media.dto.responseDto.*;
+import com.social_media.social_media.dto.response.*;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.exception.BadRequestFollowException;
@@ -9,12 +9,12 @@ import com.social_media.social_media.repository.post.IPostRepository;
 
 import com.social_media.social_media.utils.MessagesExceptions;
 import com.social_media.social_media.entity.User;
-import com.social_media.social_media.dto.responseDto.FollowingResponseDto;
-import com.social_media.social_media.dto.responseDto.FollowedResponseDto;
-import com.social_media.social_media.dto.responseDto.FollowersResponseDto;
-import com.social_media.social_media.dto.responseDto.UserResponseDto;
+import com.social_media.social_media.dto.response.FollowingResponseDto;
+import com.social_media.social_media.dto.response.FollowedResponseDto;
+import com.social_media.social_media.dto.response.FollowersResponseDto;
+import com.social_media.social_media.dto.response.UserResponseDto;
 import com.social_media.social_media.exception.NotFoundException;
-import com.social_media.social_media.dto.responseDto.FollowersCountResponseDto;
+import com.social_media.social_media.dto.response.FollowersCountResponseDto;
 import com.social_media.social_media.exception.NotSellerException;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.social_media.social_media.repository.user.IUserRepository;
-import org.yaml.snakeyaml.util.Tuple;
 
 import static com.social_media.social_media.utils.ComparatorOrder.getComparator;
 import static com.social_media.social_media.utils.MessagesExceptions.*;

@@ -3,7 +3,7 @@ package com.social_media.social_media.service.stock;
 import org.springframework.stereotype.Service;
 
 import com.social_media.social_media.dto.request.StockRequestDto;
-import com.social_media.social_media.dto.responseDto.StockResponseDto;
+import com.social_media.social_media.dto.response.StockResponseDto;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Stock;
 import com.social_media.social_media.exception.NotFoundException;

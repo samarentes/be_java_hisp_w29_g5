@@ -1,4 +1,4 @@
-package com.social_media.social_media.dto.responseDto;
+package com.social_media.social_media.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostPromoResponseDto {
+
+public class PostPromoEndDateResponseDto {
     private Long post_id;
     private Long user_id;
     @JsonFormat(pattern = "dd-MM-yyyy")
@@ -22,4 +23,6 @@ public class PostPromoResponseDto {
     private Double price;
     private Boolean has_promo;
     private Double discount;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate promotionEndDate;
 }

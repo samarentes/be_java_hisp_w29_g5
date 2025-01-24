@@ -1,11 +1,11 @@
 package com.social_media.social_media.controller;
 
-import com.social_media.social_media.dto.responseDto.PostDetailResponseDto;
-import com.social_media.social_media.dto.responseDto.PromoProductsResponseDto;
-import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
+import com.social_media.social_media.dto.response.PostDetailResponseDto;
+import com.social_media.social_media.dto.response.PromoProductsResponseDto;
+import com.social_media.social_media.dto.response.SellersPostsByFollowerResponseDto;
 import com.social_media.social_media.dto.request.PostRequestDto;
 import com.social_media.social_media.dto.request.PostPromoRequestDto;
-import com.social_media.social_media.dto.responseDto.*;
+import com.social_media.social_media.dto.response.*;
 import com.social_media.social_media.dto.request.*;
 import com.social_media.social_media.service.post.IPostService;
 import lombok.RequiredArgsConstructor;
