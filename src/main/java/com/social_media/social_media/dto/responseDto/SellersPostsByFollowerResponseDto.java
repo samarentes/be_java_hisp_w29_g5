@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SellersPostsByFollowerResponseDto {
     private Long user_id;
-    private List<PostResponseWithIdDto> posts;
+    private List<PostResponseDto> posts;
 }

@@ -27,7 +27,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(NotSellerException.class)
-    public ResponseEntity<?> notSeller(NotSellerException e) {
+    public ResponseEntity<ExceptionDto> notSeller(NotSellerException e) {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.FORBIDDEN);
     }

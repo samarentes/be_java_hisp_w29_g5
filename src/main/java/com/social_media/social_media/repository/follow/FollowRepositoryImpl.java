@@ -42,10 +42,8 @@ public class FollowRepositoryImpl implements IFollowRepository {
 
 
     @Override
-    public void deleteFollow(Optional<Follow> follow) {
-        Follow followToDelete = follow.get();
-
-        // Encuentra la ky (UUID) y elimina el registro
+    public void deleteFollow(Follow followToDelete) {
+        // Encuentra la key (UUID) y elimina el registro
         follows.entrySet().removeIf(entry -> entry.getValue().equals(followToDelete));
     }
 

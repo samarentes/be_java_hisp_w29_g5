@@ -9,7 +9,6 @@ import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.utils.MessagesExceptions;
 import com.social_media.social_media.dto.responseDto.PostPromoResponseDto;
 import com.social_media.social_media.dto.responseDto.PostResponseDto;
-import com.social_media.social_media.exception.InvalidOrderException;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import com.social_media.social_media.enums.PostType;
@@ -22,6 +21,8 @@ import com.social_media.social_media.repository.post.IPostRepository;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.social_media.social_media.utils.ComparatorOrder.getComparator;
 import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_NOT_EXIST;
 
 import static com.social_media.social_media.utils.MessagesExceptions.*;
@@ -56,6 +57,46 @@ public class PostServiceImpl implements IPostService {
         Post post = createPostCommon(postPromoRequestDto, postPromoRequestDto.getDiscount(), null);
         postRepository.add(post);
         return buildPostPromoResponseDto(post);
+    }
+
+    @Override
+    public SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(Long userId, String order) {
+        LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
+
+        List<Long> followedIds = followRepository.findFollowed(userId).stream().map(Follow::getFollowedId).toList();
+        if (followedIds.isEmpty()) {
+            throw new NotFoundException(MessagesExceptions.NO_FOLLOWERS_FOUND + userId);
+        }
+        List<Post> posts = followedIds.stream().flatMap(followedId ->
+                postRepository.findByIdSince(followedId, lastTwoWeeks).stream()).toList();
+
+        if (posts.isEmpty()) {
+            throw new NotFoundException(MessagesExceptions.NO_RECENT_POSTS_FOUND + userId);
+        }
+
+        List<PostResponseDto> postsDto = posts.stream()
+                .map(this::buildPostResponseDto)
+                .sorted(getComparator(order, PostResponseDto::getDate, PostResponseDto::getPost_id))
+                .toList();
+        return SellersPostsByFollowerResponseDto.builder().user_id(userId).posts(postsDto).build();
+    }
+
+    @Override
+    public PromoProductsResponseDto searchSellersWithPromoPosts(Long userId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new NotFoundException(SELLER_ID_NOT_EXIST);
+        }
+
+        if (postRepository.findPostBySellerId(userId).isEmpty()){
+            throw new NotSellerException(FOLLOWED_USER_NOT_SELLER);
+        }
+
+        List<Post> post = postRepository.findWithFilters(PostType.PROMO, userId);
+        return PromoProductsResponseDto.builder()
+                .user_id(userId)
+                .user_name(userRepository.findById(userId).get().getName())
+                .promo_products_count(post.size())
+                .build();
     }
 
     private Post createPostCommon(IPostRequestDto postRequestDto, Double discount, LocalDate endDate) {
@@ -125,7 +166,6 @@ public class PostServiceImpl implements IPostService {
                 .build();
     }
 
-
     // Method to build a PostPromoEndDateResponseDto object from a Post object
     private PostPromoEndDateResponseDto buildPostPromoEndDateResponseDto(Post post) {
         return PostPromoEndDateResponseDto.builder()
@@ -140,73 +180,4 @@ public class PostServiceImpl implements IPostService {
                 .promotionEndDate(post.getPromotionEndDate())
                 .build();
     }
-
-
-
-    @Override
-    public SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId, String order) {
-        LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
-
-        List<Long> followedIds = followRepository.findFollowed(userId).stream().map(Follow::getFollowedId).toList();
-        if (followedIds.isEmpty()) {
-            throw new NotFoundException(MessagesExceptions.NO_FOLLOWERS_FOUND + userId);
-        }
-        List<Post> posts = followedIds.stream().flatMap(followedId ->
-                postRepository.findByIdSince(followedId, lastTwoWeeks).stream()).toList();
-
-        if (posts.isEmpty()) {
-            throw new NotFoundException(MessagesExceptions.NO_RECENT_POSTS_FOUND + userId);
-        }
-
-        List<PostResponseWithIdDto> postsDto = posts.stream()
-                .map(post -> PostResponseWithIdDto.builder()
-                        .user_id(post.getUserId())
-                        .post_id(post.getPostId())
-                        .date(post.getDate())
-                        .product(ProductResponseDto.builder()
-                                .product_id(post.getProduct().getProductId())
-                                .product_name(post.getProduct().getProductName())
-                                .type(post.getProduct().getType())
-                                .brand(post.getProduct().getBrand())
-                                .color(post.getProduct().getColor())
-                                .notes(post.getProduct().getNotes())
-                                .build())
-                        .category(post.getCategory())
-                        .price(post.getPrice())
-                        .build()
-                ).sorted(getComparator(order))
-                .toList();
-        return SellersPostsByFollowerResponseDto.builder().user_id(userId).posts(postsDto).build();
-    }
-
-    private Comparator<PostResponseWithIdDto> getComparator(String order) {
-        Comparator<PostResponseWithIdDto> comparator = Comparator.comparing(PostResponseWithIdDto::getDate);
-        comparator = switch (order) {
-            case "date_asc" -> comparator;
-            case "date_desc" -> comparator.reversed();
-            default -> throw new InvalidOrderException(MessagesExceptions.INVALID_ORDER);
-        };
-        return comparator.thenComparing(PostResponseWithIdDto::getPost_id);
-    }
-
-    @Override
-    public PromoProductsResponseDto searchSellersWithPromoPosts(long userId) {
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new NotFoundException(SELLER_ID_NOT_EXIST);
-        }
-
-        if (postRepository.findPostBySellerId(userId).isEmpty()){
-            throw new NotSellerException(FOLLOWED_USER_NOT_SELLER);
-        }
-
-        List<Post> post = postRepository.findWithFilters(PostType.PROMO, userId);
-        return PromoProductsResponseDto.builder()
-                .user_id(userId)
-                .user_name(userRepository.findById(userId).get().getName())
-                .promo_products_count(post.size())
-                .build();
-
-    }
-
-
 }

@@ -10,9 +10,9 @@ public interface IPostService {
 
     PostPromoResponseDto createPostPromo(PostPromoRequestDto postPromoRequestDto);
 
-    PromoProductsResponseDto searchSellersWithPromoPosts(long user_id);
-
-    SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId, String order);
+    PromoProductsResponseDto searchSellersWithPromoPosts(Long user_id);
 
     PostPromoEndDateResponseDto createPostPromoEndDate(PostPromoEndDateRequestDto postPromoEndDateRequestDto);
+
+    SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(Long userId, String order);
 }
