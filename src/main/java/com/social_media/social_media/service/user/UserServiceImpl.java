@@ -13,13 +13,13 @@ import com.social_media.social_media.exception.NotSellerException;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.social_media.social_media.repository.user.IUserRepository;
+import org.yaml.snakeyaml.util.Tuple;
 
 import static com.social_media.social_media.utils.ComparatorOrder.getComparator;
 import static com.social_media.social_media.utils.MessagesExceptions.FOLLOWED_USER_NOT_SELLER;
@@ -90,6 +90,7 @@ public class UserServiceImpl implements IUserService {
         return new FollowedResponseDto(followerUser.get().getUserId(), followerUser.get().getName(), followed);
     }
 
+    @Override
     public FollowingResponseDto followSeller(Long userId, Long userIdToFollow) {
         Optional<Follow> followExist = followRepository.existsByFollowerAndFollowed(userId, userIdToFollow);
 
@@ -136,4 +137,36 @@ public class UserServiceImpl implements IUserService {
                 .followers_count(listFilteredFollower.size())
                 .build();
     }
+
+    @Override
+    public List<FollowSuggestionResponseDto> searchFollowSuggestions(Long userId, Integer limit) {
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(MessagesExceptions.USER_NOT_FOUND));
+
+        // Obtener las marcas favoritas del usuario
+        List<String> favouriteBrands = userRepository.findFavouriteBrandsById(userId);
+
+        // Encontrar vendedores que venden esas marcas
+        Map<Long, List<String>> sellersWithBrands = postRepository.findSellersByBrands(favouriteBrands);
+
+        // Obtener los IDs de los usuarios seguidos por el usuario actual
+        Set<Long> followedIds = followRepository.findFollowed(userId).stream()
+                .map(Follow::getFollowedId)
+                .collect(Collectors.toSet());
+
+        // Filtrar vendedores que no han sido seguidos por el usuario
+        Map<Long, List<String>> filteredSuggestions = sellersWithBrands.entrySet().stream()
+                .filter(entry -> !followedIds.contains(entry.getKey()))
+                .limit(limit)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        return filteredSuggestions.entrySet().stream()
+                .map(entry -> FollowSuggestionResponseDto.builder()
+                        .user_id(entry.getKey())
+                        .user_name(userRepository.findNameById(entry.getKey()))
+                        .brandsSold(entry.getValue())
+                        .build())
+                .sorted(Comparator.comparingInt(sug -> sug.getBrandsSold().size()))
+                .toList();
+    }
+
 }

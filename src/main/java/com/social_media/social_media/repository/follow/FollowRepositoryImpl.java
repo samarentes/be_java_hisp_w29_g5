@@ -3,8 +3,10 @@ package com.social_media.social_media.repository.follow;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.social_media.social_media.entity.Follow;
+import com.social_media.social_media.entity.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
+import org.yaml.snakeyaml.util.Tuple;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +23,6 @@ public class FollowRepositoryImpl implements IFollowRepository {
 
     public FollowRepositoryImpl() {
         try {
-
             loadDataBase();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -40,13 +41,11 @@ public class FollowRepositoryImpl implements IFollowRepository {
         follows = followList.stream().collect(Collectors.toMap(follow -> UUID.randomUUID(), follow -> follow));
     }
 
-
     @Override
     public void deleteFollow(Follow followToDelete) {
         // Encuentra la key (UUID) y elimina el registro
         follows.entrySet().removeIf(entry -> entry.getValue().equals(followToDelete));
     }
-
 
     @Override
     public Follow addFollow(Long followerId, Long followedId) {
@@ -89,5 +88,4 @@ public class FollowRepositoryImpl implements IFollowRepository {
 
         return followersFind;
     }
-
 }

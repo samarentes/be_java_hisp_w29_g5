@@ -3,6 +3,7 @@ package com.social_media.social_media.service.post;
 import com.social_media.social_media.dto.request.*;
 import com.social_media.social_media.dto.responseDto.*;
 import com.social_media.social_media.entity.Follow;
+import com.social_media.social_media.entity.User;
 import com.social_media.social_media.exception.InvalidPromotionEndDateException;
 import com.social_media.social_media.exception.NotSellerException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
@@ -21,6 +22,7 @@ import com.social_media.social_media.repository.post.IPostRepository;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import static com.social_media.social_media.utils.ComparatorOrder.getComparator;
 import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_NOT_EXIST;
@@ -61,6 +63,11 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(Long userId, String order) {
+        Optional<User> oUser = userRepository.findById(userId);
+        if (oUser.isEmpty()) {
+            throw new NotFoundException(MessagesExceptions.USER_NOT_FOUND);
+        }
+
         LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
 
         List<Long> followedIds = followRepository.findFollowed(userId).stream().map(Follow::getFollowedId).toList();
