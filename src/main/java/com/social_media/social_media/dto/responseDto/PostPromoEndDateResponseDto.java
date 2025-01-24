@@ -8,16 +8,21 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostResponseWithIdDto {
-    private Long user_id;
+@Builder
+
+public class PostPromoEndDateResponseDto {
     private Long post_id;
+    private Long user_id;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
     private ProductResponseDto product;
     private Integer category;
     private Double price;
+    private Boolean has_promo;
+    private Double discount;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate promotionEndDate;
 }

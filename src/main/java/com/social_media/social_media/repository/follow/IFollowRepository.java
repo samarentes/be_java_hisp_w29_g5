@@ -16,5 +16,5 @@ public interface IFollowRepository {
 
     Optional<Follow> existsByFollowerAndFollowed(Long userId, Long userIdToFollow);
 
-    void deleteFollow(Optional<Follow> follow);
+    void deleteFollow(Follow followToDelete);
 }

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.social_media.social_media.entity.Post;
-import com.social_media.social_media.entity.User;
 import com.social_media.social_media.enums.PostType;
+import com.social_media.social_media.exception.DataLoadException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.social_media.social_media.utils.MessagesExceptions.INVALID_POST_ENTITY;
+
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository {
@@ -27,8 +29,8 @@ public class PostRepositoryImpl implements IPostRepository {
         try {
             loadDataBase();
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new DataLoadException(INVALID_POST_ENTITY);
         }
     }
 

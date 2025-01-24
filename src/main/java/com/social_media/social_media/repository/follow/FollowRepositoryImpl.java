@@ -3,6 +3,7 @@ package com.social_media.social_media.repository.follow;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.social_media.social_media.entity.Follow;
+import com.social_media.social_media.exception.DataLoadException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -15,16 +16,17 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.social_media.social_media.utils.MessagesExceptions.INVALID_FOLLOW_ENTITY;
+
 @Repository
 public class FollowRepositoryImpl implements IFollowRepository {
     private Map<UUID, Follow> follows;
 
     public FollowRepositoryImpl() {
         try {
-
             loadDataBase();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new DataLoadException(INVALID_FOLLOW_ENTITY);
         }
     }
 
@@ -42,10 +44,8 @@ public class FollowRepositoryImpl implements IFollowRepository {
 
 
     @Override
-    public void deleteFollow(Optional<Follow> follow) {
-        Follow followToDelete = follow.get();
-
-        // Encuentra la ky (UUID) y elimina el registro
+    public void deleteFollow(Follow followToDelete) {
+        // Encuentra la key (UUID) y elimina el registro
         follows.entrySet().removeIf(entry -> entry.getValue().equals(followToDelete));
     }
 
