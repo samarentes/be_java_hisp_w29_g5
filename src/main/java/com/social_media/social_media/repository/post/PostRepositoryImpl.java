@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 import static com.social_media.social_media.utils.MessagesExceptions.INVALID_POST_ENTITY;
 
-
 @Repository
 public class PostRepositoryImpl implements IPostRepository {
     private Map<Long, Post> posts;
@@ -107,4 +106,5 @@ public class PostRepositoryImpl implements IPostRepository {
         });
         return filteredPosts;
     }
+
 }
