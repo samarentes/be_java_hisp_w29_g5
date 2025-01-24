@@ -3,6 +3,7 @@ package com.social_media.social_media.service.post;
 import com.social_media.social_media.dto.responseDto.PostResponseWithIdDto;
 import com.social_media.social_media.dto.responseDto.ProductResponseDto;
 import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
+import com.social_media.social_media.dto.responseDto.StockResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.utils.MessagesExceptions;
@@ -10,20 +11,26 @@ import com.social_media.social_media.dto.request.PostRequestDto;
 import com.social_media.social_media.dto.request.PostPromoRequestDto;
 import com.social_media.social_media.dto.request.IPostRequestDto;
 import com.social_media.social_media.dto.request.ProductRequestDto;
+import com.social_media.social_media.dto.responseDto.PostDetailResponseDto;
 import com.social_media.social_media.dto.responseDto.PostPromoResponseDto;
 import com.social_media.social_media.dto.responseDto.PostResponseDto;
 import com.social_media.social_media.exception.InvalidOrderException;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
+import com.social_media.social_media.entity.Stock;
 import com.social_media.social_media.enums.PostType;
 import com.social_media.social_media.exception.NotFoundException;
 import com.social_media.social_media.repository.user.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.social_media.social_media.repository.post.IPostRepository;
+import com.social_media.social_media.repository.stock.IStockRepository;
+
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+
 import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_NOT_EXIST;
 
 @RequiredArgsConstructor
@@ -33,13 +40,14 @@ public class PostServiceImpl implements IPostService {
     private final IUserRepository userRepository;
     private final IFollowRepository followRepository;
 
+    private final IStockRepository stockRepository;
+
     @Override
     public PostResponseDto createPost(PostRequestDto postProductRequestDto) {
         Post post = createPostCommon(postProductRequestDto, 0.0);
         postRepository.add(post);
         return buildPostResponseDto(post);
     }
-
 
     @Override
     public PostPromoResponseDto createPostPromo(PostPromoRequestDto postPromoRequestDto) {
@@ -114,8 +122,6 @@ public class PostServiceImpl implements IPostService {
                 .build();
     }
 
-
-
     @Override
     public SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId, String order) {
         LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
@@ -124,8 +130,8 @@ public class PostServiceImpl implements IPostService {
         if (followedIds.isEmpty()) {
             throw new NotFoundException(MessagesExceptions.NO_FOLLOWERS_FOUND + userId);
         }
-        List<Post> posts = followedIds.stream().flatMap(followedId ->
-                postRepository.findByIdSince(followedId, lastTwoWeeks).stream()).toList();
+        List<Post> posts = followedIds.stream()
+                .flatMap(followedId -> postRepository.findByIdSince(followedId, lastTwoWeeks).stream()).toList();
 
         if (posts.isEmpty()) {
             throw new NotFoundException(MessagesExceptions.NO_RECENT_POSTS_FOUND + userId);
@@ -146,8 +152,8 @@ public class PostServiceImpl implements IPostService {
                                 .build())
                         .category(post.getCategory())
                         .price(post.getPrice())
-                        .build()
-                ).sorted(getComparator(order))
+                        .build())
+                .sorted(getComparator(order))
                 .toList();
         return SellersPostsByFollowerResponseDto.builder().user_id(userId).posts(postsDto).build();
     }
@@ -160,5 +166,33 @@ public class PostServiceImpl implements IPostService {
             default -> throw new InvalidOrderException(MessagesExceptions.INVALID_ORDER);
         };
         return comparator.thenComparing(PostResponseWithIdDto::getPost_id);
+    }
+
+    @Override
+    public PostDetailResponseDto searchById(Long postId) {
+        Optional<Post> postFound = this.postRepository.findOne(postId);
+
+        if (postFound.isEmpty()) {
+            throw new NotFoundException(MessagesExceptions.POST_NOT_FOUND);
+        }
+
+        Stock stockFound = this.stockRepository.findByPostId(postId).orElse(null);
+
+        return PostDetailResponseDto.builder()
+                .user_id(postFound.get().getUserId())
+                .post_id(postFound.get().getPostId())
+                .date(postFound.get().getDate())
+                .product(ProductResponseDto.builder()
+                        .product_id(postFound.get().getProduct().getProductId())
+                        .product_name(postFound.get().getProduct().getProductName())
+                        .type(postFound.get().getProduct().getType())
+                        .brand(postFound.get().getProduct().getBrand())
+                        .color(postFound.get().getProduct().getColor())
+                        .notes(postFound.get().getProduct().getNotes())
+                        .build())
+                .category(postFound.get().getCategory())
+                .price(postFound.get().getPrice())
+                .stock(stockFound != null ? StockResponseDto.builder().units(stockFound.getUnits()).build() : null)
+                .build();
     }
 }

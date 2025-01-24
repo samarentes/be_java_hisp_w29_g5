@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
+import java.util.Optional;
+
 public interface IPostRepository {
     List<Post> findById(Long userId);
 
@@ -17,4 +19,6 @@ public interface IPostRepository {
     Post add(Post post);
 
     List<Post> findAll(PostType postType);
+
+    Optional<Post> findOne(Long postId);
 }

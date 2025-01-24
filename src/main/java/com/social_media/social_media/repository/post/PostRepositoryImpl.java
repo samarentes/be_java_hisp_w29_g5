@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository {
@@ -93,5 +95,17 @@ public class PostRepositoryImpl implements IPostRepository {
             }
         });
         return filteredPosts;
+    }
+
+    @Override
+    public Optional<Post> findOne(Long postId) {
+        AtomicReference<Post> postFindedReference = new AtomicReference<>();
+        this.posts.forEach((__, post) -> {
+            if (post.getPostId().equals(postId)) {
+                postFindedReference.set(post);
+            }
+        });
+
+        return Optional.ofNullable(postFindedReference.get());
     }
 }
