@@ -1,5 +1,6 @@
 package com.social_media.social_media.controller;
 
+import com.social_media.social_media.dto.responseDto.PromoProductsResponseDto;
 import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
 import com.social_media.social_media.dto.request.PostRequestDto;
 import com.social_media.social_media.dto.request.PostPromoRequestDto;
@@ -40,4 +41,8 @@ public class PostController {
         return new ResponseEntity<>(postService.createPostPromo(postPromoRequestDto), HttpStatus.CREATED);
     }
 
+    @GetMapping("/promo-post/count")
+    public ResponseEntity<PromoProductsResponseDto> postPromoCount(@RequestParam Long user_id) {
+        return new ResponseEntity<>(postService.searchSellersWithPromoPosts(user_id), HttpStatus.OK);
+    }
 }

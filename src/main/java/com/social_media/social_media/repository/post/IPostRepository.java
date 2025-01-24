@@ -16,5 +16,6 @@ public interface IPostRepository {
 
     Post add(Post post);
 
-    List<Post> findAll(PostType postType);
+    List<Post> findWithFilters(PostType postType, Long userId);
+
 }

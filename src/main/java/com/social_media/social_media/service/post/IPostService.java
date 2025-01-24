@@ -1,5 +1,6 @@
 package com.social_media.social_media.service.post;
 
+import com.social_media.social_media.dto.responseDto.PromoProductsResponseDto;
 import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
 import com.social_media.social_media.dto.request.PostRequestDto;
 import com.social_media.social_media.dto.request.PostPromoRequestDto;
@@ -11,5 +12,7 @@ public interface IPostService {
 
     PostPromoResponseDto createPostPromo(PostPromoRequestDto postPromoRequestDto);
 
-    SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId,String order);
+    PromoProductsResponseDto searchSellersWithPromoPosts(long user_id);
+
+    SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(long userId, String order);
 }
