@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.enums.PostType;
+import com.social_media.social_media.exception.DataLoadException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -14,9 +15,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import java.util.Optional;
+import static com.social_media.social_media.utils.MessagesExceptions.INVALID_POST_ENTITY;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository {
@@ -26,8 +28,8 @@ public class PostRepositoryImpl implements IPostRepository {
         try {
             loadDataBase();
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new DataLoadException(INVALID_POST_ENTITY);
         }
     }
 
@@ -42,6 +44,11 @@ public class PostRepositoryImpl implements IPostRepository {
         });
 
         posts = postList.stream().collect(Collectors.toMap(Post::getPostId, post -> post));
+    }
+
+    @Override
+    public Optional<Post> findById(Long postId) {
+        return Optional.ofNullable(this.posts.get(postId));
     }
 
     @Override
@@ -98,11 +105,6 @@ public class PostRepositoryImpl implements IPostRepository {
             }
         });
         return filteredPosts;
-    }
-
-    @Override
-    public Optional<Post> findById(Long postId) {
-        return Optional.ofNullable(this.posts.get(postId));
     }
 
 }

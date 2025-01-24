@@ -27,9 +27,21 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(NotSellerException.class)
-    public ResponseEntity<?> notSeller(NotSellerException e) {
+    public ResponseEntity<ExceptionDto> notSeller(NotSellerException e) {
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(InvalidPromotionEndDateException.class)
+    public ResponseEntity<ExceptionDto> InvalidPromotionEndDate(InvalidPromotionEndDateException e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(DataLoadException.class)
+    public ResponseEntity<ExceptionDto> DataLoadException(DataLoadException e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
 
 }

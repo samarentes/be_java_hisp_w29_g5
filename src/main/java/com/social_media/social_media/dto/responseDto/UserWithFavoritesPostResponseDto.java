@@ -1,17 +1,19 @@
 package com.social_media.social_media.dto.responseDto;
 
-import java.util.List;
-
+import com.social_media.social_media.entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SellersPostsByFollowerResponseDto {
+public class UserWithFavoritesPostResponseDto {
     private Long user_id;
-    private List<PostResponseDto> posts;
+    private String user_name;
+    private List<Post> favorite_posts;
 }

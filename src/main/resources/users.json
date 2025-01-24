@@ -1,46 +1,57 @@
 [
   {
     "userId": 1,
-    "name": "Ana Torres"
+    "name": "Ana Torres",
+    "favoritePosts": [1,2]
   },
   {
     "userId": 2,
-    "name": "Luis García"
+    "name": "Luis García",
+    "favoritePosts": [3,4]
   },
   {
     "userId": 3,
-    "name": "María Pérez"
+    "name": "María Pérez",
+    "favoritePosts": []
   },
   {
     "userId": 4,
-    "name": "Carlos Mendoza"
+    "name": "Carlos Mendoza",
+    "favoritePosts": []
   },
   {
     "userId": 5,
-    "name": "Sofía Romero"
+    "name": "Sofía Romero",
+    "favoritePosts": []
   },
   {
     "userId": 6,
-    "name": "Javier López"
+    "name": "Javier López",
+    "favoritePosts": []
   },
   {
     "userId": 7,
-    "name": "Laura Fernández"
+    "name": "Laura Fernández",
+    "favoritePosts": []
   },
   {
     "userId": 8,
-    "name": "Diego Sánchez"
+    "name": "Diego Sánchez",
+    "favoritePosts": []
   },
   {
     "userId": 9,
-    "name": "Isabel Martínez"
+    "name": "Isabel Martínez",
+    "favoritePosts": []
   },
   {
     "userId": 10,
-    "name": "Fernando Ruiz"
+    "name": "Fernando Ruiz",
+    "favoritePosts": []
   },
   {
     "userId": 11,
-    "name": "Pepito Ruiz"
+    "name": "Pepito Ruiz",
+    "favoritePosts": []
   }
 ]

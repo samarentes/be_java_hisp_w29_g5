@@ -5,6 +5,8 @@ import com.social_media.social_media.dto.responseDto.PromoProductsResponseDto;
 import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
 import com.social_media.social_media.dto.request.PostRequestDto;
 import com.social_media.social_media.dto.request.PostPromoRequestDto;
+import com.social_media.social_media.dto.responseDto.*;
+import com.social_media.social_media.dto.request.*;
 import com.social_media.social_media.service.post.IPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,12 +35,12 @@ public class PostController {
 
     @PostMapping("/post")
     public ResponseEntity<?> createNewPost(@RequestBody PostRequestDto postProductRequestDto) {
-        return new ResponseEntity<>(postService.createPost(postProductRequestDto), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(postProductRequestDto));
     }
 
     @PostMapping("/promo-post")
-    public ResponseEntity<?> postNewPromo(@RequestBody PostPromoRequestDto postPromoRequestDto) {
-        return new ResponseEntity<>(postService.createPostPromo(postPromoRequestDto), HttpStatus.CREATED);
+    public ResponseEntity<PostPromoResponseDto> postNewPromo(@RequestBody PostPromoRequestDto postPromoRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPostPromo(postPromoRequestDto));
     }
 
     @GetMapping("/post/{postId}")
@@ -48,6 +50,13 @@ public class PostController {
 
     @GetMapping("/promo-post/count")
     public ResponseEntity<PromoProductsResponseDto> postPromoCount(@RequestParam Long user_id) {
-        return new ResponseEntity<>(postService.searchSellersWithPromoPosts(user_id), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(postService.searchSellersWithPromoPosts(user_id));
+    }
+
+    @PostMapping("/promo-post-end-date")
+    public ResponseEntity<PostPromoEndDateResponseDto> postNewPromoEndDate(
+            @RequestBody PostPromoEndDateRequestDto postPromoEndDateRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postService.createPostPromoEndDate(postPromoEndDateRequestDto));
     }
 }

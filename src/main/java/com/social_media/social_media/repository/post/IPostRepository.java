@@ -5,7 +5,7 @@ import com.social_media.social_media.enums.PostType;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import java.util.Optional;
 
