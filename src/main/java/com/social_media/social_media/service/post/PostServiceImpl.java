@@ -1,14 +1,12 @@
 package com.social_media.social_media.service.post;
 
+import com.social_media.social_media.dto.request.*;
 import com.social_media.social_media.dto.responseDto.*;
 import com.social_media.social_media.entity.Follow;
+import com.social_media.social_media.exception.InvalidPromotionEndDateException;
 import com.social_media.social_media.exception.NotSellerException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.utils.MessagesExceptions;
-import com.social_media.social_media.dto.request.PostRequestDto;
-import com.social_media.social_media.dto.request.PostPromoRequestDto;
-import com.social_media.social_media.dto.request.IPostRequestDto;
-import com.social_media.social_media.dto.request.ProductRequestDto;
 import com.social_media.social_media.dto.responseDto.PostPromoResponseDto;
 import com.social_media.social_media.dto.responseDto.PostResponseDto;
 import com.social_media.social_media.exception.InvalidOrderException;
@@ -36,20 +34,31 @@ public class PostServiceImpl implements IPostService {
     private final IFollowRepository followRepository;
 
     @Override
+    public PostPromoEndDateResponseDto createPostPromoEndDate(PostPromoEndDateRequestDto postPromoEndDateRequestDto) {
+        if (postPromoEndDateRequestDto.getPromotionEndDate().isBefore(postPromoEndDateRequestDto.getDate())) {
+            throw new InvalidPromotionEndDateException(END_DATE_BEFORE_PUBLICATION_DATE );
+
+        }
+        Post post = createPostCommon(postPromoEndDateRequestDto, postPromoEndDateRequestDto.getDiscount(), postPromoEndDateRequestDto.getPromotionEndDate());
+        postRepository.add(post);
+        return buildPostPromoEndDateResponseDto(post);
+    }
+
+    @Override
     public PostResponseDto createPost(PostRequestDto postProductRequestDto) {
-        Post post = createPostCommon(postProductRequestDto, 0.0);
+        Post post = createPostCommon(postProductRequestDto, 0.0, null);
         postRepository.add(post);
         return buildPostResponseDto(post);
     }
 
     @Override
     public PostPromoResponseDto createPostPromo(PostPromoRequestDto postPromoRequestDto) {
-        Post post = createPostCommon(postPromoRequestDto, postPromoRequestDto.getDiscount());
+        Post post = createPostCommon(postPromoRequestDto, postPromoRequestDto.getDiscount(), null);
         postRepository.add(post);
         return buildPostPromoResponseDto(post);
     }
 
-    private Post createPostCommon(IPostRequestDto postRequestDto, Double discount) {
+    private Post createPostCommon(IPostRequestDto postRequestDto, Double discount, LocalDate endDate) {
         if (userRepository.findById(postRequestDto.getUser_id()).isEmpty()) {
             throw new NotFoundException(SELLER_ID_NOT_EXIST);
         }
@@ -62,6 +71,7 @@ public class PostServiceImpl implements IPostService {
                 .category(postRequestDto.getCategory())
                 .price(postRequestDto.getPrice())
                 .discount(discount)
+                .promotionEndDate(endDate)
                 .build();
     }
 
@@ -112,6 +122,22 @@ public class PostServiceImpl implements IPostService {
                 .brand(product.getBrand())
                 .color(product.getColor())
                 .notes(product.getNotes())
+                .build();
+    }
+
+
+    // Method to build a PostPromoEndDateResponseDto object from a Post object
+    private PostPromoEndDateResponseDto buildPostPromoEndDateResponseDto(Post post) {
+        return PostPromoEndDateResponseDto.builder()
+                .post_id(post.getPostId())
+                .user_id(post.getUserId())
+                .date(post.getDate())
+                .product(buildProductResponseDto(post.getProduct()))
+                .category(post.getCategory())
+                .price(post.getPrice())
+                .discount(post.getDiscount())
+                .has_promo(true)
+                .promotionEndDate(post.getPromotionEndDate())
                 .build();
     }
 
