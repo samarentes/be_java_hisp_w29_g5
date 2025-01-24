@@ -2,10 +2,8 @@ package com.social_media.social_media.repository.user;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.social_media.social_media.dto.responseDto.UserResponseDto;
 import com.social_media.social_media.entity.User;
 import com.social_media.social_media.exception.DataLoadException;
-import com.social_media.social_media.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -16,7 +14,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.social_media.social_media.utils.MessagesExceptions.INVALID_FOLLOW_ENTITY;
 import static com.social_media.social_media.utils.MessagesExceptions.INVALID_USER_ENTITY;
 
 @Repository
@@ -47,5 +44,18 @@ public class UserRepositoryImpl implements IUserRepository {
     @Override
     public Optional<User> findById(Long userId) {
         return Optional.ofNullable(this.users.get(userId));
+    }
+
+    @Override
+    public User update(Long UserId, Long idNewPost) {
+        User user = this.users.get(UserId);
+        user.getFavoritePosts().add(idNewPost);
+        return user;
+
+    }
+
+    @Override
+    public List<Long> findFavoritePostsById(Long userId) {
+        return this.users.get(userId).getFavoritePosts();
     }
 }

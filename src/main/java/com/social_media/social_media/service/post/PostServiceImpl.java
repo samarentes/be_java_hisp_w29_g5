@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import com.social_media.social_media.repository.post.IPostRepository;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.social_media.social_media.utils.ComparatorOrder.getComparator;

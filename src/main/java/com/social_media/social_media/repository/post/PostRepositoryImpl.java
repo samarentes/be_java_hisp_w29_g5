@@ -15,9 +15,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.social_media.social_media.utils.MessagesExceptions.INVALID_FOLLOW_ENTITY;
 import static com.social_media.social_media.utils.MessagesExceptions.INVALID_POST_ENTITY;
 
 
@@ -48,7 +48,12 @@ public class PostRepositoryImpl implements IPostRepository {
     }
 
     @Override
-    public List<Post> findById(Long userId) {
+    public Optional<Post> findById(Long postId) {
+        return Optional.ofNullable(this.posts.get(postId));
+    }
+
+    @Override
+    public List<Post> findByUserId(Long userId) {
         List<Post> filteredPosts = new ArrayList<>();
         this.posts.forEach((__, post) -> {
             if (post.getUserId().equals(userId)) {

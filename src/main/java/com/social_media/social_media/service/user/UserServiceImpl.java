@@ -2,13 +2,19 @@ package com.social_media.social_media.service.user;
 
 import com.social_media.social_media.dto.responseDto.*;
 import com.social_media.social_media.entity.Follow;
+import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.exception.BadRequestFollowException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.repository.post.IPostRepository;
 
 import com.social_media.social_media.utils.MessagesExceptions;
 import com.social_media.social_media.entity.User;
+import com.social_media.social_media.dto.responseDto.FollowingResponseDto;
+import com.social_media.social_media.dto.responseDto.FollowedResponseDto;
+import com.social_media.social_media.dto.responseDto.FollowersResponseDto;
+import com.social_media.social_media.dto.responseDto.UserResponseDto;
 import com.social_media.social_media.exception.NotFoundException;
+import com.social_media.social_media.dto.responseDto.FollowersCountResponseDto;
 import com.social_media.social_media.exception.NotSellerException;
 
 import lombok.RequiredArgsConstructor;
@@ -22,8 +28,7 @@ import org.springframework.stereotype.Service;
 import com.social_media.social_media.repository.user.IUserRepository;
 
 import static com.social_media.social_media.utils.ComparatorOrder.getComparator;
-import static com.social_media.social_media.utils.MessagesExceptions.FOLLOWED_USER_NOT_SELLER;
-import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_NOT_EXIST;
+import static com.social_media.social_media.utils.MessagesExceptions.*;
 
 @RequiredArgsConstructor
 @Service
@@ -60,9 +65,9 @@ public class UserServiceImpl implements IUserService {
                                 .user_name(followerFound.getName())
                                 .build())
                         .orElse(null))
-        .filter(Objects::nonNull)
-        .sorted(getComparator(order, UserResponseDto::getUser_name))
-        .toList();
+                .filter(Objects::nonNull)
+                .sorted(getComparator(order, UserResponseDto::getUser_name))
+                .toList();
 
         return new FollowersResponseDto(followedUser.get().getUserId(), followedUser.get().getName(), followers);
     }
@@ -78,14 +83,14 @@ public class UserServiceImpl implements IUserService {
         List<Follow> followedFind = followRepository.findFollowed(userId);
         List<UserResponseDto> followed = followedFind.stream()
                 .map(follow -> userRepository.findById(follow.getFollowedId())
-                    .map(followedFound -> UserResponseDto.builder()
-                        .user_id(followedFound.getUserId())
-                        .user_name(followedFound.getName())
-                        .build())
-                    .orElse(null))
-        .filter(Objects::nonNull)
-        .sorted(getComparator(order, UserResponseDto::getUser_name))
-        .toList();
+                        .map(followedFound -> UserResponseDto.builder()
+                                .user_id(followedFound.getUserId())
+                                .user_name(followedFound.getName())
+                                .build())
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .sorted(getComparator(order, UserResponseDto::getUser_name))
+                .toList();
 
         return new FollowedResponseDto(followerUser.get().getUserId(), followerUser.get().getName(), followed);
     }
@@ -103,8 +108,9 @@ public class UserServiceImpl implements IUserService {
             throw new BadRequestFollowException(MessagesExceptions.FOLLOW_ALREADY_EXISTS);
         }
 
-        // validar que el usuario que intenta seguir es un seller, buscando si existe al menos un post
-        if (postRepository.findById(userIdToFollow).isEmpty()) {
+        // validar que el usuario que intenta seguir si es un seller buscando si existe
+        // al menos un post
+        if (postRepository.findByUserId(userIdToFollow).isEmpty()) {
             throw new BadRequestFollowException(MessagesExceptions.FOLLOWED_USER_NOT_SELLER);
         }
 
@@ -136,4 +142,67 @@ public class UserServiceImpl implements IUserService {
                 .followers_count(listFilteredFollower.size())
                 .build();
     }
+
+    @Override
+    public UserWithFavoritesPostResponseDto updateUserFavoritesPost(Long userId, Long postId) {
+        if (userRepository.findById(userId).isEmpty()) throw new NotFoundException(USER_NOT_FOUND);
+
+        if (postRepository.findById(postId).isEmpty()) throw new NotFoundException(POST_NOT_FOUND);
+
+        if (userRepository.findFavoritePostsById(userId).contains(postId))
+            throw new BadRequestFollowException(POST_ALREADY_FAVORITE);
+
+        User updateUser = userRepository.update(userId, postId);
+
+        List<Post> favoritePosts = updateUser.getFavoritePosts().stream()
+                .map(postRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .toList();
+
+        return UserWithFavoritesPostResponseDto.builder()
+                .user_id(updateUser.getUserId())
+                .user_name(updateUser.getName())
+                .favorite_posts(favoritePosts)
+                .build();
+    }
+
+    @Override
+    public UserFavoritesResponseDto searchUserFavoritesPost(long userId) {
+        if (userRepository.findById(userId).isEmpty()) throw new NotFoundException(USER_NOT_FOUND);
+
+        List<Long> favoritePosts = userRepository.findFavoritePostsById(userId);
+
+        List<Post> posts = favoritePosts.stream()
+                .map(postRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .toList();
+
+        List<PostPromoResponseDto> postsDto = posts.stream()
+                .map(post -> PostPromoResponseDto.builder()
+                        .post_id(post.getPostId())
+                        .user_id(post.getUserId())
+                        .date(post.getDate())
+                        .product(ProductResponseDto.builder()
+                                .product_id(post.getProduct().getProductId())
+                                .product_name(post.getProduct().getProductName())
+                                .type(post.getProduct().getType())
+                                .brand(post.getProduct().getBrand())
+                                .color(post.getProduct().getColor())
+                                .notes(post.getProduct().getNotes())
+                                .build())
+                        .category(post.getCategory())
+                        .price(post.getPrice())
+                        .has_promo(post.getDiscount() != 0.0)
+                        .discount(post.getDiscount())
+                        .build()
+                ).toList();
+
+
+        return UserFavoritesResponseDto.builder().favorites(postsDto).build();
+
+    }
+
+
 }
