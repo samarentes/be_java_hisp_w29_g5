@@ -15,4 +15,6 @@ public final class MessagesExceptions {
     public static final String NO_RECENT_POSTS_FOUND = "No se encontraron publicaciones recientes para los seguidores del usuario con ID: ";
     public static final String INVALID_ORDER = "El orden indicado es inválido: el mismo debe ser 'date_asc' o 'date_desc'.";
     public static final String INVALID_ORDER_NAME = "El orden indicado es inválido: el mismo debe ser 'name_asc' o 'name_desc'.";
+    public static final String POST_NOT_FOUND = "La publicación no fue encontrada";
+    public static final String POST_ALREADY_FAVORITE = "La publicación ya es favorita para ese usuario";
 }
