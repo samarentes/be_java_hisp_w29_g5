@@ -4,7 +4,9 @@ import com.social_media.social_media.dto.responseDto.PostResponseWithIdDto;
 import com.social_media.social_media.dto.responseDto.ProductResponseDto;
 import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
 import com.social_media.social_media.dto.responseDto.StockResponseDto;
+import com.social_media.social_media.dto.responseDto.*;
 import com.social_media.social_media.entity.Follow;
+import com.social_media.social_media.exception.NotSellerException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.utils.MessagesExceptions;
 import com.social_media.social_media.dto.request.PostRequestDto;
@@ -32,6 +34,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.social_media.social_media.utils.MessagesExceptions.SELLER_ID_NOT_EXIST;
+
+import static com.social_media.social_media.utils.MessagesExceptions.*;
 
 @RequiredArgsConstructor
 @Service
@@ -62,7 +66,7 @@ public class PostServiceImpl implements IPostService {
         }
 
         return Post.builder()
-                .postId(Integer.toUnsignedLong(postRepository.findAll(PostType.ALL).size() + 1))
+                .postId(Integer.toUnsignedLong(postRepository.findWithFilters(PostType.ALL, null).size() + 1))
                 .userId(postRequestDto.getUser_id())
                 .date(postRequestDto.getDate())
                 .product(buildProduct(postRequestDto.getProduct()))
@@ -192,9 +196,28 @@ public class PostServiceImpl implements IPostService {
                         .build())
                 .category(postFound.get().getCategory())
                 .price(postFound.get().getPrice())
-                .discount(postFound.get().getDiscount() == null ? 0 : postFound.get().getDiscount())
-                .has_promo(postFound.get().getDiscount() == null ? false : true)
+                .discount(postFound.get().getDiscount())
+                .has_promo(postFound.get().getDiscount() > 0 ? true : false)
                 .stock(stockFound != null ? StockResponseDto.builder().units(stockFound.getUnits()).build() : null)
                 .build();
     }
+
+    public PromoProductsResponseDto searchSellersWithPromoPosts(long userId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new NotFoundException(SELLER_ID_NOT_EXIST);
+        }
+
+        if (postRepository.findPostBySellerId(userId).isEmpty()) {
+            throw new NotSellerException(FOLLOWED_USER_NOT_SELLER);
+        }
+
+        List<Post> post = postRepository.findWithFilters(PostType.PROMO, userId);
+        return PromoProductsResponseDto.builder()
+                .user_id(userId)
+                .user_name(userRepository.findById(userId).get().getName())
+                .promo_products_count(post.size())
+                .build();
+
+    }
+
 }
