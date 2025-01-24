@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.social_media.social_media.dto.responseDto.UserResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.User;
-import com.social_media.social_media.exception.NotFoundException;
+import com.social_media.social_media.exception.DataLoadException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 import org.yaml.snakeyaml.util.Tuple;
@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.social_media.social_media.utils.MessagesExceptions.INVALID_USER_ENTITY;
+
 @Repository
 public class UserRepositoryImpl implements IUserRepository {
     private Map<Long, User> users;
@@ -25,8 +27,8 @@ public class UserRepositoryImpl implements IUserRepository {
     public UserRepositoryImpl() {
         try {
             loadDataBase();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new DataLoadException(INVALID_USER_ENTITY);
         }
     }
 
@@ -55,5 +57,18 @@ public class UserRepositoryImpl implements IUserRepository {
     @Override
     public String findNameById(Long userId) {
         return users.get(userId).getName();
+    }
+
+    @Override
+    public User update(Long UserId, Long idNewPost) {
+        User user = this.users.get(UserId);
+        user.getFavoritePosts().add(idNewPost);
+        return user;
+
+    }
+
+    @Override
+    public List<Long> findFavoritePostsById(Long userId) {
+        return this.users.get(userId).getFavoritePosts();
     }
 }

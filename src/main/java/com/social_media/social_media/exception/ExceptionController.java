@@ -38,4 +38,10 @@ public class ExceptionController {
         return new ResponseEntity<>(exceptionDto, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(DataLoadException.class)
+    public ResponseEntity<ExceptionDto> DataLoadException(DataLoadException e) {
+        ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
+    }
+
 }

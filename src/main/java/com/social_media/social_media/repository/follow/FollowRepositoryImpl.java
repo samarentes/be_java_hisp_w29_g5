@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.User;
+import com.social_media.social_media.exception.DataLoadException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 import org.yaml.snakeyaml.util.Tuple;
@@ -17,6 +18,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.social_media.social_media.utils.MessagesExceptions.INVALID_FOLLOW_ENTITY;
+
 @Repository
 public class FollowRepositoryImpl implements IFollowRepository {
     private Map<UUID, Follow> follows;
@@ -24,8 +27,8 @@ public class FollowRepositoryImpl implements IFollowRepository {
     public FollowRepositoryImpl() {
         try {
             loadDataBase();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new DataLoadException(INVALID_FOLLOW_ENTITY);
         }
     }
 

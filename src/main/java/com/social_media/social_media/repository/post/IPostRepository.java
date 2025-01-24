@@ -8,9 +8,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import java.util.Optional;
 
 public interface IPostRepository {
-    List<Post> findById(Long userId);
+    Optional<Post> findById(Long postId);
+
+    List<Post> findByUserId(Long userId);
 
     List<Post> findPostBySellerId(Long userIdToFollow);
 

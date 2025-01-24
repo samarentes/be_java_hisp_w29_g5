@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,13 +40,13 @@ public class UserController {
 
     @GetMapping("/{userId}/follower/list")
     public ResponseEntity<FollowersResponseDto> getFollowers(@PathVariable Long userId,
-            @RequestParam(required = false, defaultValue = "name_asc") String order) {
+                                                             @RequestParam(required = false, defaultValue = "name_asc") String order) {
         return new ResponseEntity<>(this.userService.searchFollowers(userId, order), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/followed/list")
     public ResponseEntity<FollowedResponseDto> getFollowed(@PathVariable Long userId,
-            @RequestParam(required = false, defaultValue = "name_asc") String order) {
+                                                           @RequestParam(required = false, defaultValue = "name_asc") String order) {
         return new ResponseEntity<>(this.userService.searchFollowed(userId, order), HttpStatus.OK);
     }
 
@@ -53,5 +54,16 @@ public class UserController {
     public ResponseEntity<List<FollowSuggestionResponseDto>> getFollowSuggestions(@PathVariable Long userId,
             @RequestParam(defaultValue = "3") Integer limit) {
         return new ResponseEntity<>(userService.searchFollowSuggestions(userId, limit), HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/{userId}/favorites/{postId}")
+    public ResponseEntity<UserWithFavoritesPostResponseDto> postUpdateFavorites(@PathVariable Long userId, @PathVariable Long postId) {
+        return new ResponseEntity<>(this.userService.updateUserFavoritesPost(userId, postId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/favorites/list")
+    public ResponseEntity<UserFavoritesResponseDto> getFavorites(@PathVariable Long userId) {
+        return new ResponseEntity<>(this.userService.searchUserFavoritesPost(userId), HttpStatus.OK);
     }
 }

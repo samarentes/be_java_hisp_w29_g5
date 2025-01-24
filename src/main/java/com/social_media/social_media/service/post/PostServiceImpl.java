@@ -1,5 +1,8 @@
 package com.social_media.social_media.service.post;
 
+import com.social_media.social_media.dto.responseDto.ProductResponseDto;
+import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
+import com.social_media.social_media.dto.responseDto.StockResponseDto;
 import com.social_media.social_media.dto.request.*;
 import com.social_media.social_media.dto.responseDto.*;
 import com.social_media.social_media.entity.Follow;
@@ -8,19 +11,25 @@ import com.social_media.social_media.exception.InvalidPromotionEndDateException;
 import com.social_media.social_media.exception.NotSellerException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.utils.MessagesExceptions;
+import com.social_media.social_media.dto.request.PostRequestDto;
+import com.social_media.social_media.dto.request.PostPromoRequestDto;
+import com.social_media.social_media.dto.request.IPostRequestDto;
+import com.social_media.social_media.dto.request.ProductRequestDto;
+import com.social_media.social_media.dto.responseDto.PostDetailResponseDto;
 import com.social_media.social_media.dto.responseDto.PostPromoResponseDto;
 import com.social_media.social_media.dto.responseDto.PostResponseDto;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
+import com.social_media.social_media.entity.Stock;
 import com.social_media.social_media.enums.PostType;
 import com.social_media.social_media.exception.NotFoundException;
 import com.social_media.social_media.repository.user.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.social_media.social_media.repository.post.IPostRepository;
+import com.social_media.social_media.repository.stock.IStockRepository;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,13 +45,16 @@ public class PostServiceImpl implements IPostService {
     private final IUserRepository userRepository;
     private final IFollowRepository followRepository;
 
+    private final IStockRepository stockRepository;
+
     @Override
     public PostPromoEndDateResponseDto createPostPromoEndDate(PostPromoEndDateRequestDto postPromoEndDateRequestDto) {
         if (postPromoEndDateRequestDto.getPromotionEndDate().isBefore(postPromoEndDateRequestDto.getDate())) {
-            throw new InvalidPromotionEndDateException(END_DATE_BEFORE_PUBLICATION_DATE );
+            throw new InvalidPromotionEndDateException(END_DATE_BEFORE_PUBLICATION_DATE);
 
         }
-        Post post = createPostCommon(postPromoEndDateRequestDto, postPromoEndDateRequestDto.getDiscount(), postPromoEndDateRequestDto.getPromotionEndDate());
+        Post post = createPostCommon(postPromoEndDateRequestDto, postPromoEndDateRequestDto.getDiscount(),
+                postPromoEndDateRequestDto.getPromotionEndDate());
         postRepository.add(post);
         return buildPostPromoEndDateResponseDto(post);
     }
@@ -74,8 +86,8 @@ public class PostServiceImpl implements IPostService {
         if (followedIds.isEmpty()) {
             throw new NotFoundException(MessagesExceptions.NO_FOLLOWERS_FOUND + userId);
         }
-        List<Post> posts = followedIds.stream().flatMap(followedId ->
-                postRepository.findByIdSince(followedId, lastTwoWeeks).stream()).toList();
+        List<Post> posts = followedIds.stream()
+                .flatMap(followedId -> postRepository.findByIdSince(followedId, lastTwoWeeks).stream()).toList();
 
         if (posts.isEmpty()) {
             throw new NotFoundException(MessagesExceptions.NO_RECENT_POSTS_FOUND + userId);
@@ -94,7 +106,7 @@ public class PostServiceImpl implements IPostService {
             throw new NotFoundException(SELLER_ID_NOT_EXIST);
         }
 
-        if (postRepository.findPostBySellerId(userId).isEmpty()){
+        if (postRepository.findPostBySellerId(userId).isEmpty()) {
             throw new NotSellerException(FOLLOWED_USER_NOT_SELLER);
         }
 
@@ -187,4 +199,35 @@ public class PostServiceImpl implements IPostService {
                 .promotionEndDate(post.getPromotionEndDate())
                 .build();
     }
+
+    @Override
+    public PostDetailResponseDto searchById(Long postId) {
+        Optional<Post> postFound = this.postRepository.findById(postId);
+
+        if (postFound.isEmpty()) {
+            throw new NotFoundException(MessagesExceptions.POST_NOT_FOUND);
+        }
+
+        Stock stockFound = this.stockRepository.findByPostId(postId).orElse(null);
+
+        return PostDetailResponseDto.builder()
+                .user_id(postFound.get().getUserId())
+                .post_id(postFound.get().getPostId())
+                .date(postFound.get().getDate())
+                .product(ProductResponseDto.builder()
+                        .product_id(postFound.get().getProduct().getProductId())
+                        .product_name(postFound.get().getProduct().getProductName())
+                        .type(postFound.get().getProduct().getType())
+                        .brand(postFound.get().getProduct().getBrand())
+                        .color(postFound.get().getProduct().getColor())
+                        .notes(postFound.get().getProduct().getNotes())
+                        .build())
+                .category(postFound.get().getCategory())
+                .price(postFound.get().getPrice())
+                .discount(postFound.get().getDiscount())
+                .has_promo(postFound.get().getDiscount() > 0 ? true : false)
+                .stock(stockFound != null ? StockResponseDto.builder().units(stockFound.getUnits()).build() : null)
+                .build();
+    }
+
 }
