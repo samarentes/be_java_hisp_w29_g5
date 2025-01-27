@@ -1,20 +1,29 @@
 package com.social_media.social_media.service.user;
 
-import com.social_media.social_media.dto.response.*;
+import com.social_media.social_media.dto.response.FollowingResponseDto;
+import com.social_media.social_media.dto.response.FollowedResponseDto;
+import com.social_media.social_media.dto.response.FollowersResponseDto;
+import com.social_media.social_media.dto.response.UserResponseDto;
+import com.social_media.social_media.dto.response.ProductResponseDto;
+import com.social_media.social_media.dto.response.SellersPostsByFollowerResponseDto;
+import com.social_media.social_media.dto.response.StockResponseDto;
+import com.social_media.social_media.dto.response.PostPromoEndDateResponseDto;
+import com.social_media.social_media.dto.response.PostDetailResponseDto;
+import com.social_media.social_media.dto.response.PostPromoResponseDto;
+import com.social_media.social_media.dto.response.PostResponseDto;
+import com.social_media.social_media.dto.response.PromoProductsResponseDto;
+import com.social_media.social_media.dto.response.FollowSuggestionResponseDto;
+import com.social_media.social_media.dto.response.UserWithFavoritesPostResponseDto;
+import com.social_media.social_media.dto.response.UserFavoritesResponseDto;
+import com.social_media.social_media.dto.response.FollowersCountResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.exception.BadRequestFollowException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
 import com.social_media.social_media.repository.post.IPostRepository;
-
 import com.social_media.social_media.utils.MessagesExceptions;
 import com.social_media.social_media.entity.User;
-import com.social_media.social_media.dto.response.FollowingResponseDto;
-import com.social_media.social_media.dto.response.FollowedResponseDto;
-import com.social_media.social_media.dto.response.FollowersResponseDto;
-import com.social_media.social_media.dto.response.UserResponseDto;
 import com.social_media.social_media.exception.NotFoundException;
-import com.social_media.social_media.dto.response.FollowersCountResponseDto;
 import com.social_media.social_media.exception.NotSellerException;
 
 import lombok.RequiredArgsConstructor;
@@ -37,7 +46,7 @@ public class UserServiceImpl implements IUserService {
     private final IFollowRepository followRepository;
 
     @Override
-    public Boolean unfollowSeller(Long userId, Long userIdToUnfollow) {
+    public void unfollowSeller(Long userId, Long userIdToUnfollow) {
         // validar si el user id ya está siguiendo al seller especificado (si existe registro)
         Optional<Follow> follow = followRepository.existsByFollowerAndFollowed(userId, userIdToUnfollow);
         if (follow.isEmpty()) {
@@ -45,7 +54,6 @@ public class UserServiceImpl implements IUserService {
         }
 
         followRepository.deleteFollow(follow.get());
-        return true;
     }
 
     @Override

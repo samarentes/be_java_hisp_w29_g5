@@ -3,12 +3,9 @@ package com.social_media.social_media.repository.follow;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.social_media.social_media.entity.Follow;
-import com.social_media.social_media.entity.User;
 import com.social_media.social_media.exception.DataLoadException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
-import org.yaml.snakeyaml.util.Tuple;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

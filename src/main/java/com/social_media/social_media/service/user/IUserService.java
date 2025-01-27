@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface IUserService {
 
-    Boolean unfollowSeller(Long userId, Long userIdToUnfollow);
+    void unfollowSeller(Long userId, Long userIdToUnfollow);
 
     FollowedResponseDto searchFollowed(Long userId, String order);
 
