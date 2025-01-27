@@ -9,12 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Product {
-    private Long productId;
-    private String productName;
-    private String type;
-    private String brand;
-    private String color;
-    private String notes;
-
+public class Stock {
+    private Long postId;
+    private Long units;
 }
