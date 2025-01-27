@@ -1,6 +1,7 @@
 package com.social_media.social_media.service.user;
 
-import com.social_media.social_media.dto.responseDto.*;
+import com.social_media.social_media.dto.response.*;
+import java.util.List;
 
 public interface IUserService {
 
@@ -14,8 +15,9 @@ public interface IUserService {
 
     FollowersCountResponseDto searchFollowersCount(Long userId);
 
+    List<FollowSuggestionResponseDto> searchFollowSuggestions(Long userId, Integer limit);
+
     UserWithFavoritesPostResponseDto updateUserFavoritesPost(Long userId, Long postId);
 
-    UserFavoritesResponseDto searchUserFavoritesPost(long userId);
-
+    UserFavoritesResponseDto searchUserFavoritesPost(Long userId);
 }

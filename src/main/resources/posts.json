@@ -190,5 +190,21 @@
     "category": 1,
     "price": 129.99,
     "discount": 0.034
+  },
+  {
+    "postId": 13,
+    "userId": 10,
+    "date": "21-01-2025",
+    "product": {
+      "productId": 13,
+      "productName": "Camiseta de la Selección Argentina",
+      "type": "Ropa",
+      "brand": "adidas",
+      "color": "Blanco",
+      "notes": "Diseñada para tirar facha."
+    },
+    "category": 2,
+    "price": 49.99,
+    "discount": 0
   }
 ]

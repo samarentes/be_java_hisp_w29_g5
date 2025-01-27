@@ -9,6 +9,7 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,7 +23,6 @@ public class UserRepositoryImpl implements IUserRepository {
 
     public UserRepositoryImpl() {
         try {
-
             loadDataBase();
         } catch (IOException e) {
             throw new DataLoadException(INVALID_USER_ENTITY);
@@ -43,19 +43,23 @@ public class UserRepositoryImpl implements IUserRepository {
 
     @Override
     public Optional<User> findById(Long userId) {
-        return Optional.ofNullable(this.users.get(userId));
+        return Optional.ofNullable(users.get(userId));
+    }
+
+    @Override
+    public String findNameById(Long userId) {
+        return users.get(userId) == null ? "" : users.get(userId).getName();
     }
 
     @Override
     public User update(Long UserId, Long idNewPost) {
-        User user = this.users.get(UserId);
+        User user = users.get(UserId);
         user.getFavoritePosts().add(idNewPost);
         return user;
-
     }
 
     @Override
     public List<Long> findFavoritePostsById(Long userId) {
-        return this.users.get(userId).getFavoritePosts();
+        return users.get(userId).getFavoritePosts();
     }
 }

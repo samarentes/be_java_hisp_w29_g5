@@ -17,7 +17,8 @@ public final class MessagesExceptions {
     public static final String INVALID_FOLLOW_ENTITY = "La entidad Follow es inválida";
     public static final String INVALID_POST_ENTITY = "La entidad Post es inválida";
     public static final String INVALID_USER_ENTITY = "La entidad User es inválida";
-    public static final String INVALID_ORDER_NAME = "El orden indicado es inválido: el mismo debe ser 'name_asc' o 'name_desc'.";
     public static final String POST_NOT_FOUND = "La publicación no fue encontrada";
     public static final String POST_ALREADY_FAVORITE = "La publicación ya es favorita para ese usuario";
+    public static final String NO_FAVOURITE_POSTS = "El usuario no posee posts favoritos.";
+    public static final String NO_SUGGESTIONS = "No encontramos sugerencias de vendedores que el usuario pueda seguir.";
 }

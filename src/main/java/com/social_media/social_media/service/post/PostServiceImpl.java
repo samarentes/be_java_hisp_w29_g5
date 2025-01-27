@@ -1,11 +1,12 @@
 package com.social_media.social_media.service.post;
 
-import com.social_media.social_media.dto.responseDto.ProductResponseDto;
-import com.social_media.social_media.dto.responseDto.SellersPostsByFollowerResponseDto;
-import com.social_media.social_media.dto.responseDto.StockResponseDto;
+import com.social_media.social_media.dto.response.ProductResponseDto;
+import com.social_media.social_media.dto.response.SellersPostsByFollowerResponseDto;
+import com.social_media.social_media.dto.response.StockResponseDto;
 import com.social_media.social_media.dto.request.*;
-import com.social_media.social_media.dto.responseDto.*;
+import com.social_media.social_media.dto.response.*;
 import com.social_media.social_media.entity.Follow;
+import com.social_media.social_media.entity.User;
 import com.social_media.social_media.exception.InvalidPromotionEndDateException;
 import com.social_media.social_media.exception.NotSellerException;
 import com.social_media.social_media.repository.follow.IFollowRepository;
@@ -14,9 +15,9 @@ import com.social_media.social_media.dto.request.PostRequestDto;
 import com.social_media.social_media.dto.request.PostPromoRequestDto;
 import com.social_media.social_media.dto.request.IPostRequestDto;
 import com.social_media.social_media.dto.request.ProductRequestDto;
-import com.social_media.social_media.dto.responseDto.PostDetailResponseDto;
-import com.social_media.social_media.dto.responseDto.PostPromoResponseDto;
-import com.social_media.social_media.dto.responseDto.PostResponseDto;
+import com.social_media.social_media.dto.response.PostDetailResponseDto;
+import com.social_media.social_media.dto.response.PostPromoResponseDto;
+import com.social_media.social_media.dto.response.PostResponseDto;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import com.social_media.social_media.entity.Stock;
@@ -74,6 +75,11 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public SellersPostsByFollowerResponseDto searchFollowedPostsFromLastTwoWeeks(Long userId, String order) {
+        Optional<User> oUser = userRepository.findById(userId);
+        if (oUser.isEmpty()) {
+            throw new NotFoundException(MessagesExceptions.USER_NOT_FOUND);
+        }
+
         LocalDate lastTwoWeeks = LocalDate.now().minusWeeks(2);
 
         List<Long> followedIds = followRepository.findFollowed(userId).stream().map(Follow::getFollowedId).toList();

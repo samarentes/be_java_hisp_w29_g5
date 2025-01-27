@@ -16,20 +16,20 @@ public class StockRepository implements IStockRepository {
 
     @Override
     public Stock add(Stock stock) {
-        this.stocks.put(UUID.randomUUID(), stock);
+        stocks.put(UUID.randomUUID(), stock);
         return stock;
     }
 
     @Override
     public Optional<Stock> findByPostId(Long postId) {
-        AtomicReference<Stock> stockFindedReference = new AtomicReference<>();
-        this.stocks.forEach((__, stock) -> {
+        AtomicReference<Stock> stockFoundReference = new AtomicReference<>();
+        stocks.forEach((__, stock) -> {
             if (stock.getPostId().equals(postId)) {
-                stockFindedReference.set(stock);
+                stockFoundReference.set(stock);
             }
         });
 
-        return Optional.ofNullable(stockFindedReference.get());
+        return Optional.ofNullable(stockFoundReference.get());
     }
 
 }

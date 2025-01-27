@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.enums.PostType;
+import org.springframework.lang.Nullable;
 import com.social_media.social_media.exception.DataLoadException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,7 +29,6 @@ public class PostRepositoryImpl implements IPostRepository {
     public PostRepositoryImpl() {
         try {
             loadDataBase();
-
         } catch (IOException e) {
             throw new DataLoadException(INVALID_POST_ENTITY);
         }
@@ -107,4 +108,25 @@ public class PostRepositoryImpl implements IPostRepository {
         return filteredPosts;
     }
 
+    @Override
+    public Map<Long, List<String>> findSellersByBrands(List<String> favouriteBrands) {
+        Map<Long, List<String>> sellersWithBrands = new HashMap<>();
+        posts.forEach((__, post) -> {
+            String postBrand = post.getProduct().getBrand().toUpperCase();
+            if (favouriteBrands.contains(postBrand)) {
+                sellersWithBrands.compute(post.getUserId(), (k, brands) -> addBrandTo(brands, postBrand));
+            }
+        });
+        return sellersWithBrands;
+    }
+
+    private List<String> addBrandTo(@Nullable List<String> brands, String postBrand) {
+        if (brands == null) {
+            brands = new ArrayList<>();
+        }
+        if (!brands.contains(postBrand)) {
+            brands.add(postBrand);
+        }
+        return brands;
+    }
 }

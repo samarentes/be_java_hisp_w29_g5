@@ -3,7 +3,7 @@ package com.social_media.social_media.service.stock;
 import org.springframework.stereotype.Service;
 
 import com.social_media.social_media.dto.request.StockRequestDto;
-import com.social_media.social_media.dto.responseDto.StockResponseDto;
+import com.social_media.social_media.dto.response.StockResponseDto;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Stock;
 import com.social_media.social_media.exception.NotFoundException;
@@ -16,16 +16,14 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class StockServiceImpl implements IStockService {
-
     private final IStockRepository stockRepository;
     private final IPostRepository postRepository;
 
     @Override
     public StockResponseDto createStock(Long postId, StockRequestDto stockRequestDto) {
+        Post postFound = postRepository.findById(postId).orElse(null);
 
-        Post postFinded = this.postRepository.findById(postId).orElse(null);
-
-        if (postFinded == null) {
+        if (postFound == null) {
             throw new NotFoundException(MessagesExceptions.POST_NOT_FOUND);
         }
 

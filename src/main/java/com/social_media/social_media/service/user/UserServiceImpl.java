@@ -1,6 +1,6 @@
 package com.social_media.social_media.service.user;
 
-import com.social_media.social_media.dto.responseDto.*;
+import com.social_media.social_media.dto.response.*;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.exception.BadRequestFollowException;
@@ -9,19 +9,18 @@ import com.social_media.social_media.repository.post.IPostRepository;
 
 import com.social_media.social_media.utils.MessagesExceptions;
 import com.social_media.social_media.entity.User;
-import com.social_media.social_media.dto.responseDto.FollowingResponseDto;
-import com.social_media.social_media.dto.responseDto.FollowedResponseDto;
-import com.social_media.social_media.dto.responseDto.FollowersResponseDto;
-import com.social_media.social_media.dto.responseDto.UserResponseDto;
+import com.social_media.social_media.dto.response.FollowingResponseDto;
+import com.social_media.social_media.dto.response.FollowedResponseDto;
+import com.social_media.social_media.dto.response.FollowersResponseDto;
+import com.social_media.social_media.dto.response.UserResponseDto;
 import com.social_media.social_media.exception.NotFoundException;
-import com.social_media.social_media.dto.responseDto.FollowersCountResponseDto;
+import com.social_media.social_media.dto.response.FollowersCountResponseDto;
 import com.social_media.social_media.exception.NotSellerException;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -95,6 +94,7 @@ public class UserServiceImpl implements IUserService {
         return new FollowedResponseDto(followerUser.get().getUserId(), followerUser.get().getName(), followed);
     }
 
+    @Override
     public FollowingResponseDto followSeller(Long userId, Long userIdToFollow) {
         Optional<Follow> followExist = followRepository.existsByFollowerAndFollowed(userId, userIdToFollow);
 
@@ -144,10 +144,45 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserWithFavoritesPostResponseDto updateUserFavoritesPost(Long userId, Long postId) {
-        if (userRepository.findById(userId).isEmpty()) throw new NotFoundException(USER_NOT_FOUND);
+    public List<FollowSuggestionResponseDto> searchFollowSuggestions(Long userId, Integer limit) {
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
-        if (postRepository.findById(postId).isEmpty()) throw new NotFoundException(POST_NOT_FOUND);
+        // Obtener las marcas favoritas del usuario
+        List<String> favouriteBrands = searchUserFavoritesPost(userId).getFavorites().stream()
+                .map(post -> post.getProduct().getBrand().toUpperCase())
+                .distinct().toList();
+        if(favouriteBrands.isEmpty()) throw new NotFoundException(NO_FAVOURITE_POSTS);
+
+        // Encontrar vendedores que venden esas marcas
+        Map<Long, List<String>> sellersWithBrands = postRepository.findSellersByBrands(favouriteBrands);
+
+        // Obtener los IDs de los usuarios seguidos por el usuario actual
+        Set<Long> followedIds = followRepository.findFollowed(userId).stream()
+                .map(Follow::getFollowedId)
+                .collect(Collectors.toSet());
+
+        // Filtrar vendedores que no han sido seguidos por el usuario, y que no sean el propio usuario
+        Map<Long, List<String>> filteredSuggestions = sellersWithBrands.entrySet().stream()
+                .filter(entry -> !followedIds.contains(entry.getKey()) && entry.getKey() != userId)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        if(filteredSuggestions.isEmpty()) throw new NotFoundException(NO_SUGGESTIONS);
+
+        return filteredSuggestions.entrySet().stream()
+                .map(entry -> FollowSuggestionResponseDto.builder()
+                        .user_id(entry.getKey())
+                        .user_name(userRepository.findNameById(entry.getKey()))
+                        .brandsSold(entry.getValue())
+                        .build())
+                .sorted(Comparator.comparing((FollowSuggestionResponseDto sug) -> sug.getBrandsSold().size()).reversed())
+                .limit(limit)
+                .toList();
+    }
+
+    @Override
+    public UserWithFavoritesPostResponseDto updateUserFavoritesPost(Long userId, Long postId) {
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(MessagesExceptions.USER_NOT_FOUND));
+
+        postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
 
         if (userRepository.findFavoritePostsById(userId).contains(postId))
             throw new BadRequestFollowException(POST_ALREADY_FAVORITE);
@@ -168,8 +203,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserFavoritesResponseDto searchUserFavoritesPost(long userId) {
-        if (userRepository.findById(userId).isEmpty()) throw new NotFoundException(USER_NOT_FOUND);
+    public UserFavoritesResponseDto searchUserFavoritesPost(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(MessagesExceptions.USER_NOT_FOUND));
 
         List<Long> favoritePosts = userRepository.findFavoritePostsById(userId);
 
@@ -201,8 +236,5 @@ public class UserServiceImpl implements IUserService {
 
 
         return UserFavoritesResponseDto.builder().favorites(postsDto).build();
-
     }
-
-
 }
