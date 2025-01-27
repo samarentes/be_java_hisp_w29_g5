@@ -34,7 +34,7 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<?> createNewPost(@RequestBody PostRequestDto postProductRequestDto) {
+    public ResponseEntity<?> postNew(@RequestBody PostRequestDto postProductRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(postProductRequestDto));
     }
 
@@ -43,14 +43,14 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPostPromo(postPromoRequestDto));
     }
 
-    @GetMapping("/post/{postId}")
-    public ResponseEntity<PostDetailResponseDto> getById(@PathVariable Long postId) {
-        return new ResponseEntity<>(postService.searchById(postId), HttpStatus.OK);
-    }
-
     @GetMapping("/promo-post/count")
     public ResponseEntity<PromoProductsResponseDto> postPromoCount(@RequestParam Long user_id) {
         return ResponseEntity.status(HttpStatus.OK).body(postService.searchSellersWithPromoPosts(user_id));
+    }
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<PostDetailResponseDto> getById(@PathVariable Long postId) {
+        return new ResponseEntity<>(postService.searchById(postId), HttpStatus.OK);
     }
 
     @PostMapping("/promo-post-end-date")

@@ -29,7 +29,6 @@ public class UserController {
     public ResponseEntity<FollowingResponseDto> postFollowSeller(@PathVariable Long userId,
             @PathVariable Long userIdToFollow) {
         return new ResponseEntity<>(userService.followSeller(userId, userIdToFollow), HttpStatus.OK);
-
     }
 
     @GetMapping("/{userId}/follower/list")
@@ -50,14 +49,15 @@ public class UserController {
         return new ResponseEntity<>(userService.searchFollowSuggestions(userId, limit), HttpStatus.OK);
     }
 
-    @PostMapping("/{userId}/favorites/{postId}")
-    public ResponseEntity<UserWithFavoritesPostResponseDto> postUpdateFavorites(@PathVariable Long userId,
-            @PathVariable Long postId) {
-        return new ResponseEntity<>(userService.updateUserFavoritesPost(userId, postId), HttpStatus.OK);
-    }
-
     @GetMapping("/{userId}/favorites/list")
     public ResponseEntity<UserFavoritesResponseDto> getFavorites(@PathVariable Long userId) {
         return new ResponseEntity<>(userService.searchUserFavoritesPost(userId), HttpStatus.OK);
     }
+
+    @PostMapping("/{userId}/favorites/{postId}")
+    public ResponseEntity<UserWithFavoritesPostResponseDto> postUpdateFavorites(@PathVariable Long userId,
+                                                                                @PathVariable Long postId) {
+        return new ResponseEntity<>(userService.updateUserFavoritesPost(userId, postId), HttpStatus.OK);
+    }
+
 }

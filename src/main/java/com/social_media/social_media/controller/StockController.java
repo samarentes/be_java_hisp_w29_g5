@@ -19,13 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/stock")
 public class StockController {
-
     private final IStockService stockService;
 
     @PostMapping("/{postId}")
-    public ResponseEntity<StockResponseDto> postMethodName(@PathVariable Long postId,
+    public ResponseEntity<StockResponseDto> postStock(@PathVariable Long postId,
             @RequestBody StockRequestDto stockRequestDto) {
-        return new ResponseEntity<>(this.stockService.createStock(postId, stockRequestDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(stockService.createStock(postId, stockRequestDto), HttpStatus.CREATED);
     }
 
 }

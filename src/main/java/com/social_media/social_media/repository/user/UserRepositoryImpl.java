@@ -47,25 +47,19 @@ public class UserRepositoryImpl implements IUserRepository {
     }
 
     @Override
-    public List<String> findFavouriteBrandsById(Long userId) {
-        return new ArrayList<>();
-    }
-
-    @Override
     public String findNameById(Long userId) {
-        return users.get(userId).getName();
+        return users.get(userId) == null ? "" : users.get(userId).getName();
     }
 
     @Override
     public User update(Long UserId, Long idNewPost) {
-        User user = this.users.get(UserId);
+        User user = users.get(UserId);
         user.getFavoritePosts().add(idNewPost);
         return user;
-
     }
 
     @Override
     public List<Long> findFavoritePostsById(Long userId) {
-        return this.users.get(userId).getFavoritePosts();
+        return users.get(userId).getFavoritePosts();
     }
 }

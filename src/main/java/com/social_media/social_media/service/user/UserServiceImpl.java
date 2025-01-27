@@ -145,10 +145,13 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<FollowSuggestionResponseDto> searchFollowSuggestions(Long userId, Integer limit) {
-        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(MessagesExceptions.USER_NOT_FOUND));
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
         // Obtener las marcas favoritas del usuario
-        List<String> favouriteBrands = userRepository.findFavouriteBrandsById(userId);
+        List<String> favouriteBrands = searchUserFavoritesPost(userId).getFavorites().stream()
+                .map(post -> post.getProduct().getBrand().toUpperCase())
+                .distinct().toList();
+        if(favouriteBrands.isEmpty()) throw new NotFoundException(NO_FAVOURITE_POSTS);
 
         // Encontrar vendedores que venden esas marcas
         Map<Long, List<String>> sellersWithBrands = postRepository.findSellersByBrands(favouriteBrands);
@@ -158,11 +161,11 @@ public class UserServiceImpl implements IUserService {
                 .map(Follow::getFollowedId)
                 .collect(Collectors.toSet());
 
-        // Filtrar vendedores que no han sido seguidos por el usuario
+        // Filtrar vendedores que no han sido seguidos por el usuario, y que no sean el propio usuario
         Map<Long, List<String>> filteredSuggestions = sellersWithBrands.entrySet().stream()
-                .filter(entry -> !followedIds.contains(entry.getKey()))
-                .limit(limit)
+                .filter(entry -> !followedIds.contains(entry.getKey()) && entry.getKey() != userId)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        if(filteredSuggestions.isEmpty()) throw new NotFoundException(NO_SUGGESTIONS);
 
         return filteredSuggestions.entrySet().stream()
                 .map(entry -> FollowSuggestionResponseDto.builder()
@@ -170,15 +173,16 @@ public class UserServiceImpl implements IUserService {
                         .user_name(userRepository.findNameById(entry.getKey()))
                         .brandsSold(entry.getValue())
                         .build())
-                .sorted(Comparator.comparingInt(sug -> sug.getBrandsSold().size()))
+                .sorted(Comparator.comparing((FollowSuggestionResponseDto sug) -> sug.getBrandsSold().size()).reversed())
+                .limit(limit)
                 .toList();
     }
 
     @Override
     public UserWithFavoritesPostResponseDto updateUserFavoritesPost(Long userId, Long postId) {
-        if (userRepository.findById(userId).isEmpty()) throw new NotFoundException(USER_NOT_FOUND);
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(MessagesExceptions.USER_NOT_FOUND));
 
-        if (postRepository.findById(postId).isEmpty()) throw new NotFoundException(POST_NOT_FOUND);
+        postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
 
         if (userRepository.findFavoritePostsById(userId).contains(postId))
             throw new BadRequestFollowException(POST_ALREADY_FAVORITE);
@@ -199,8 +203,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserFavoritesResponseDto searchUserFavoritesPost(long userId) {
-        if (userRepository.findById(userId).isEmpty()) throw new NotFoundException(USER_NOT_FOUND);
+    public UserFavoritesResponseDto searchUserFavoritesPost(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new NotFoundException(MessagesExceptions.USER_NOT_FOUND));
 
         List<Long> favoritePosts = userRepository.findFavoritePostsById(userId);
 
@@ -232,6 +236,5 @@ public class UserServiceImpl implements IUserService {
 
 
         return UserFavoritesResponseDto.builder().favorites(postsDto).build();
-
     }
 }

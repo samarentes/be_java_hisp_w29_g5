@@ -13,7 +13,5 @@ public interface IUserRepository {
 
     List<Long> findFavoritePostsById(Long userId);
 
-    List<String> findFavouriteBrandsById(Long userId);
-
     String findNameById(Long userId);
 }

@@ -19,5 +19,5 @@ public interface IUserService {
 
     UserWithFavoritesPostResponseDto updateUserFavoritesPost(Long userId, Long postId);
 
-    UserFavoritesResponseDto searchUserFavoritesPost(long userId);
+    UserFavoritesResponseDto searchUserFavoritesPost(Long userId);
 }

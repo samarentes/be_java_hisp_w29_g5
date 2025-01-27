@@ -29,7 +29,6 @@ public class PostRepositoryImpl implements IPostRepository {
     public PostRepositoryImpl() {
         try {
             loadDataBase();
-
         } catch (IOException e) {
             throw new DataLoadException(INVALID_POST_ENTITY);
         }
