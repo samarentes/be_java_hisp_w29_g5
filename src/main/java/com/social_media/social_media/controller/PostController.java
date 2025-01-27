@@ -35,12 +35,12 @@ public class PostController {
 
     @PostMapping("/post")
     public ResponseEntity<?> postNew(@RequestBody PostRequestDto postProductRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(postProductRequestDto));
+        return ResponseEntity.status(HttpStatus.OK).body(postService.createPost(postProductRequestDto));
     }
 
     @PostMapping("/promo-post")
     public ResponseEntity<PostPromoResponseDto> postNewPromo(@RequestBody PostPromoRequestDto postPromoRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPostPromo(postPromoRequestDto));
+        return ResponseEntity.status(HttpStatus.OK).body(postService.createPostPromo(postPromoRequestDto));
     }
 
     @GetMapping("/promo-post/count")
