@@ -88,7 +88,7 @@ Para llevar a cabo la revisión de los pull requests (PR), se estableció un esq
 ---
 
 ## **MEJORAS REALIZADAS**
-- En la carga de los JSON, trabajar un mensaje de excepción personalizado para **IOException** en los repositorios.
-- Los endpoints que reciben **userId** de entrada podrían incluir una validación de excepción de tipo **NotFound** para mayor control (1, 2, 3, 4, 5, 7, 8, 10, 11).
-- Validar que un vendedor no siga a otro vendedor (en nuestra lógica, un vendedor puede ser comprador al mismo tiempo).
-- Agregar validación de orden no válido a la **US_0008**.
+- Se implementó un mensaje de excepción personalizado para **IOException** en los repositorios al cargar los JSON.
+- Se añadió una validación de excepción de tipo **NotFound** para los endpoints que reciben **userId** de entrada, mejorando el control.
+- Se validó que un vendedor no pueda seguir a otro vendedor.
+- Se agregó una validación de orden no válido a la **US_0008**.
