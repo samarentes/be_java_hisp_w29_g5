@@ -51,7 +51,7 @@ public class T0008 {
 
         List<User> userFollowers = TestUtils.createTenRandomUsers();
 
-        List<Follow> followers = TestUtils.createTenFollowersForUser(userFollowed.getUserId(),userFollowers, true);
+        List<Follow> followers = TestUtils.createTenFollowersForUser(userFollowed.getUserId(), userFollowers, true);
 
         when(userRepository.findById(userFollowed.getUserId()))
                 .thenReturn(Optional.of(userFollowed));
@@ -97,7 +97,7 @@ public class T0008 {
 
         List<User> userFollowers = TestUtils.createTenRandomUsers();
 
-        List<Follow> followers = TestUtils.createTenFollowersForUser(userFollowed.getUserId(),userFollowers, false);
+        List<Follow> followers = TestUtils.createTenFollowersForUser(userFollowed.getUserId(), userFollowers, false);
 
         when(userRepository.findById(userFollowed.getUserId()))
                 .thenReturn(Optional.of(userFollowed));
