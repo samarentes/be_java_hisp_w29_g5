@@ -43,7 +43,15 @@ public class T0007 {
 
         doNothing().when(followRepository).deleteFollow(follow);
 
+
         userService.unfollowSeller(user.getUserId(), userToUnfollow.getUserId());
+
+
+        when(followRepository.existsByFollowerAndFollowed(user.getUserId(), userToUnfollow.getUserId()))
+                .thenReturn(Optional.empty());
+
+        Optional<Follow> followCheck = followRepository.existsByFollowerAndFollowed(user.getUserId(), userToUnfollow.getUserId());
+        assertEquals(Optional.empty(), followCheck);
     }
 
     @Test
