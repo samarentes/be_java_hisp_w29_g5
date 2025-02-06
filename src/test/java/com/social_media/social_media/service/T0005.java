@@ -47,9 +47,9 @@ public class T0005 {
 
         // 🟢 **Arrange**
         //entitys to mock
+        User userToMock = TestUtils.createRandomUser();
         Product productMock = TestUtils.createRandomProduct();
-        Post postMock = TestUtils.createRandomPostNotUserId();
-        postMock.setPostId(1L);
+        Post postMock = TestUtils.createRandomPostWithPostId(1L);
 
         ProductRequestDto productRequestDto = TestUtils.convertProductToRequestDto(productMock);
         ProductResponseDto productResponseDto = TestUtils.convertProductToResponsetDto(productMock);
@@ -57,7 +57,7 @@ public class T0005 {
         PostResponseDto postResponseDtoExpected = TestUtils.convertPostToResponseDto(postMock, productResponseDto);
         PostRequestDto postRequestDto = TestUtils.convertPostToRequestDto(postMock, productRequestDto);
         
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(TestUtils.createRandomUser()));
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(userToMock));
         when(postRepository.add(any(Post.class))).thenReturn(postMock);
 
         // 🟡 **Act**

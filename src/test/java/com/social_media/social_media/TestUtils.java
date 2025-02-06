@@ -56,6 +56,19 @@ public class TestUtils {
         );
     }
 
+    public static Post createRandomPostWithPostId(Long postId) {
+        return new Post(
+                postId,
+                faker.number().randomNumber(),
+                LocalDate.now(),
+                createRandomProduct(),
+                random.nextInt(5) + 1,
+                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", ".")),
+                faker.number().randomDouble(2, 0, 50),
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
+        );
+    }
+
     public static User createRandomUser() {
         return new User(
                 faker.number().randomNumber(),
