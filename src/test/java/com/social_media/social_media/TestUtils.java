@@ -1,7 +1,10 @@
 package com.social_media.social_media;
 
 import com.github.javafaker.Faker;
+import com.social_media.social_media.dto.response.FollowersCountResponseDto;
+import com.social_media.social_media.dto.response.FollowersResponseDto;
 import com.social_media.social_media.dto.response.FollowingResponseDto;
+import com.social_media.social_media.dto.response.UserResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
@@ -9,7 +12,11 @@ import com.social_media.social_media.entity.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TestUtils {
 
@@ -59,5 +66,37 @@ public class TestUtils {
                 .build();
     }
 
+    public static List<User> createTenRandomUsers() {
+        return IntStream.range(0, 10)
+                .mapToObj(i -> createRandomUser())
+                .collect(Collectors.toList());
+    }
 
+    public static List<Follow> createTenFollowersForUser(Long userId, List<User> followers, boolean ascending) {
+        Comparator<User> comparator = Comparator.comparing(User::getName);
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+
+        followers.sort(comparator);
+
+        return followers.stream()
+                .map(user -> createFollow(user.getUserId(), userId))
+                .collect(Collectors.toList());
+    }
+
+    public static FollowersResponseDto convertFollowersToResponseDto(User userFollowed, List<User> followers) {
+        return FollowersResponseDto.builder()
+                .user_id(userFollowed.getUserId())
+                .user_name(userFollowed.getName())
+                .followers(followers.stream().map(TestUtils::convertUserToResponseDto).toList())
+                .build();
+    }
+
+    public static UserResponseDto convertUserToResponseDto(User user) {
+        return UserResponseDto.builder()
+                .user_id(user.getUserId())
+                .user_name(user.getName())
+                .build();
+    }
 }
