@@ -1,5 +1,6 @@
 package com.social_media.social_media.service;
 
+import com.social_media.social_media.TestUtils;
 import com.social_media.social_media.dto.request.PostRequestDto;
 import com.social_media.social_media.dto.request.ProductRequestDto;
 import com.social_media.social_media.dto.response.PostResponseDto;
@@ -24,6 +25,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,27 +46,19 @@ public class T0005 {
     void createPostOk(){
 
         // 🟢 **Arrange**
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate date = LocalDate.parse("18-01-2025", formatter);
-
         //entitys to mock
-        Product productMock = new Product(
-                11L, "Sudadera Deportiva","Ropa","Nike","Negro", "Diseñada para mantener el calor."
-        );
-        Post postMock = new Post(1L, 1L, date, productMock, 2, 49.99, 0.0, null);
+        Product productMock = TestUtils.createRandomProduct();
+        Post postMock = TestUtils.createRandomPostNotUserId();
+        postMock.setPostId(1L);
 
-        ProductRequestDto productRequestDto = new ProductRequestDto(
-                11L, "Sudadera Deportiva","Ropa","Nike","Negro", "Diseñada para mantener el calor."
-        );
+        ProductRequestDto productRequestDto = TestUtils.convertProductToRequestDto(productMock);
+        ProductResponseDto productResponseDto = TestUtils.convertProductToResponsetDto(productMock);
 
-        ProductResponseDto productResponseDto = new ProductResponseDto(
-                11L, "Sudadera Deportiva","Ropa","Nike","Negro", "Diseñada para mantener el calor."
-        );
-        PostResponseDto postResponseDtoExpected = new PostResponseDto(1L, 1L, date, productResponseDto, 2, 49.99);
-        PostRequestDto postRequestDto = new PostRequestDto(1L, date, productRequestDto, 2, 49.99);
-
-        when(userRepository.findById(1L)).thenReturn(Optional.of(new User()));
-        when(postRepository.add(postMock)).thenReturn(postMock);
+        PostResponseDto postResponseDtoExpected = TestUtils.convertPostToResponseDto(postMock, productResponseDto);
+        PostRequestDto postRequestDto = TestUtils.convertPostToRequestDto(postMock, productRequestDto);
+        
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(TestUtils.createRandomUser()));
+        when(postRepository.add(any(Post.class))).thenReturn(postMock);
 
         // 🟡 **Act**
         PostResponseDto postResponseDtoActual = postService.createPost(postRequestDto);
@@ -77,13 +72,7 @@ public class T0005 {
     @DisplayName("T-0005 - Test of create post (User not found) - Sad way")
     void createPostNotOk() {
         // 🟢 **Arrange**
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate date = LocalDate.parse("18-01-2025", formatter);
-
-        ProductRequestDto productRequestDto = new ProductRequestDto(
-                11L, "Sudadera Deportiva","Ropa","Nike","Negro", "Diseñada para mantener el calor."
-        );
-        PostRequestDto postRequestDto = new PostRequestDto(1L, date, productRequestDto, 2, 49.99);
+        PostRequestDto postRequestDto = TestUtils.createRandomPostRequestDto();
 
         //se simula que el id de usuario pasado no existe
         when(userRepository.findById(postRequestDto.getUser_id())).thenReturn(Optional.empty());
