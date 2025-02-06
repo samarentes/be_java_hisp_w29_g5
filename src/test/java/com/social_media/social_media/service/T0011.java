@@ -11,6 +11,7 @@ import com.social_media.social_media.exception.NotSellerException;
 import com.social_media.social_media.repository.post.PostRepositoryImpl;
 import com.social_media.social_media.repository.user.UserRepositoryImpl;
 import com.social_media.social_media.service.post.PostServiceImpl;
+import com.social_media.social_media.utils.MessagesExceptions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,20 +42,21 @@ public class T0011 {
     @DisplayName("T-0011 - Test of search Sellers With Promo Posts - Happy way")
     void searchSellersWithPromoPostsOk(){
         // 🟢 **Arrange**
-        Long id = 1L;
+        Long sellerId = 1L;
+        User userToMock = TestUtils.createRandomUser();
         List<Post> postListToMock = List.of(
                 TestUtils.createRandomPostNotUserId(),
                 TestUtils.createRandomPostNotUserId()
         );
-        when(userRepository.findById(id)).thenReturn(Optional.of(TestUtils.createRandomUser()));
-        when(postRepository.findPostBySellerId(id)).thenReturn(postListToMock);
-        when(postRepository.findWithFilters(PostType.PROMO, id)).thenReturn(postListToMock);
+        when(userRepository.findById(sellerId)).thenReturn(Optional.of(userToMock));
+        when(postRepository.findPostBySellerId(sellerId)).thenReturn(postListToMock);
+        when(postRepository.findWithFilters(PostType.PROMO, sellerId)).thenReturn(postListToMock);
 
         // 🟡 **Act**
-        PromoProductsResponseDto responseActual = postService.searchSellersWithPromoPosts(id);
+        PromoProductsResponseDto responseActual = postService.searchSellersWithPromoPosts(sellerId);
 
         // 🔴 **Assert**
-        assertEquals(id, responseActual.getUser_id());
+        assertEquals(sellerId, responseActual.getUser_id());
     }
 
     @Test
@@ -67,7 +69,12 @@ public class T0011 {
         when(userRepository.findById(sellerId)).thenReturn(Optional.empty());
 
         // 🔴 **Act && Assert**
-        assertThrows(NotFoundException.class, ()-> postService.searchSellersWithPromoPosts(sellerId));
+        NotFoundException thrown = assertThrows(
+                NotFoundException.class,
+                () -> postService.searchSellersWithPromoPosts(sellerId)
+        );
+
+        assertEquals(MessagesExceptions.SELLER_ID_NOT_EXIST, thrown.getMessage());
     }
 
     @Test
@@ -83,6 +90,11 @@ public class T0011 {
         when(postRepository.findPostBySellerId(userId)).thenReturn(Collections.emptyList());
 
         // 🔴 **Act && Assert**
-        assertThrows(NotSellerException.class, ()-> postService.searchSellersWithPromoPosts(userId));
+        NotSellerException thrown = assertThrows(
+                NotSellerException.class,
+                () -> postService.searchSellersWithPromoPosts(userId)
+        );
+
+        assertEquals(MessagesExceptions.FOLLOWED_USER_NOT_SELLER, thrown.getMessage());
     }
 }
