@@ -69,7 +69,7 @@ public class T0002 {
 
         FollowersCountResponseDto actualResponse = userService.searchFollowersCount(userToFollow.getUserId());
 
-        FollowersCountResponseDto expectedResponse = TestUtils.convertFollowersToResponseDto(userToFollow, followers);
+        FollowersCountResponseDto expectedResponse = TestUtils.convertFollowersToFollowersCountResponseDto(userToFollow, followers);
 
         assertEquals(expectedResponse, actualResponse);
         assertEquals(expectedResponse.getFollowers_count(), actualResponse.getFollowers_count());
@@ -83,9 +83,7 @@ public class T0002 {
         when(userRepository.findById(userToFollow.getUserId()))
                 .thenReturn(Optional.empty());
 
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
-            userService.searchFollowersCount(userToFollow.getUserId());
-        });
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> userService.searchFollowersCount(userToFollow.getUserId()));
 
         String expectedMessage = MessagesExceptions.SELLER_ID_NOT_EXIST;
         String actualMessage = thrown.getMessage();
@@ -101,9 +99,7 @@ public class T0002 {
         when(userRepository.findById(userToFollow.getUserId()))
                 .thenReturn(Optional.of(userToFollow));
 
-        NotSellerException thrown = assertThrows(NotSellerException.class, () -> {
-            userService.searchFollowersCount(userToFollow.getUserId());
-        });
+        NotSellerException thrown = assertThrows(NotSellerException.class, () -> userService.searchFollowersCount(userToFollow.getUserId()));
 
         String expectedMessage = MessagesExceptions.FOLLOWED_USER_NOT_SELLER;
         String actualMessage = thrown.getMessage();
