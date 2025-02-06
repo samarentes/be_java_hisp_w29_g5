@@ -2,17 +2,18 @@ package com.social_media.social_media;
 
 import com.github.javafaker.Faker;
 import com.social_media.social_media.dto.response.FollowingResponseDto;
+import com.social_media.social_media.dto.request.PostRequestDto;
+import com.social_media.social_media.dto.request.ProductRequestDto;
+import com.social_media.social_media.dto.response.PostResponseDto;
+import com.social_media.social_media.dto.response.ProductResponseDto;
 import com.social_media.social_media.dto.response.FollowersCountResponseDto;
 import com.social_media.social_media.dto.response.FollowersResponseDto;
-import com.social_media.social_media.dto.response.FollowingResponseDto;
 import com.social_media.social_media.dto.response.UserResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import com.social_media.social_media.entity.User;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Random;
 import com.social_media.social_media.exception.NotFoundException;
 import com.social_media.social_media.utils.MessagesExceptions;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -53,6 +53,19 @@ public class TestUtils {
         return new Post(
                 faker.number().randomNumber(),
                 userId,
+                LocalDate.now(),
+                createRandomProduct(),
+                random.nextInt(5) + 1,
+                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", ".")),
+                faker.number().randomDouble(2, 0, 50),
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
+        );
+    }
+
+    public static Post createRandomPostWithPostId(Long postId) {
+        return new Post(
+                postId,
+                faker.number().randomNumber(),
                 LocalDate.now(),
                 createRandomProduct(),
                 random.nextInt(5) + 1,
@@ -91,6 +104,90 @@ public class TestUtils {
                 faker.number().randomDouble(2, 1, 50),
                 LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
         );
+    }
+
+    public static ProductRequestDto createRandomProductRequestDto() {
+        return new ProductRequestDto(
+                faker.number().randomNumber(),
+                faker.commerce().productName(),
+                faker.commerce().department(),
+                faker.company().name(),
+                faker.color().name(),
+                faker.lorem().sentence()
+        );
+    }
+
+    public static ProductResponseDto createRandomProductResponseDto() {
+        return new ProductResponseDto(
+                faker.number().randomNumber(),
+                faker.commerce().productName(),
+                faker.commerce().department(),
+                faker.company().name(),
+                faker.color().name(),
+                faker.lorem().sentence()
+        );
+    }
+
+    public static PostResponseDto createRandomPostResponseDto() {
+        return new PostResponseDto(
+                faker.number().randomNumber(),
+                faker.number().randomNumber(),
+                LocalDate.now(),
+                createRandomProductResponseDto(),
+                random.nextInt(5) + 1,
+                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", "."))
+        );
+    }
+
+    public static PostRequestDto createRandomPostRequestDto() {
+        return new PostRequestDto(
+                faker.number().randomNumber(),
+                LocalDate.now(),
+                createRandomProductRequestDto(),
+                random.nextInt(5) + 1,
+                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", "."))
+        );
+    }
+
+    public static PostResponseDto convertPostToResponseDto(Post post, ProductResponseDto product) {
+        return PostResponseDto.builder()
+                .post_id(post.getPostId())
+                .user_id(post.getUserId())
+                .date(post.getDate())
+                .product(product)
+                .category(post.getCategory())
+                .price(post.getPrice())
+                .build();
+    }
+
+    public static PostRequestDto convertPostToRequestDto(Post post, ProductRequestDto product) {
+        return PostRequestDto.builder()
+                .user_id(post.getUserId())
+                .date(post.getDate())
+                .product(product)
+                .category(post.getCategory())
+                .price(post.getPrice())
+                .build();
+    }
+
+    public static ProductRequestDto convertProductToRequestDto(Product product) {
+        return ProductRequestDto.builder()
+                .product_id(product.getProductId())
+                .product_name(product.getProductName())
+                .type(product.getType())
+                .color(product.getColor())
+                .notes(product.getNotes())
+                .build();
+    }
+
+    public static ProductResponseDto convertProductToResponsetDto(Product product) {
+        return ProductResponseDto.builder()
+                .product_id(product.getProductId())
+                .product_name(product.getProductName())
+                .type(product.getType())
+                .color(product.getColor())
+                .notes(product.getNotes())
+                .build();
     }
 
     public static Post createRandomPostWithBrand(Long userId, String brand) {
