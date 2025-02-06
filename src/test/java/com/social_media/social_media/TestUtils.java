@@ -88,4 +88,16 @@ public class TestUtils {
                 faker.lorem().sentence());
     }
 
+    public static Post createRandomOldPost(Long userId) {
+        return new Post(
+                faker.number().randomNumber(),
+                userId,
+                LocalDate.now().minusWeeks(3),
+                createRandomProduct(),
+                random.nextInt(5) + 1,
+                Double.valueOf(faker.commerce().price(10.0, 100.0)),
+                faker.number().randomDouble(2, 0, 50),
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
+    }
+
 }

@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.social_media.social_media.TestUtils;
-import com.social_media.social_media.dto.request.ProductRequestDto;
 import com.social_media.social_media.dto.request.StockRequestDto;
 import com.social_media.social_media.dto.response.PostDetailResponseDto;
 import com.social_media.social_media.dto.response.ProductResponseDto;
