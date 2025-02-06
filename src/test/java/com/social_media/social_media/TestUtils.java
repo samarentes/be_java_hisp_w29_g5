@@ -1,6 +1,7 @@
 package com.social_media.social_media;
 
 import com.github.javafaker.Faker;
+import com.social_media.social_media.dto.response.FollowersCountResponseDto;
 import com.social_media.social_media.dto.response.FollowingResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
@@ -9,6 +10,7 @@ import com.social_media.social_media.entity.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class TestUtils {
@@ -56,6 +58,15 @@ public class TestUtils {
         return FollowingResponseDto.builder()
                 .user_id(follow.getFollowerId())
                 .userIdToFollow(follow.getFollowedId())
+                .build();
+    }
+
+    public static FollowersCountResponseDto convertFollowersToResponseDto(User user,List<Follow> followers) {
+        return FollowersCountResponseDto
+                .builder()
+                .user_id(user.getUserId())
+                .user_name(user.getName())
+                .followers_count(followers.size())
                 .build();
     }
 
