@@ -106,6 +106,14 @@ public class UserServiceImpl implements IUserService {
     public FollowingResponseDto followSeller(Long userId, Long userIdToFollow) {
         Optional<Follow> followExist = followRepository.existsByFollowerAndFollowed(userId, userIdToFollow);
 
+        if (userRepository.findById(userIdToFollow).isEmpty())
+            throw new NotFoundException(USER_NOT_FOUND);
+
+
+        if (userRepository.findById(userId).isEmpty())
+            throw new NotFoundException(USER_NOT_FOUND);
+
+
         // validar que el mismo id de user no se siga
         if (userId.equals(userIdToFollow)) {
             throw new BadRequestFollowException(MessagesExceptions.THE_USER_CANNOT_FOLLOW_THEMSELVES);
