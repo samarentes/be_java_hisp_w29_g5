@@ -66,6 +66,15 @@ public class TestUtils {
                 .build();
     }
 
+    public static FollowersCountResponseDto convertFollowersToFollowersCountResponseDto(User user, List<Follow> followers) {
+        return FollowersCountResponseDto
+                .builder()
+                .user_id(user.getUserId())
+                .user_name(user.getName())
+                .followers_count(followers.size())
+                .build();
+    }
+
     public static List<User> createTenRandomUsers() {
         return IntStream.range(0, 10)
                 .mapToObj(i -> createRandomUser())
