@@ -9,14 +9,24 @@ import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import com.social_media.social_media.entity.User;
+import com.social_media.social_media.exception.NotFoundException;
+import com.social_media.social_media.utils.MessagesExceptions;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 public class TestUtils {
 
@@ -85,7 +95,20 @@ public class TestUtils {
                 faker.lorem().sentence());
     }
 
-    public static FollowersCountResponseDto convertFollowersToFollowersCountResponseDto(User user, List<Follow> followers) {
+    public static Post createRandomOldPost(Long userId) {
+        return new Post(
+                faker.number().randomNumber(),
+                userId,
+                LocalDate.now().minusWeeks(3),
+                createRandomProduct(),
+                random.nextInt(5) + 1,
+                Double.valueOf(faker.commerce().price(10.0, 100.0)),
+                faker.number().randomDouble(2, 0, 50),
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
+    }
+
+    public static FollowersCountResponseDto convertFollowersToFollowersCountResponseDto(User user,
+            List<Follow> followers) {
         return FollowersCountResponseDto
                 .builder()
                 .user_id(user.getUserId())
