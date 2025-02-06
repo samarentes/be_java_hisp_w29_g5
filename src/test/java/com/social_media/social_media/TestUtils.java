@@ -6,10 +6,20 @@ import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import com.social_media.social_media.entity.User;
+import com.social_media.social_media.exception.NotFoundException;
+import com.social_media.social_media.utils.MessagesExceptions;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 public class TestUtils {
 
@@ -23,8 +33,7 @@ public class TestUtils {
                 faker.commerce().department(),
                 faker.company().name(),
                 faker.color().name(),
-                faker.lorem().sentence()
-        );
+                faker.lorem().sentence());
     }
 
     public static Post createRandomPost(Long userId) {
@@ -36,20 +45,18 @@ public class TestUtils {
                 random.nextInt(5) + 1,
                 Double.valueOf(faker.commerce().price(10.0, 100.0)),
                 faker.number().randomDouble(2, 0, 50),
-                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
-        );
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
     }
 
     public static User createRandomUser() {
         return new User(
                 faker.number().randomNumber(),
                 faker.name().username(),
-                new ArrayList<>()
-        );
+                new ArrayList<>());
     }
 
-    public static Follow createFollow(Long userId, long userIdToFollow){
-        return new Follow(userId,userIdToFollow);
+    public static Follow createFollow(Long userId, long userIdToFollow) {
+        return new Follow(userId, userIdToFollow);
     }
 
     public static FollowingResponseDto convertFollowToResponseDto(Follow follow) {
@@ -59,5 +66,26 @@ public class TestUtils {
                 .build();
     }
 
+    public static Post createRandomPostWithBrand(Long userId, String brand) {
+        return new Post(
+                faker.number().randomNumber(),
+                userId,
+                LocalDate.now(),
+                createRandomProductWithBrand(brand),
+                random.nextInt(5) + 1,
+                Double.valueOf(faker.commerce().price(10.0, 100.0)),
+                faker.number().randomDouble(2, 0, 50),
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
+    }
+
+    public static Product createRandomProductWithBrand(String brand) {
+        return new Product(
+                faker.number().randomNumber(),
+                faker.commerce().productName(),
+                faker.commerce().department(),
+                brand,
+                faker.color().name(),
+                faker.lorem().sentence());
+    }
 
 }
