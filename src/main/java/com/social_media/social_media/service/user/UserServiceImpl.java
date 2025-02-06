@@ -60,9 +60,12 @@ public class UserServiceImpl implements IUserService {
     public FollowersResponseDto searchFollowers(Long userId, String order) {
         Optional<User> followedUser = userRepository.findById(userId);
 
-        if (followedUser.isEmpty()) {
-            throw new NotFoundException(MessagesExceptions.SELLER_ID_NOT_EXIST);
-        }
+        if (followedUser.isEmpty())
+            throw new NotFoundException(MessagesExceptions.USER_NOT_FOUND);
+
+        if (postRepository.findPostBySellerId(userId).isEmpty())
+            throw new NotSellerException(MessagesExceptions.FOLLOWED_USER_NOT_SELLER);
+
 
         List<Follow> followersFind = followRepository.findFollowers(userId);
         List<UserResponseDto> followers = followersFind.stream()
@@ -105,6 +108,14 @@ public class UserServiceImpl implements IUserService {
     @Override
     public FollowingResponseDto followSeller(Long userId, Long userIdToFollow) {
         Optional<Follow> followExist = followRepository.existsByFollowerAndFollowed(userId, userIdToFollow);
+
+        if (userRepository.findById(userIdToFollow).isEmpty())
+            throw new NotFoundException(USER_NOT_FOUND);
+
+
+        if (userRepository.findById(userId).isEmpty())
+            throw new NotFoundException(USER_NOT_FOUND);
+
 
         // validar que el mismo id de user no se siga
         if (userId.equals(userIdToFollow)) {
@@ -159,7 +170,7 @@ public class UserServiceImpl implements IUserService {
         List<String> favouriteBrands = searchUserFavoritesPost(userId).getFavorites().stream()
                 .map(post -> post.getProduct().getBrand().toUpperCase())
                 .distinct().toList();
-        if(favouriteBrands.isEmpty()) throw new NotFoundException(NO_FAVOURITE_POSTS);
+        if (favouriteBrands.isEmpty()) throw new NotFoundException(NO_FAVOURITE_POSTS);
 
         // Encontrar vendedores que venden esas marcas
         Map<Long, List<String>> sellersWithBrands = postRepository.findSellersByBrands(favouriteBrands);
@@ -173,7 +184,7 @@ public class UserServiceImpl implements IUserService {
         Map<Long, List<String>> filteredSuggestions = sellersWithBrands.entrySet().stream()
                 .filter(entry -> !followedIds.contains(entry.getKey()) && entry.getKey() != userId)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        if(filteredSuggestions.isEmpty()) throw new NotFoundException(NO_SUGGESTIONS);
+        if (filteredSuggestions.isEmpty()) throw new NotFoundException(NO_SUGGESTIONS);
 
         return filteredSuggestions.entrySet().stream()
                 .map(entry -> FollowSuggestionResponseDto.builder()
