@@ -1,19 +1,20 @@
 package com.social_media.social_media;
 
 import com.github.javafaker.Faker;
+import com.social_media.social_media.dto.response.FollowingResponseDto;
 import com.social_media.social_media.dto.request.PostRequestDto;
 import com.social_media.social_media.dto.request.ProductRequestDto;
-import com.social_media.social_media.dto.response.FollowingResponseDto;
 import com.social_media.social_media.dto.response.PostResponseDto;
 import com.social_media.social_media.dto.response.ProductResponseDto;
 import com.social_media.social_media.dto.response.FollowersCountResponseDto;
 import com.social_media.social_media.dto.response.FollowersResponseDto;
-import com.social_media.social_media.dto.response.FollowingResponseDto;
 import com.social_media.social_media.dto.response.UserResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import com.social_media.social_media.entity.User;
+
+import java.util.Random;
 import com.social_media.social_media.exception.NotFoundException;
 import com.social_media.social_media.utils.MessagesExceptions;
 
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -45,26 +45,14 @@ public class TestUtils {
                 faker.commerce().department(),
                 faker.company().name(),
                 faker.color().name(),
-                faker.lorem().sentence());
+                faker.lorem().sentence()
+        );
     }
 
     public static Post createRandomPost(Long userId) {
         return new Post(
                 faker.number().randomNumber(),
                 userId,
-                LocalDate.now(),
-                createRandomProduct(),
-                random.nextInt(5) + 1,
-                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", ".")),
-                faker.number().randomDouble(2, 0, 50),
-                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
-        );
-    }
-
-    public static Post createRandomPostNotUserId() {
-        return new Post(
-                faker.number().randomNumber(),
-                faker.number().randomNumber(),
                 LocalDate.now(),
                 createRandomProduct(),
                 random.nextInt(5) + 1,
@@ -103,6 +91,19 @@ public class TestUtils {
                 .user_id(follow.getFollowerId())
                 .userIdToFollow(follow.getFollowedId())
                 .build();
+    }
+
+    public static Post createRandomPostNotUserId() {
+        return new Post(
+                faker.number().randomNumber(),
+                faker.number().randomNumber(),
+                LocalDate.now(),
+                createRandomProduct(),
+                random.nextInt(5) + 1,
+                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", ".")),
+                faker.number().randomDouble(2, 1, 50),
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
+        );
     }
 
     public static ProductRequestDto createRandomProductRequestDto() {
