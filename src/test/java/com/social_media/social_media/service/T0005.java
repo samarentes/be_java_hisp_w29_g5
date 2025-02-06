@@ -52,7 +52,7 @@ public class T0005 {
         Post postMock = TestUtils.createRandomPostWithPostId(1L);
 
         ProductRequestDto productRequestDto = TestUtils.convertProductToRequestDto(productMock);
-        ProductResponseDto productResponseDto = TestUtils.convertProductToResponsetDto(productMock);
+        ProductResponseDto productResponseDto = TestUtils.convertProductToResponseDto(productMock);
 
         PostResponseDto postResponseDtoExpected = TestUtils.convertPostToResponseDto(postMock, productResponseDto);
         PostRequestDto postRequestDto = TestUtils.convertPostToRequestDto(postMock, productRequestDto);

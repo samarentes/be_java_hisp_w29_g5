@@ -16,7 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.social_media.social_media.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,7 +41,8 @@ public class T0010 {
     void createPostPromoTest200() {
         // Arrange
         User user = createRandomUser();
-        Post postPromo = createRandomPostPromo(user.getUserId(), null);
+        Long idPostRandom = ThreadLocalRandom.current().nextLong(3L, 7L);
+        Post postPromo = createRandomPostPromoWithPostId(user.getUserId(), idPostRandom, null);
         PostPromoRequestDto postPromoRequest = convertPostPromoToRequestDto(postPromo);
         PostPromoResponseDto expectedResponse = convertPostPromoToResponseDto(postPromo);
 
@@ -58,7 +61,7 @@ public class T0010 {
     @DisplayName("T-0010 Create Post Promo Test 404 UserNotFound")
     void createPostPromoTestFailUserNotFound() {
         // Arrange
-        Post postPromo = createRandomPostPromo(anyLong(), null);
+        Post postPromo = createRandomPost(anyLong());
         PostPromoRequestDto postPromoRequest = convertPostPromoToRequestDto(postPromo);
 
         when(userRepository.findById(postPromo.getUserId())).thenReturn(Optional.empty());

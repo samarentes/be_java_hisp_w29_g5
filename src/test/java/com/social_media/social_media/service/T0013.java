@@ -42,10 +42,11 @@ public class T0013 {
     @DisplayName("T-0013 Search User Favorites Post Test 200")
     void searchUserFavoritesPostTest200() {
         // Arrange
-        User user = createRandomUser();
         List<Post> favoritePosts = createListRandomPosts(5);
         List<Long> idFavoritePosts = favoritePosts.stream().mapToLong(Post::getPostId).boxed().toList();
         List<PostPromoResponseDto> favoritePostsDto = favoritePosts.stream().map(TestUtils::convertPostPromoToResponseDto).toList();
+        User user = createRandomUser();
+        user.setFavoritePosts(idFavoritePosts);
 
         UserFavoritesResponseDto expectedResponse = UserFavoritesResponseDto.builder().favorites(favoritePostsDto).build();
 

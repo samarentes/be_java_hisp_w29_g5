@@ -10,24 +10,16 @@ import com.social_media.social_media.dto.response.FollowersCountResponseDto;
 import com.social_media.social_media.dto.response.FollowersResponseDto;
 import com.social_media.social_media.dto.response.UserResponseDto;
 import com.social_media.social_media.dto.request.PostPromoRequestDto;
-import com.social_media.social_media.dto.request.ProductRequestDto;
+import com.social_media.social_media.dto.response.PostPromoResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import com.social_media.social_media.entity.User;
 
-import com.social_media.social_media.exception.NotFoundException;
-import com.social_media.social_media.utils.MessagesExceptions;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -69,15 +61,15 @@ public class TestUtils {
                 LocalDate.now(),
                 createRandomProduct(),
                 random.nextInt(5) + 1,
-                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", ".")),
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0),
                 faker.number().randomDouble(2, 0, 50),
                 LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
         );
     }
 
-    public static Post createRandomPostPromo(Long userId, LocalDate promotionEndDate) {
+    public static Post createRandomPostPromoWithPostId(Long userId, Long postId, LocalDate promotionEndDate) {
         return new Post(
-                faker.number().randomNumber(),
+                postId,
                 userId,
                 LocalDate.now(),
                 createRandomProduct(),
@@ -112,7 +104,7 @@ public class TestUtils {
                 LocalDate.now(),
                 createRandomProduct(),
                 random.nextInt(5) + 1,
-                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", ".")),
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0),
                 faker.number().randomDouble(2, 1, 50),
                 LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
         );
@@ -147,7 +139,7 @@ public class TestUtils {
                 LocalDate.now(),
                 createRandomProductResponseDto(),
                 random.nextInt(5) + 1,
-                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", "."))
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0)
         );
     }
 
@@ -157,7 +149,7 @@ public class TestUtils {
                 LocalDate.now(),
                 createRandomProductRequestDto(),
                 random.nextInt(5) + 1,
-                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", "."))
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0)
         );
     }
 
@@ -187,16 +179,18 @@ public class TestUtils {
                 .product_id(product.getProductId())
                 .product_name(product.getProductName())
                 .type(product.getType())
+                .brand(product.getBrand())
                 .color(product.getColor())
                 .notes(product.getNotes())
                 .build();
     }
 
-    public static ProductResponseDto convertProductToResponsetDto(Product product) {
+    public static ProductResponseDto convertProductToResponseDto(Product product) {
         return ProductResponseDto.builder()
                 .product_id(product.getProductId())
                 .product_name(product.getProductName())
                 .type(product.getType())
+                .brand(product.getBrand())
                 .color(product.getColor())
                 .notes(product.getNotes())
                 .build();
@@ -209,7 +203,7 @@ public class TestUtils {
                 LocalDate.now(),
                 createRandomProductWithBrand(brand),
                 random.nextInt(5) + 1,
-                Double.valueOf(faker.commerce().price(10.0, 100.0)),
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0),
                 faker.number().randomDouble(2, 0, 50),
                 LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
     }
@@ -231,7 +225,7 @@ public class TestUtils {
                 LocalDate.now().minusWeeks(3),
                 createRandomProduct(),
                 random.nextInt(5) + 1,
-                Double.valueOf(faker.commerce().price(10.0, 100.0)),
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0),
                 faker.number().randomDouble(2, 0, 50),
                 LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
     }
@@ -302,28 +296,6 @@ public class TestUtils {
                 .price(postPromo.getPrice())
                 .has_promo(true)
                 .discount(postPromo.getDiscount())
-                .build();
-    }
-
-    public static ProductRequestDto convertProductToRequestDto(Product product) {
-        return ProductRequestDto.builder()
-                .product_id(product.getProductId())
-                .product_name(product.getProductName())
-                .type(product.getType())
-                .brand(product.getBrand())
-                .color(product.getColor())
-                .notes(product.getNotes())
-                .build();
-    }
-
-    public static ProductResponseDto convertProductToResponseDto(Product product) {
-        return ProductResponseDto.builder()
-                .product_id(product.getProductId())
-                .product_name(product.getProductName())
-                .type(product.getType())
-                .brand(product.getBrand())
-                .color(product.getColor())
-                .notes(product.getNotes())
                 .build();
     }
 
