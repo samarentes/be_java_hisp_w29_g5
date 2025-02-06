@@ -9,7 +9,7 @@ import com.social_media.social_media.exception.BadRequestFollowException;
 import com.social_media.social_media.exception.NotFoundException;
 import com.social_media.social_media.repository.follow.FollowRepositoryImpl;
 import com.social_media.social_media.repository.post.PostRepositoryImpl;
-import com.social_media.social_media.repository.user.IUserRepository;
+import com.social_media.social_media.repository.user.UserRepositoryImpl;
 import com.social_media.social_media.service.user.UserServiceImpl;
 import com.social_media.social_media.utils.MessagesExceptions;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 public class T0001 {
 
     @Mock
-    IUserRepository userRepository;
+    UserRepositoryImpl userRepository;
 
     @Mock
     PostRepositoryImpl postRepository;
@@ -67,9 +67,11 @@ public class T0001 {
                 .thenReturn(follow);
 
 
-        FollowingResponseDto responseDto = userService.followSeller(user.getUserId(), userToFollow.getUserId());
+        FollowingResponseDto actualResponse = userService.followSeller(user.getUserId(), userToFollow.getUserId());
 
-        assertEquals(responseDto, TestUtils.convertFollowToResponseDto(follow));
+        FollowingResponseDto expectedResponse = TestUtils.convertFollowToResponseDto(follow);
+
+        assertEquals(expectedResponse, actualResponse);
     }
 
     @Test
@@ -85,7 +87,10 @@ public class T0001 {
                 () -> userService.followSeller(user.getUserId(), user.getUserId())
         );
 
-        assertEquals(MessagesExceptions.THE_USER_CANNOT_FOLLOW_THEMSELVES, thrown.getMessage());
+        String expectedMessage = MessagesExceptions.THE_USER_CANNOT_FOLLOW_THEMSELVES;
+        String actualMessage = thrown.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
@@ -111,7 +116,10 @@ public class T0001 {
                 () -> userService.followSeller(user.getUserId(), userToFollow.getUserId())
         );
 
-        assertEquals(MessagesExceptions.FOLLOW_ALREADY_EXISTS, thrown.getMessage());
+        String expectedMessage = MessagesExceptions.FOLLOW_ALREADY_EXISTS;
+        String actualMessage = thrown.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
@@ -139,11 +147,14 @@ public class T0001 {
                 () -> userService.followSeller(user.getUserId(), userToFollow.getUserId())
         );
 
-        assertEquals(MessagesExceptions.FOLLOWED_USER_NOT_SELLER, thrown.getMessage());
+        String expectedMessage = MessagesExceptions.FOLLOWED_USER_NOT_SELLER;
+        String actualMessage = thrown.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
-    @DisplayName("T-0005 Followed user not found exception")
+    @DisplayName("T-0001 Followed user not found exception")
     void followSellerTestFailUserNotFound() {
         User user = TestUtils.createRandomUser();
         User userToFollow = TestUtils.createRandomUser();
@@ -156,6 +167,9 @@ public class T0001 {
                 () -> userService.followSeller(user.getUserId(), userToFollow.getUserId())
         );
 
-        assertEquals(MessagesExceptions.USER_NOT_FOUND, thrown.getMessage());
+        String expectedMessage = MessagesExceptions.USER_NOT_FOUND;
+        String actualMessage = thrown.getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 }
