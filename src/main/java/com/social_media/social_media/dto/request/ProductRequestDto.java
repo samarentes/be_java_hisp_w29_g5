@@ -1,16 +1,14 @@
 package com.social_media.social_media.dto.request;
 
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class ProductRequestDto {
     @NotNull(message = "La id no puede estar vacío.")
     @Positive(message = "El id debe ser mayor a cero.")

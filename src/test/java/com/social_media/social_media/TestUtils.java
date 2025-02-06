@@ -1,32 +1,23 @@
 package com.social_media.social_media;
 
 import com.github.javafaker.Faker;
-import com.social_media.social_media.dto.response.FollowersCountResponseDto;
-import com.social_media.social_media.dto.response.FollowersResponseDto;
-import com.social_media.social_media.dto.response.FollowingResponseDto;
-import com.social_media.social_media.dto.response.UserResponseDto;
+import com.social_media.social_media.dto.request.PostPromoRequestDto;
+import com.social_media.social_media.dto.request.ProductRequestDto;
+import com.social_media.social_media.dto.response.*;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import com.social_media.social_media.entity.User;
-import com.social_media.social_media.exception.NotFoundException;
-import com.social_media.social_media.utils.MessagesExceptions;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.Locale;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 public class TestUtils {
 
@@ -50,9 +41,21 @@ public class TestUtils {
                 LocalDate.now(),
                 createRandomProduct(),
                 random.nextInt(5) + 1,
-                Double.valueOf(faker.commerce().price(10.0, 100.0)),
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0),
                 faker.number().randomDouble(2, 0, 50),
                 LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
+    }
+
+    public static Post createRandomPostPromo(Long userId, LocalDate promotionEndDate) {
+        return new Post(
+                faker.number().randomNumber(),
+                userId,
+                LocalDate.now(),
+                createRandomProduct(),
+                random.nextInt(5) + 1,
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0),
+                faker.number().randomDouble(2, 10, 50),
+                promotionEndDate);
     }
 
     public static User createRandomUser() {
@@ -108,7 +111,7 @@ public class TestUtils {
     }
 
     public static FollowersCountResponseDto convertFollowersToFollowersCountResponseDto(User user,
-            List<Follow> followers) {
+                                                                                        List<Follow> followers) {
         return FollowersCountResponseDto
                 .builder()
                 .user_id(user.getUserId())
@@ -149,5 +152,58 @@ public class TestUtils {
                 .user_id(user.getUserId())
                 .user_name(user.getName())
                 .build();
+    }
+
+    public static PostPromoRequestDto convertPostPromoToRequestDto(Post postPromo) {
+        return PostPromoRequestDto.builder()
+                .user_id(postPromo.getUserId())
+                .date(postPromo.getDate())
+                .product(convertProductToRequestDto(postPromo.getProduct()))
+                .category(postPromo.getCategory())
+                .price(postPromo.getPrice())
+                .has_promo(true)
+                .discount(postPromo.getDiscount())
+                .build();
+    }
+
+    public static PostPromoResponseDto convertPostPromoToResponseDto(Post postPromo) {
+        return PostPromoResponseDto.builder()
+                .post_id(postPromo.getPostId())
+                .user_id(postPromo.getUserId())
+                .date(postPromo.getDate())
+                .product(convertProductToResponseDto(postPromo.getProduct()))
+                .category(postPromo.getCategory())
+                .price(postPromo.getPrice())
+                .has_promo(true)
+                .discount(postPromo.getDiscount())
+                .build();
+    }
+
+    public static ProductRequestDto convertProductToRequestDto(Product product) {
+        return ProductRequestDto.builder()
+                .product_id(product.getProductId())
+                .product_name(product.getProductName())
+                .type(product.getType())
+                .brand(product.getBrand())
+                .color(product.getColor())
+                .notes(product.getNotes())
+                .build();
+    }
+
+    public static ProductResponseDto convertProductToResponseDto(Product product) {
+        return ProductResponseDto.builder()
+                .product_id(product.getProductId())
+                .product_name(product.getProductName())
+                .type(product.getType())
+                .brand(product.getBrand())
+                .color(product.getColor())
+                .notes(product.getNotes())
+                .build();
+    }
+
+    public static List<Post> createListRandomPosts(int size) {
+        return IntStream.range(0, size)
+                .mapToObj(i -> createRandomPost(1L))
+                .collect(Collectors.toList());
     }
 }
