@@ -1,6 +1,7 @@
 package com.social_media.social_media;
 
 import com.github.javafaker.Faker;
+import com.social_media.social_media.dto.response.FollowersCountResponseDto;
 import com.social_media.social_media.dto.response.FollowingResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
@@ -16,6 +17,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.DisplayName;
@@ -86,6 +88,15 @@ public class TestUtils {
                 brand,
                 faker.color().name(),
                 faker.lorem().sentence());
+    }
+
+    public static FollowersCountResponseDto convertFollowersToResponseDto(User user, List<Follow> followers) {
+        return FollowersCountResponseDto
+                .builder()
+                .user_id(user.getUserId())
+                .user_name(user.getName())
+                .followers_count(followers.size())
+                .build();
     }
 
 }
