@@ -30,6 +30,9 @@ public class I0005 {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+    
     @Test
     @DisplayName("I-0005 - Test of create post")
     void postNew() throws Exception{
@@ -40,7 +43,6 @@ public class I0005 {
         ProductRequestDto productRequestDtoToMock = TestUtils.convertProductToRequestDto(product);
         PostRequestDto postRequestDtoToMock = TestUtils.convertPostToRequestDto(post, productRequestDtoToMock);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); //Registra el módulo para LocalDate
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); //Evita que lo serialice como timestamp
 
