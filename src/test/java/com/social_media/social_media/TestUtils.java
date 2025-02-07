@@ -175,6 +175,7 @@ public class TestUtils {
                 .product_id(product.getProductId())
                 .product_name(product.getProductName())
                 .type(product.getType())
+                .brand(product.getBrand())
                 .color(product.getColor())
                 .notes(product.getNotes())
                 .build();
