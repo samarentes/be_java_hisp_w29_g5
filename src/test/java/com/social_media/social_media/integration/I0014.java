@@ -24,7 +24,7 @@ public class I0014 {
     private PostRepositoryImpl postRepository;
 
     @Test
-    void testCreateUser() throws Exception {
+    void testCreateStock() throws Exception {
         String requestBody = """
                     {
                         "units":10
