@@ -1,10 +1,7 @@
 package com.social_media.social_media;
 
 import com.github.javafaker.Faker;
-import com.social_media.social_media.dto.response.FollowersCountResponseDto;
-import com.social_media.social_media.dto.response.FollowersResponseDto;
-import com.social_media.social_media.dto.response.FollowingResponseDto;
-import com.social_media.social_media.dto.response.UserResponseDto;
+import com.social_media.social_media.dto.response.*;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
@@ -143,6 +140,15 @@ public class TestUtils {
                 .followers(followers.stream().map(TestUtils::convertUserToResponseDto).toList())
                 .build();
     }
+
+    public static FollowedResponseDto convertFollowedToResponseDto(User userFollowed, List<User> followers){
+        return FollowedResponseDto.builder()
+                .user_id(userFollowed.getUserId())
+                .user_name(userFollowed.getName())
+                .followed(followers.stream().map(TestUtils::convertUserToResponseDto).toList())
+                .build();
+    }
+
 
     public static UserResponseDto convertUserToResponseDto(User user) {
         return UserResponseDto.builder()
