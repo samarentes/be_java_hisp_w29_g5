@@ -39,19 +39,19 @@ public class I0013 {
                 Long userId = 14L;
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 List<PostPromoResponseDto> favoritePosts = new ArrayList<>();
-                favoritePosts.add(new PostPromoResponseDto(15L, 1L, LocalDate.parse("03-10-2023", formatter),
+                favoritePosts.add(new PostPromoResponseDto(1L, 1L, LocalDate.parse("03-10-2023", formatter),
                                 new ProductResponseDto(1L, "Camiseta Deportiva", "Ropa", "Adidas", "Rojo",
                                                 "Ideal para correr y hacer ejercicio."),
                                 2, 29.99, false, 0.0));
-                favoritePosts.add(new PostPromoResponseDto(21L, 2L, LocalDate.parse("03-10-2023", formatter),
+                favoritePosts.add(new PostPromoResponseDto(2L, 2L, LocalDate.parse("03-10-2023", formatter),
                                 new ProductResponseDto(2L, "Pantalones Deportivos", "Ropa", "Nike", "Negro",
                                                 "Comodidad y estilo."),
                                 2, 39.99, false, 0.0));
-                favoritePosts.add(new PostPromoResponseDto(31L, 3L, LocalDate.parse("03-10-2023", formatter),
+                favoritePosts.add(new PostPromoResponseDto(3L, 3L, LocalDate.parse("03-10-2023", formatter),
                                 new ProductResponseDto(3L, "Zapatillas Running", "Calzado", "Puma", "Blanco",
                                                 "Amortiguación avanzada."),
                                 1, 79.99, false, 0.0));
-                favoritePosts.add(new PostPromoResponseDto(41L, 4L, LocalDate.parse("03-10-2023", formatter),
+                favoritePosts.add(new PostPromoResponseDto(4L, 4L, LocalDate.parse("03-10-2023", formatter),
                                 new ProductResponseDto(4L, "Gorra Deportiva", "Accesorio", "Reebok", "Azul",
                                                 "Protección solar y estilo."),
                                 3, 19.99, false, 0.0));
