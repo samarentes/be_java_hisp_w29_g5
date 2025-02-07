@@ -1,5 +1,7 @@
 package com.social_media.social_media.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.social_media.social_media.TestUtils;
 import com.social_media.social_media.dto.response.FollowersResponseDto;
 import com.social_media.social_media.dto.response.UserResponseDto;
@@ -30,165 +32,166 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class T0008 {
-    @Mock
-    UserRepositoryImpl userRepository;
+        @Mock
+        UserRepositoryImpl userRepository;
 
-    @Mock
-    PostRepositoryImpl postRepository;
+        @Mock
+        PostRepositoryImpl postRepository;
 
-    @Mock
-    FollowRepositoryImpl followRepository;
+        @Mock
+        FollowRepositoryImpl followRepository;
 
-    @InjectMocks
-    UserServiceImpl userService;
+        @InjectMocks
+        UserServiceImpl userService;
 
-    @Test
-    @DisplayName("T-0008 Search followers successfully with ascending order")
-    void searchFollowersSuccessAsc() {
-        User userFollowed = TestUtils.createRandomUser();
+        @Test
+        @DisplayName("T-0008 Search followers successfully with ascending order")
+        void searchFollowersSuccessAsc() {
+                User userFollowed = TestUtils.createRandomUser();
 
-        Post post = TestUtils.createRandomPost(userFollowed.getUserId());
+                Post post = TestUtils.createRandomPost(userFollowed.getUserId());
 
-        List<User> userFollowers = TestUtils.createTenRandomUsers();
+                List<User> userFollowers = TestUtils.createTenRandomUsers();
 
-        List<Follow> followers = TestUtils.createTenFollowersForUser(userFollowed.getUserId(), userFollowers, true);
+                List<Follow> followers = TestUtils.createTenFollowersForUser(userFollowed.getUserId(), userFollowers,
+                                true);
 
-        when(userRepository.findById(userFollowed.getUserId()))
-                .thenReturn(Optional.of(userFollowed));
+                when(userRepository.findById(userFollowed.getUserId()))
+                                .thenReturn(Optional.of(userFollowed));
 
-        when(postRepository.findPostBySellerId(userFollowed.getUserId()))
-                .thenReturn(List.of(post));
+                when(postRepository.findPostBySellerId(userFollowed.getUserId()))
+                                .thenReturn(List.of(post));
 
-        when(followRepository.findFollowers(userFollowed.getUserId()))
-                .thenReturn(followers);
+                when(followRepository.findFollowers(userFollowed.getUserId()))
+                                .thenReturn(followers);
 
-        for (Follow follower : followers) {
-            when(userRepository.findById(follower.getFollowerId()))
-                    .thenReturn(Optional.of(
-                            userFollowers
-                                    .stream()
-                                    .filter(u -> u.getUserId()
-                                            .equals(follower.getFollowerId()))
-                                    .findFirst().get()));
+                for (Follow follower : followers) {
+                        when(userRepository.findById(follower.getFollowerId()))
+                                        .thenReturn(Optional.of(
+                                                        userFollowers
+                                                                        .stream()
+                                                                        .filter(u -> u.getUserId()
+                                                                                        .equals(follower.getFollowerId()))
+                                                                        .findFirst().get()));
+                }
+
+                FollowersResponseDto response = userService.searchFollowers(userFollowed.getUserId(), "name_asc");
+
+                FollowersResponseDto expectedResponse = TestUtils.convertFollowersToResponseDto(userFollowed,
+                                userFollowers);
+
+                assertEquals(expectedResponse.getUser_name(), response.getUser_name());
+                assertEquals(expectedResponse.getUser_id(), response.getUser_id());
+
+                for (int i = 0; i < response.getFollowers().size(); i++) {
+                        UserResponseDto actualUser = response.getFollowers().get(i);
+                        UserResponseDto expectedUser = expectedResponse.getFollowers().get(i);
+
+                        assertEquals(expectedUser, actualUser);
+                }
+
         }
 
-        FollowersResponseDto response = userService.searchFollowers(userFollowed.getUserId(), "name_asc");
+        @Test
+        @DisplayName("T-0008 Search followers successfully with descending order")
+        void searchFollowersSuccessDesc() {
+                User userFollowed = TestUtils.createRandomUser();
 
-        FollowersResponseDto expectedResponse = TestUtils.convertFollowersToResponseDto(userFollowed, userFollowers);
+                Post post = TestUtils.createRandomPost(userFollowed.getUserId());
 
-        assertEquals(expectedResponse.getUser_name(), response.getUser_name());
-        assertEquals(expectedResponse.getUser_id(), response.getUser_id());
+                List<User> userFollowers = TestUtils.createTenRandomUsers();
 
-        for (int i = 0; i < response.getFollowers().size(); i++) {
-            UserResponseDto actualUser = response.getFollowers().get(i);
-            UserResponseDto expectedUser = expectedResponse.getFollowers().get(i);
+                List<Follow> followers = TestUtils.createTenFollowersForUser(userFollowed.getUserId(), userFollowers,
+                                false);
 
-            assertEquals(expectedUser, actualUser);
+                when(userRepository.findById(userFollowed.getUserId()))
+                                .thenReturn(Optional.of(userFollowed));
+
+                when(postRepository.findPostBySellerId(userFollowed.getUserId()))
+                                .thenReturn(List.of(post));
+
+                when(followRepository.findFollowers(userFollowed.getUserId()))
+                                .thenReturn(followers);
+
+                for (Follow follower : followers) {
+                        when(userRepository.findById(follower.getFollowerId()))
+                                        .thenReturn(Optional.of(
+                                                        userFollowers
+                                                                        .stream()
+                                                                        .filter(u -> u.getUserId()
+                                                                                        .equals(follower.getFollowerId()))
+                                                                        .findFirst().get()));
+                }
+
+                FollowersResponseDto response = userService.searchFollowers(userFollowed.getUserId(), "name_desc");
+
+                FollowersResponseDto expectedResponse = TestUtils.convertFollowersToResponseDto(userFollowed,
+                                userFollowers);
+
+                assertEquals(expectedResponse.getUser_name(), response.getUser_name());
+                assertEquals(expectedResponse.getUser_id(), response.getUser_id());
+
+                for (int i = 0; i < response.getFollowers().size(); i++) {
+                        UserResponseDto actualUser = response.getFollowers().get(i);
+                        UserResponseDto expectedUser = expectedResponse.getFollowers().get(i);
+
+                        assertThat(actualUser)
+                                        .usingRecursiveComparison()
+                                        .isEqualTo(expectedUser);
+                }
+
         }
 
-    }
+        @Test
+        @DisplayName("T-0008 Search followers fail user not found")
+        void searchFollowersFailUserNotFound() {
+                User userFollowed = TestUtils.createRandomUser();
 
-    @Test
-    @DisplayName("T-0008 Search followers successfully with descending order")
-    void searchFollowersSuccessDesc() {
-        User userFollowed = TestUtils.createRandomUser();
+                when(userRepository.findById(userFollowed.getUserId()))
+                                .thenReturn(Optional.empty());
 
-        Post post = TestUtils.createRandomPost(userFollowed.getUserId());
+                NotFoundException thrown = assertThrows(
+                                NotFoundException.class,
+                                () -> userService.searchFollowers(userFollowed.getUserId(), "name_asc"));
 
-        List<User> userFollowers = TestUtils.createTenRandomUsers();
-
-        List<Follow> followers = TestUtils.createTenFollowersForUser(userFollowed.getUserId(), userFollowers, false);
-
-        when(userRepository.findById(userFollowed.getUserId()))
-                .thenReturn(Optional.of(userFollowed));
-
-        when(postRepository.findPostBySellerId(userFollowed.getUserId()))
-                .thenReturn(List.of(post));
-
-        when(followRepository.findFollowers(userFollowed.getUserId()))
-                .thenReturn(followers);
-
-        for (Follow follower : followers) {
-            when(userRepository.findById(follower.getFollowerId()))
-                    .thenReturn(Optional.of(
-                            userFollowers
-                                    .stream()
-                                    .filter(u -> u.getUserId()
-                                            .equals(follower.getFollowerId()))
-                                    .findFirst().get()));
+                assertEquals(MessagesExceptions.USER_NOT_FOUND, thrown.getMessage());
         }
 
-        FollowersResponseDto response = userService.searchFollowers(userFollowed.getUserId(), "name_desc");
+        @Test
+        @DisplayName("T-0008 Search followers user is not a seller")
+        void searchFollowersFailUserNotSeller() {
+                User userFollowed = TestUtils.createRandomUser();
 
-        FollowersResponseDto expectedResponse = TestUtils.convertFollowersToResponseDto(userFollowed, userFollowers);
+                when(userRepository.findById(userFollowed.getUserId()))
+                                .thenReturn(Optional.of(userFollowed));
 
-        assertEquals(expectedResponse.getUser_name(), response.getUser_name());
-        assertEquals(expectedResponse.getUser_id(), response.getUser_id());
+                when(postRepository.findPostBySellerId(userFollowed.getUserId()))
+                                .thenReturn(List.of());
 
-        for (int i = 0; i < response.getFollowers().size(); i++) {
-            UserResponseDto actualUser = response.getFollowers().get(i);
-            UserResponseDto expectedUser = expectedResponse.getFollowers().get(i);
+                NotSellerException thrown = assertThrows(
+                                NotSellerException.class,
+                                () -> userService.searchFollowers(userFollowed.getUserId(), "name_asc"));
 
-            assertEquals(expectedUser, actualUser);
+                assertEquals(MessagesExceptions.FOLLOWED_USER_NOT_SELLER, thrown.getMessage());
         }
 
-    }
+        @Test
+        @DisplayName("T-0008 Search followers with invalid order")
+        void searchFollowersFailInvalidOrder() {
+                User userFollowed = TestUtils.createRandomUser();
+                Post post = TestUtils.createRandomPost(userFollowed.getUserId());
 
-    @Test
-    @DisplayName("T-0008 Search followers fail user not found")
-    void searchFollowersFailUserNotFound() {
-        User userFollowed = TestUtils.createRandomUser();
+                when(userRepository.findById(userFollowed.getUserId()))
+                                .thenReturn(Optional.of(userFollowed));
 
-        when(userRepository.findById(userFollowed.getUserId()))
-                .thenReturn(Optional.empty());
+                when(postRepository.findPostBySellerId(userFollowed.getUserId()))
+                                .thenReturn(List.of(post));
 
-        NotFoundException thrown = assertThrows(
-                NotFoundException.class,
-                () -> userService.searchFollowers(userFollowed.getUserId(), "name_asc")
-        );
+                InvalidOrderException thrown = assertThrows(
+                                InvalidOrderException.class,
+                                () -> userService.searchFollowers(userFollowed.getUserId(), "invalid_order"));
 
-        assertEquals(MessagesExceptions.USER_NOT_FOUND, thrown.getMessage());
-    }
-
-    @Test
-    @DisplayName("T-0008 Search followers user is not a seller")
-    void searchFollowersFailUserNotSeller() {
-        User userFollowed = TestUtils.createRandomUser();
-
-        when(userRepository.findById(userFollowed.getUserId()))
-                .thenReturn(Optional.of(userFollowed));
-
-        when(postRepository.findPostBySellerId(userFollowed.getUserId()))
-                .thenReturn(List.of());
-
-        NotSellerException thrown = assertThrows(
-                NotSellerException.class,
-                () -> userService.searchFollowers(userFollowed.getUserId(), "name_asc")
-        );
-
-        assertEquals(MessagesExceptions.FOLLOWED_USER_NOT_SELLER, thrown.getMessage());
-    }
-
-    @Test
-    @DisplayName("T-0008 Search followers with invalid order")
-    void searchFollowersFailInvalidOrder() {
-        User userFollowed = TestUtils.createRandomUser();
-        Post post = TestUtils.createRandomPost(userFollowed.getUserId());
-
-        when(userRepository.findById(userFollowed.getUserId()))
-                .thenReturn(Optional.of(userFollowed));
-
-        when(postRepository.findPostBySellerId(userFollowed.getUserId()))
-                .thenReturn(List.of(post));
-
-        InvalidOrderException thrown = assertThrows(
-                InvalidOrderException.class,
-                () -> userService.searchFollowers(userFollowed.getUserId(), "invalid_order")
-        );
-
-        assertEquals(MessagesExceptions.INVALID_ORDER, thrown.getMessage());
-    }
-
+                assertEquals(MessagesExceptions.INVALID_ORDER, thrown.getMessage());
+        }
 
 }
-
