@@ -32,6 +32,9 @@ public class I0009 {
     @Autowired
     private PostRepositoryImpl postRepository;
 
+    @Autowired
+    private FollowRepositoryImpl followRepository;
+
     @Test
     @DisplayName("I0009 - Should return 404 when user is not found")
     void testUserNotFound() throws Exception {
@@ -67,8 +70,11 @@ public class I0009 {
     @DisplayName("I0009 - Should sort posts by date in ascending order")
     void testshouldSortByDateAscending() throws Exception {
 
-        Long followUserId = 1L;
-        Long followerUserId = 2L;
+        Long followUserId = 16L;
+        Long followerUserId = 17L;
+
+        followRepository.addFollow(followerUserId, followUserId);
+
         postRepository.add(TestUtils.createRecentPost(followUserId));
         postRepository.add(TestUtils.createRecentPost(followUserId));
         postRepository.add(TestUtils.createRecentPost(followUserId));

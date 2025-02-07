@@ -68,5 +68,17 @@
     "userId": 14,
     "name": "Lionel Messi",
     "favoritePosts": [1, 2, 3, 4]
+  },
+  {
+    "userId": 15,
+    "name": "Penaldo"
+  },
+  {
+    "userId": 16,
+    "name": "Ronaldo Nazario"
+  },
+  {
+    "userId": 17,
+    "name": "Ricardo Kaka"
   }
 ]

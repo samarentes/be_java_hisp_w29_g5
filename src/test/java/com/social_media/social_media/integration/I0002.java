@@ -1,7 +1,11 @@
 package com.social_media.social_media.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.social_media.social_media.TestUtils;
 import com.social_media.social_media.dto.response.FollowersCountResponseDto;
+import com.social_media.social_media.entity.Post;
+import com.social_media.social_media.repository.follow.FollowRepositoryImpl;
+import com.social_media.social_media.repository.post.PostRepositoryImpl;
 import com.social_media.social_media.utils.MessagesExceptions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,15 +31,27 @@ public class I0002 {
     private MockMvc mockMvc;
 
     @Autowired
+    private FollowRepositoryImpl followRepository;
+
+    @Autowired
+    private PostRepositoryImpl postRepositoryImpl;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Test
     @DisplayName("I0002 - When trying to get followers count, then return followers count 200 OK")
     public void whenTryingToGetFollowersCount_thenReturnFollowersCount200OK() throws Exception {
 
-        Long userId = 9L;
-        String name = "Isabel Martínez";
+        Long userId = 17L;
+        String name = "Ricardo Kaka";
         Integer expectedFollowersCount = 1;
+
+        Post newPost = TestUtils.createRandomPost(userId);
+
+        postRepositoryImpl.add(newPost);
+
+        followRepository.addFollow(16L, userId);
 
         MvcResult mvcResult = mockMvc.perform(get("/users/{userId}/followers/count/", userId))
                 .andExpect(status().isOk())
