@@ -31,8 +31,9 @@ public class I0012 {
     @Test
     @DisplayName("I-0012 - Create Post Promo With End Date Test")
     void postNewPromoEndDate() throws Exception {
-        Product product = new Product(3L, "Camiseta de la Seleccion Colombiana", "Ropa", "Adidas", "Amarillo", "Muy fachera");
-        Post postPromo = new Post(3L, 3L, LocalDate.now(), product, 1, 3.00, 15.00, LocalDate.of(2025, 3, 3));
+        Product product = new Product(3L, "Camiseta de la Seleccion Colombiana", "Ropa", "Adidas", "Amarillo",
+                "Muy fachera");
+        Post postPromo = new Post(30L, 3L, LocalDate.now(), product, 1, 3.00, 15.00, LocalDate.of(2025, 3, 3));
         PostPromoEndDateRequestDto payloadDto = convertPostPromoEndDateToRequestDto(postPromo);
         ObjectWriter objectWriter = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false)
                 .registerModule(new JavaTimeModule())
@@ -42,12 +43,13 @@ public class I0012 {
         String payloadJson = objectWriter.writeValueAsString(payloadDto);
 
         mockMvc.perform(post("/products/promo-post-end-date")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(payloadJson))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(payloadJson))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.user_id").value(payloadDto.getUser_id()))
-                .andExpect(jsonPath("$.date").value(payloadDto.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))))
+                .andExpect(jsonPath("$.date")
+                        .value(payloadDto.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))))
                 .andExpect(jsonPath("$.product.product_id").value(payloadDto.getProduct().getProduct_id().toString()))
                 .andExpect(jsonPath("$.product.product_name").value(payloadDto.getProduct().getProduct_name()))
                 .andExpect(jsonPath("$.product.type").value(payloadDto.getProduct().getType()))

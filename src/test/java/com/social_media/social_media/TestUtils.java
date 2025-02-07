@@ -38,7 +38,7 @@ public class TestUtils {
 
     public static Post createRandomPost(Long userId) {
         return new Post(
-                faker.number().randomNumber(),
+                UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE,
                 userId,
                 LocalDate.now(),
                 createRandomProduct(),
