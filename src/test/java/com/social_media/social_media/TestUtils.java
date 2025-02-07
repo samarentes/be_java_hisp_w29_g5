@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -86,14 +87,14 @@ public class TestUtils {
 
     public static User createRandomUser() {
         return new User(
-                Math.max(faker.number().randomNumber(), 20),
+                UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE,
                 faker.name().username(),
                 new ArrayList<>());
     }
 
     public static User createRandomUserWithFavorites(List<Long> favoritePosts) {
         return new User(
-                Math.max(faker.number().randomNumber(), 20),
+                UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE,
                 faker.name().username(),
                 favoritePosts);
     }
