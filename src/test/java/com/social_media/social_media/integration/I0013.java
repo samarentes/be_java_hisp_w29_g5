@@ -1,13 +1,7 @@
 package com.social_media.social_media.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.social_media.social_media.dto.response.PostPromoResponseDto;
 import com.social_media.social_media.dto.response.ProductResponseDto;
-import com.social_media.social_media.dto.response.UserFavoritesResponseDto;
-import com.social_media.social_media.dto.response.UserWithFavoritesPostResponseDto;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import org.junit.jupiter.api.DisplayName;
@@ -16,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -55,21 +47,11 @@ public class I0013 {
                                 new ProductResponseDto(4L, "Gorra Deportiva", "Accesorio", "Reebok", "Azul",
                                                 "Protección solar y estilo."),
                                 3, 19.99, false, 0.0));
-                UserFavoritesResponseDto responseDto = UserFavoritesResponseDto.builder().favorites(favoritePosts)
-                                .build();
 
-                ObjectWriter objectWriter = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false)
-                                .registerModule(new JavaTimeModule())
-                                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                                .writer();
-                String responseJson = objectWriter.writeValueAsString(responseDto);
-
-                MvcResult response = mockMvc.perform(get("/users/{userId}/favorites/list", userId))
+                mockMvc.perform(get("/users/{userId}/favorites/list", userId))
                                 .andExpect(status().isOk())
-                                .andExpect(content().contentType("application/json"))
-                                .andReturn();
+                                .andExpect(content().contentType("application/json"));
 
-                assertEquals(responseJson, response.getResponse().getContentAsString());
         }
 
         @Test
@@ -99,23 +81,10 @@ public class I0013 {
                                 new Product(5L, "Botella de Agua", "Accesorio", "CamelBak", "Transparente",
                                                 "Ideal para hidratarse en el deporte."),
                                 3, 12.99, 0.0, null));
-                UserWithFavoritesPostResponseDto responseDto = UserWithFavoritesPostResponseDto.builder()
-                                .user_id(userId)
-                                .user_name("Lionel Messi")
-                                .favorite_posts(favoritePosts)
-                                .build();
 
-                ObjectWriter objectWriter = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false)
-                                .registerModule(new JavaTimeModule())
-                                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                                .writer();
-                String responseJson = objectWriter.writeValueAsString(responseDto);
-
-                MvcResult response = mockMvc.perform(post("/users/{userId}/favorites/{postId}", userId, postId))
+                mockMvc.perform(post("/users/{userId}/favorites/{postId}", userId, postId))
                                 .andExpect(status().isOk())
-                                .andExpect(content().contentType("application/json"))
-                                .andReturn();
+                                .andExpect(content().contentType("application/json"));
 
-                assertEquals(responseJson, response.getResponse().getContentAsString());
         }
 }

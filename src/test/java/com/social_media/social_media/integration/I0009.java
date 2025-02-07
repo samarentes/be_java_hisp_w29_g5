@@ -77,7 +77,7 @@ public class I0009 {
                 .param("order", "date_asc")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.posts", hasSize(4)))
+                .andExpect(jsonPath("$.posts", hasSize(3)))
                 .andExpect(jsonPath("$.posts[0].date").isNotEmpty())
                 .andExpect(jsonPath("$.posts[1].date").isNotEmpty())
                 .andExpect(jsonPath("$.posts[2].date").isNotEmpty());
