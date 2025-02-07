@@ -1,14 +1,12 @@
 package com.social_media.social_media.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class ProductResponseDto {
     private Long product_id;
     private String product_name;
