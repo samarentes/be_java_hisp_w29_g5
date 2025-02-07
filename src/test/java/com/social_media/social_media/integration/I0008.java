@@ -34,11 +34,10 @@ public class I0008 {
     @DisplayName("T0008 - When trying search follower list by user id, then return follower list 200 OK")
     public void whenTryingToGetFollowersList_thenReturnFollowersList200OK() throws Exception {
 
-        Long userId = 2L;
-        String name = "Luis García";
+        Long userId = 10L;
+        String name = "Fernando Ruiz";
         List<UserResponseDto> followers = List.of(
-                new UserResponseDto(4L, "Carlos Mendoza"),
-                new UserResponseDto(5L, "Sofía Romero"));
+                new UserResponseDto(8L, "Diego Sánchez"));
 
         MvcResult mvcResult = mockMvc.perform(get("/users/{userId}/follower/list", userId))
                 .andExpect(status().isOk())

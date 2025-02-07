@@ -33,9 +33,9 @@ public class I0002 {
     @DisplayName("I0002 - When trying to get followers count, then return followers count 200 OK")
     public void whenTryingToGetFollowersCount_thenReturnFollowersCount200OK() throws Exception {
 
-        Long userId = 2L;
-        String name = "Luis García";
-        Integer expectedFollowersCount = 2;
+        Long userId = 9L;
+        String name = "Isabel Martínez";
+        Integer expectedFollowersCount = 1;
 
         MvcResult mvcResult = mockMvc.perform(get("/users/{userId}/followers/count/", userId))
                 .andExpect(status().isOk())
