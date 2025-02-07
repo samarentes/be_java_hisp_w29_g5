@@ -4,6 +4,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import static com.social_media.social_media.utils.MessagesExceptions.USER_NOT_FOUND;
+import static org.hamcrest.Matchers.is;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,6 +33,7 @@ public class I0006 {
     private FollowRepositoryImpl followRepository;
 
     @Test
+    @DisplayName("I-0006 Get post for last two weeks Ok ")
     void testGetPostForLastTwoWeeks() throws Exception {
 
         Post recentPostOne = TestUtils.createRandomPost(11L);
@@ -47,5 +52,14 @@ public class I0006 {
                 .andExpect(jsonPath("$.posts.length()").value(2))
                 .andExpect(jsonPath("$.posts[0].post_id").value(recentPostOne.getPostId()))
                 .andExpect(jsonPath("$.posts[1].post_id").value(recentPostTwo.getPostId()));
+    }
+
+    @Test
+    @DisplayName("I-0006 Get post for last two 404 ")
+    void testGetPostForLastTwoWeeksNotFound() throws Exception {
+
+        mockMvc.perform(get("/products/followed/999/list"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is(USER_NOT_FOUND)));
     }
 }

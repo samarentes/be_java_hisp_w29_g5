@@ -4,6 +4,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import static com.social_media.social_media.utils.MessagesExceptions.POST_NOT_FOUND;
+import static org.hamcrest.Matchers.is;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,6 +28,7 @@ public class I0014 {
     private PostRepositoryImpl postRepository;
 
     @Test
+    @DisplayName("I-0014 create stock Ok ")
     void testCreateStock() throws Exception {
         String requestBody = """
                     {
@@ -40,5 +45,22 @@ public class I0014 {
                 .content(requestBody))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.units").value(10));
+    }
+
+    @Test
+    @DisplayName("I-0014 Create stock 404 ")
+    void testCreateStockNotFound() throws Exception {
+
+        String requestBody = """
+                    {
+                        "units":10
+                    }
+                """;
+
+        mockMvc.perform(post("/stock/99999")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is(POST_NOT_FOUND)));
     }
 }
