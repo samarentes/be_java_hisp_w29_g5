@@ -21,14 +21,13 @@ public class I0011 {
     @Autowired
     private MockMvc mockMvc;
 
-
     @Test
     @DisplayName("I-0011 - Test of search Sellers With Promo Posts - OK")
     void searchSellersWithPromoPosts() throws Exception {
 
         Long userId = 1L;
         this.mockMvc.perform(get("/products/promo-post/count")
-                        .param("userId", String.valueOf(userId)))
+                .param("userId", String.valueOf(userId)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -39,7 +38,7 @@ public class I0011 {
 
         Long userId = 1000L;
         this.mockMvc.perform(get("/products/promo-post/count")
-                        .param("userId", String.valueOf(userId)))
+                .param("userId", String.valueOf(userId)))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(SELLER_ID_NOT_EXIST));
@@ -49,9 +48,9 @@ public class I0011 {
     @DisplayName("I-0011 - Test of search Sellers With Promo Posts - 403 (Followed user not seller)")
     void searchSellersWithPromoPostsFollowedUserNotSeller() throws Exception {
 
-        Long userId = 11L;
+        Long userId = 12L;
         this.mockMvc.perform(get("/products/promo-post/count")
-                        .param("userId", String.valueOf(userId)))
+                .param("userId", String.valueOf(userId)))
                 .andDo(print())
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.message").value(FOLLOWED_USER_NOT_SELLER));

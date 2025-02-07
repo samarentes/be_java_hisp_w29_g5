@@ -58,7 +58,7 @@ public class I0001 {
     @DisplayName("I0001 - When trying to follow a user that is not a seller, then return 400 Bad Request")
     void testPostFollowSellerBadRequest() throws Exception {
         Long userId = 1L;
-        Long userIdToFollow = 11L;
+        Long userIdToFollow = 12L;
 
         mockMvc.perform(post("/users/{userId}/follow/{userIdToFollow}", userId, userIdToFollow))
                 .andExpect(status().isBadRequest())

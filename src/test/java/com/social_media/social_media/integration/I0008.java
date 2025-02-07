@@ -38,8 +38,7 @@ public class I0008 {
         String name = "Luis García";
         List<UserResponseDto> followers = List.of(
                 new UserResponseDto(4L, "Carlos Mendoza"),
-                new UserResponseDto(5L, "Sofía Romero")
-        );
+                new UserResponseDto(5L, "Sofía Romero"));
 
         MvcResult mvcResult = mockMvc.perform(get("/users/{userId}/follower/list", userId))
                 .andExpect(status().isOk())
@@ -69,7 +68,7 @@ public class I0008 {
     @Test
     @DisplayName("T0008 - When trying search follower list by user id, then return user is not a seller")
     public void whenTryingToGetFollowersList_thenReturnEmptyFollowersList200OK() throws Exception {
-        Long userId = 11L;
+        Long userId = 12L;
 
         mockMvc.perform(get("/users/{userId}/follower/list", userId))
                 .andExpect(status().isForbidden())

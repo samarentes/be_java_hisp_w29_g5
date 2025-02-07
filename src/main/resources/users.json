@@ -2,12 +2,12 @@
   {
     "userId": 1,
     "name": "Ana Torres",
-    "favoritePosts": [1,2]
+    "favoritePosts": [1, 2]
   },
   {
     "userId": 2,
     "name": "Luis García",
-    "favoritePosts": [3,4]
+    "favoritePosts": [3, 4]
   },
   {
     "userId": 3,
@@ -52,6 +52,16 @@
   {
     "userId": 11,
     "name": "Pepito Ruiz",
+    "favoritePosts": []
+  },
+  {
+    "userId": 12,
+    "name": "Radamel Falcao",
+    "favoritePosts": []
+  },
+  {
+    "userId": 13,
+    "name": "Orlando Paredes",
     "favoritePosts": []
   }
 ]

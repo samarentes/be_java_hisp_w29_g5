@@ -1,6 +1,5 @@
 package com.social_media.social_media.integration;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.social_media.social_media.dto.response.FollowersCountResponseDto;
 import com.social_media.social_media.utils.MessagesExceptions;
@@ -45,8 +44,10 @@ public class I0002 {
         String jsonResponse = mvcResult.getResponse().getContentAsString();
         int statusCode = mvcResult.getResponse().getStatus();
 
-        FollowersCountResponseDto actualResponse = objectMapper.readValue(jsonResponse, FollowersCountResponseDto.class);
-        FollowersCountResponseDto expectedResponseDto = new FollowersCountResponseDto(userId, name, expectedFollowersCount);
+        FollowersCountResponseDto actualResponse = objectMapper.readValue(jsonResponse,
+                FollowersCountResponseDto.class);
+        FollowersCountResponseDto expectedResponseDto = new FollowersCountResponseDto(userId, name,
+                expectedFollowersCount);
 
         assertEquals(actualResponse, expectedResponseDto);
         assertThat(statusCode).isEqualTo(200);
@@ -59,7 +60,7 @@ public class I0002 {
         Long userId = 100L;
 
         mockMvc.perform(get("/users/{userId}/followers/count/", userId)
-                        .contentType("application/json"))
+                .contentType("application/json"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is(MessagesExceptions.SELLER_ID_NOT_EXIST)))
                 .andReturn();
@@ -70,15 +71,14 @@ public class I0002 {
     @DisplayName("I0002 - When trying to get followers count, then return error user is not seller")
     public void whenTryingToGetFollowersCount_thenReturnErrorUserIsNotSeller() throws Exception {
 
-        Long userId = 11L;
+        Long userId = 12L;
 
         mockMvc.perform(get("/users/{userId}/followers/count/", userId)
-                        .contentType("application/json"))
+                .contentType("application/json"))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.message", is(MessagesExceptions.FOLLOWED_USER_NOT_SELLER)))
                 .andReturn();
 
     }
-
 
 }

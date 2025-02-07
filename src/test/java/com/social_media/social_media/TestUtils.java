@@ -32,8 +32,7 @@ public class TestUtils {
                 faker.commerce().department(),
                 faker.company().name(),
                 faker.color().name(),
-                faker.lorem().sentence()
-        );
+                faker.lorem().sentence());
     }
 
     public static Post createRandomPost(Long userId) {
@@ -45,8 +44,7 @@ public class TestUtils {
                 random.nextInt(5) + 1,
                 ThreadLocalRandom.current().nextDouble(10.0, 100.0),
                 faker.number().randomDouble(2, 0, 50),
-                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
-        );
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
     }
 
     public static Post createRandomPostWithPostId(Long postId) {
@@ -58,8 +56,7 @@ public class TestUtils {
                 random.nextInt(5) + 1,
                 ThreadLocalRandom.current().nextDouble(10.0, 100.0),
                 faker.number().randomDouble(2, 0, 50),
-                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
-        );
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
     }
 
     public static Post createRandomPostPromoWithPostId(Long userId, Long postId) {
@@ -71,11 +68,11 @@ public class TestUtils {
                 random.nextInt(5) + 1,
                 ThreadLocalRandom.current().nextDouble(10.0, 100.0),
                 faker.number().randomDouble(2, 10, 50),
-                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
-        );
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
     }
 
-    public static Post createRandomPostPromoWithPromotionEndDate(Long userId, Long postId, LocalDate date, LocalDate promotionEndDate) {
+    public static Post createRandomPostPromoWithPromotionEndDate(Long userId, Long postId, LocalDate date,
+            LocalDate promotionEndDate) {
         return new Post(
                 postId,
                 userId,
@@ -121,8 +118,7 @@ public class TestUtils {
                 random.nextInt(5) + 1,
                 ThreadLocalRandom.current().nextDouble(10.0, 100.0),
                 faker.number().randomDouble(2, 1, 50),
-                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
-        );
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
     }
 
     public static ProductRequestDto createRandomProductRequestDto() {
@@ -132,8 +128,7 @@ public class TestUtils {
                 faker.commerce().department(),
                 faker.company().name(),
                 faker.color().name(),
-                faker.lorem().sentence()
-        );
+                faker.lorem().sentence());
     }
 
     public static ProductResponseDto createRandomProductResponseDto() {
@@ -143,8 +138,7 @@ public class TestUtils {
                 faker.commerce().department(),
                 faker.company().name(),
                 faker.color().name(),
-                faker.lorem().sentence()
-        );
+                faker.lorem().sentence());
     }
 
     public static PostResponseDto createRandomPostResponseDto() {
@@ -154,8 +148,7 @@ public class TestUtils {
                 LocalDate.now(),
                 createRandomProductResponseDto(),
                 random.nextInt(5) + 1,
-                ThreadLocalRandom.current().nextDouble(10.0, 100.0)
-        );
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0));
     }
 
     public static PostRequestDto createRandomPostRequestDto() {
@@ -164,8 +157,7 @@ public class TestUtils {
                 LocalDate.now(),
                 createRandomProductRequestDto(),
                 random.nextInt(5) + 1,
-                ThreadLocalRandom.current().nextDouble(10.0, 100.0)
-        );
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0));
     }
 
     public static PostResponseDto convertPostToResponseDto(Post post, ProductResponseDto product) {
@@ -254,13 +246,11 @@ public class TestUtils {
                 random.nextInt(5) + 1,
                 Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", ".")),
                 faker.number().randomDouble(2, 0, 50),
-                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
-        );
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
     }
 
-
     public static FollowersCountResponseDto convertFollowersToFollowersCountResponseDto(User user,
-                                                                                        List<Follow> followers) {
+            List<Follow> followers) {
         return FollowersCountResponseDto
                 .builder()
                 .user_id(user.getUserId())
@@ -361,4 +351,3 @@ public class TestUtils {
                 .collect(Collectors.toList());
     }
 }
-

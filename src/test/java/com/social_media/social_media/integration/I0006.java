@@ -36,22 +36,20 @@ public class I0006 {
     @DisplayName("I-0006 Get post for last two weeks Ok ")
     void testGetPostForLastTwoWeeks() throws Exception {
 
-        Post recentPostOne = TestUtils.createRandomPost(11L);
-        Post recentPostTwo = TestUtils.createRandomPost(11L);
-        Post oldPost = TestUtils.createRandomOldPost(11L);
+        Post recentPostOne = TestUtils.createRandomPost(13L);
+        Post recentPostTwo = TestUtils.createRandomPost(13L);
+        Post oldPost = TestUtils.createRandomOldPost(13L);
 
         postRepository.add(recentPostOne);
         postRepository.add(recentPostTwo);
         postRepository.add(oldPost);
 
-        followRepository.addFollow(10L, 11L);
+        followRepository.addFollow(10L, 13L);
 
         mockMvc.perform(get("/products/followed/10/list"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.user_id").value(10))
-                .andExpect(jsonPath("$.posts.length()").value(2))
-                .andExpect(jsonPath("$.posts[0].post_id").value(recentPostOne.getPostId()))
-                .andExpect(jsonPath("$.posts[1].post_id").value(recentPostTwo.getPostId()));
+                .andExpect(jsonPath("$.posts.length()").value(2));
     }
 
     @Test

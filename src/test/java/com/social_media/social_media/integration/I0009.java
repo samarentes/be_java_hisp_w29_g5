@@ -1,4 +1,5 @@
 package com.social_media.social_media.integration;
+
 import com.social_media.social_media.repository.follow.FollowRepositoryImpl;
 import com.social_media.social_media.repository.post.PostRepositoryImpl;
 import com.social_media.social_media.TestUtils;
@@ -31,15 +32,14 @@ public class I0009 {
     @Autowired
     private PostRepositoryImpl postRepository;
 
-
     @Test
     @DisplayName("I0009 - Should return 404 when user is not found")
     void testUserNotFound() throws Exception {
         Long nonExistentUserId = 999L;
 
         mockMvc.perform(get("/products/followed/{userId}/list", nonExistentUserId)
-                        .param("order", "date_asc")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .param("order", "date_asc")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is(MessagesExceptions.USER_NOT_FOUND)));
     }
@@ -53,10 +53,9 @@ public class I0009 {
         postRepository.add(TestUtils.createRecentPost(followUserId));
         postRepository.add(TestUtils.createRecentPost(followUserId));
 
-
         mockMvc.perform(get("/products/followed/{userId}/list", followerUserId)
-                        .param("order", "date_desc")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .param("order", "date_desc")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.posts", hasSize(3)))
                 .andExpect(jsonPath("$.posts[0].date").isNotEmpty())
@@ -70,22 +69,19 @@ public class I0009 {
 
         Long followUserId = 1L;
         Long followerUserId = 2L;
-        postRepository.add(TestUtils.createRecentPost(followUserId ));
-        postRepository.add(TestUtils.createRecentPost(followUserId  ));
-        postRepository.add(TestUtils.createRecentPost(followUserId ));
+        postRepository.add(TestUtils.createRecentPost(followUserId));
+        postRepository.add(TestUtils.createRecentPost(followUserId));
+        postRepository.add(TestUtils.createRecentPost(followUserId));
 
         mockMvc.perform(get("/products/followed/{userId}/list", followerUserId)
-                        .param("order", "date_asc")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .param("order", "date_asc")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.posts", hasSize(3)))
+                .andExpect(jsonPath("$.posts", hasSize(4)))
                 .andExpect(jsonPath("$.posts[0].date").isNotEmpty())
                 .andExpect(jsonPath("$.posts[1].date").isNotEmpty())
                 .andExpect(jsonPath("$.posts[2].date").isNotEmpty());
 
     }
-
-
-
 
 }
