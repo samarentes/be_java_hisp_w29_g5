@@ -245,6 +245,20 @@ public class TestUtils {
                 LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
     }
 
+    public static Post createRecentPost(Long userId) {
+        return new Post(
+                faker.number().randomNumber(), // Asume que faker.number().randomNumber() es adecuado para el ID
+                userId,
+                LocalDate.now().minusDays(random.nextInt(14)), // Fecha dentro de las últimas dos semanas
+                createRandomProduct(),
+                random.nextInt(5) + 1,
+                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", ".")),
+                faker.number().randomDouble(2, 0, 50),
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
+        );
+    }
+
+
     public static FollowersCountResponseDto convertFollowersToFollowersCountResponseDto(User user,
                                                                                         List<Follow> followers) {
         return FollowersCountResponseDto
@@ -347,3 +361,4 @@ public class TestUtils {
                 .collect(Collectors.toList());
     }
 }
+
