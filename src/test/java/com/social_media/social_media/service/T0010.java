@@ -42,7 +42,7 @@ public class T0010 {
         // Arrange
         User user = createRandomUser();
         Long idPostRandom = ThreadLocalRandom.current().nextLong(3L, 7L);
-        Post postPromo = createRandomPostPromoWithPostId(user.getUserId(), idPostRandom, null);
+        Post postPromo = createRandomPostPromoWithPromotionEndDate(user.getUserId(), idPostRandom, LocalDate.now(), null);
         PostPromoRequestDto postPromoRequest = convertPostPromoToRequestDto(postPromo);
         PostPromoResponseDto expectedResponse = convertPostPromoToResponseDto(postPromo);
 

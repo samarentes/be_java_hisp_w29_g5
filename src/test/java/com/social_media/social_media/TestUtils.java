@@ -1,6 +1,7 @@
 package com.social_media.social_media;
 
 import com.github.javafaker.Faker;
+import com.social_media.social_media.dto.request.PostPromoEndDateRequestDto;
 import com.social_media.social_media.dto.response.*;
 import com.social_media.social_media.dto.request.PostRequestDto;
 import com.social_media.social_media.dto.request.ProductRequestDto;
@@ -61,11 +62,24 @@ public class TestUtils {
         );
     }
 
-    public static Post createRandomPostPromoWithPostId(Long userId, Long postId, LocalDate promotionEndDate) {
+    public static Post createRandomPostPromoWithPostId(Long userId, Long postId) {
         return new Post(
                 postId,
                 userId,
                 LocalDate.now(),
+                createRandomProduct(),
+                random.nextInt(5) + 1,
+                ThreadLocalRandom.current().nextDouble(10.0, 100.0),
+                faker.number().randomDouble(2, 10, 50),
+                LocalDate.now().plusDays(faker.number().numberBetween(1, 30))
+        );
+    }
+
+    public static Post createRandomPostPromoWithPromotionEndDate(Long userId, Long postId, LocalDate date, LocalDate promotionEndDate) {
+        return new Post(
+                postId,
+                userId,
+                date,
                 createRandomProduct(),
                 random.nextInt(5) + 1,
                 ThreadLocalRandom.current().nextDouble(10.0, 100.0),
@@ -287,6 +301,19 @@ public class TestUtils {
                 .build();
     }
 
+    public static PostPromoEndDateRequestDto convertPostPromoEndDateToRequestDto(Post postPromo) {
+        return PostPromoEndDateRequestDto.builder()
+                .user_id(postPromo.getUserId())
+                .date(postPromo.getDate())
+                .product(convertProductToRequestDto(postPromo.getProduct()))
+                .category(postPromo.getCategory())
+                .price(postPromo.getPrice())
+                .has_promo(true)
+                .discount(postPromo.getDiscount())
+                .promotionEndDate(postPromo.getPromotionEndDate())
+                .build();
+    }
+
     public static PostPromoResponseDto convertPostPromoToResponseDto(Post postPromo) {
         return PostPromoResponseDto.builder()
                 .post_id(postPromo.getPostId())
@@ -297,6 +324,20 @@ public class TestUtils {
                 .price(postPromo.getPrice())
                 .has_promo(true)
                 .discount(postPromo.getDiscount())
+                .build();
+    }
+
+    public static PostPromoEndDateResponseDto convertPostPromoEndDateToResponseDto(Post postPromo) {
+        return PostPromoEndDateResponseDto.builder()
+                .post_id(postPromo.getPostId())
+                .user_id(postPromo.getUserId())
+                .date(postPromo.getDate())
+                .product(convertProductToResponseDto(postPromo.getProduct()))
+                .category(postPromo.getCategory())
+                .price(postPromo.getPrice())
+                .has_promo(true)
+                .discount(postPromo.getDiscount())
+                .promotionEndDate(postPromo.getPromotionEndDate())
                 .build();
     }
 
