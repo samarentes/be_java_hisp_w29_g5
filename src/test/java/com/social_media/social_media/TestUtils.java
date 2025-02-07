@@ -189,7 +189,7 @@ public class TestUtils {
                 LocalDate.now(),
                 createRandomProductWithBrand(brand),
                 random.nextInt(5) + 1,
-                Double.valueOf(faker.commerce().price(10.0, 100.0)),
+                Double.valueOf(faker.commerce().price(10.0, 100.0).replace(",", ".")),
                 faker.number().randomDouble(2, 0, 50),
                 LocalDate.now().plusDays(faker.number().numberBetween(1, 30)));
     }
@@ -274,3 +274,4 @@ public class TestUtils {
                 .build();
     }
 }
+
