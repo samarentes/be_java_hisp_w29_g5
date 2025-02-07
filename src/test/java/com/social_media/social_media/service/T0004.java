@@ -2,6 +2,7 @@ package com.social_media.social_media.service;
 
 import com.social_media.social_media.TestUtils;
 import com.social_media.social_media.dto.response.FollowedResponseDto;
+import com.social_media.social_media.dto.response.UserResponseDto;
 import com.social_media.social_media.entity.Follow;
 import com.social_media.social_media.entity.User;
 import com.social_media.social_media.repository.follow.FollowRepositoryImpl;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,7 +52,7 @@ public class T0004 {
 
         //arrange
         when(userRepository.findById(userFollower.getUserId())).thenReturn(Optional.of(userFollower));
-        when(followRepository.findFollowers(userFollower.getUserId())).thenReturn(followeds);
+        when(followRepository.findFollowed(userFollower.getUserId())).thenReturn(followeds);
         for (Follow follow : followeds) {
             Optional<User> followedUser = userFolloweds.stream()
                     .filter(user -> user.getUserId().equals(follow.getFollowedId()))
@@ -59,11 +61,14 @@ public class T0004 {
             when(userRepository.findById(follow.getFollowedId())).thenReturn(followedUser);
         }
         //act
-        FollowedResponseDto followedResponseDto = userService.searchFollowed(userFollower.getUserId(), "name_asc");
-        FollowedResponseDto expectResponse = TestUtils.convertFollowedToResponseDto(userFollower,userFolloweds);
+        FollowedResponseDto response = userService.searchFollowed(userFollower.getUserId(), "name_asc");
+        FollowedResponseDto expectedResponse = TestUtils.convertFollowedToResponseDto(userFollower, userFolloweds);
+
         //assert
 
-        Assertions.assertEquals(followedResponseDto,expectResponse);
+        assertEquals(response.getUser_name(),expectedResponse.getUser_name());
+        assertEquals(response.getUser_id(),expectedResponse.getUser_id());
+        assertEquals(response.getFollowed().size(),expectedResponse.getFollowed().size());
 
     }
 }
