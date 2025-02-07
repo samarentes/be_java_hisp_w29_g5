@@ -116,7 +116,6 @@ public class TestUtils {
                 faker.lorem().sentence()
         );
     }
-
     public static ProductResponseDto createRandomProductResponseDto() {
         return new ProductResponseDto(
                 faker.number().randomNumber(),
