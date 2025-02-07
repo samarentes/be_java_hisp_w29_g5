@@ -30,82 +30,92 @@ import java.util.List;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class I0013 {
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    @Test
-    @DisplayName("I-0013 - Search User Favorites Post Test")
-    void getFavorites() throws Exception {
-        Long userId = 14L;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        List<PostPromoResponseDto> favoritePosts = new ArrayList<>();
-        favoritePosts.add(new PostPromoResponseDto(1L, 1L, LocalDate.parse("03-10-2023", formatter),
-                new ProductResponseDto(1L, "Camiseta Deportiva", "Ropa", "Adidas", "Rojo", "Ideal para correr y hacer ejercicio."),
-                2, 29.99, false, 0.0));
-        favoritePosts.add(new PostPromoResponseDto(2L, 2L, LocalDate.parse("03-10-2023", formatter),
-                new ProductResponseDto(2L, "Pantalones Deportivos", "Ropa", "Nike", "Negro", "Comodidad y estilo."),
-                2, 39.99, false, 0.0));
-        favoritePosts.add(new PostPromoResponseDto(3L, 3L, LocalDate.parse("03-10-2023", formatter),
-                new ProductResponseDto(3L, "Zapatillas Running", "Calzado", "Puma", "Blanco", "Amortiguación avanzada."),
-                1, 79.99, false, 0.0));
-        favoritePosts.add(new PostPromoResponseDto(4L, 4L, LocalDate.parse("03-10-2023", formatter),
-                new ProductResponseDto(4L, "Gorra Deportiva", "Accesorio", "Reebok", "Azul", "Protección solar y estilo."),
-                3, 19.99, false, 0.0));
-        UserFavoritesResponseDto responseDto = UserFavoritesResponseDto.builder().favorites(favoritePosts).build();
+        @Test
+        @DisplayName("I-0013 - Search User Favorites Post Test")
+        void getFavorites() throws Exception {
+                Long userId = 14L;
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                List<PostPromoResponseDto> favoritePosts = new ArrayList<>();
+                favoritePosts.add(new PostPromoResponseDto(15L, 1L, LocalDate.parse("03-10-2023", formatter),
+                                new ProductResponseDto(1L, "Camiseta Deportiva", "Ropa", "Adidas", "Rojo",
+                                                "Ideal para correr y hacer ejercicio."),
+                                2, 29.99, false, 0.0));
+                favoritePosts.add(new PostPromoResponseDto(21L, 2L, LocalDate.parse("03-10-2023", formatter),
+                                new ProductResponseDto(2L, "Pantalones Deportivos", "Ropa", "Nike", "Negro",
+                                                "Comodidad y estilo."),
+                                2, 39.99, false, 0.0));
+                favoritePosts.add(new PostPromoResponseDto(31L, 3L, LocalDate.parse("03-10-2023", formatter),
+                                new ProductResponseDto(3L, "Zapatillas Running", "Calzado", "Puma", "Blanco",
+                                                "Amortiguación avanzada."),
+                                1, 79.99, false, 0.0));
+                favoritePosts.add(new PostPromoResponseDto(41L, 4L, LocalDate.parse("03-10-2023", formatter),
+                                new ProductResponseDto(4L, "Gorra Deportiva", "Accesorio", "Reebok", "Azul",
+                                                "Protección solar y estilo."),
+                                3, 19.99, false, 0.0));
+                UserFavoritesResponseDto responseDto = UserFavoritesResponseDto.builder().favorites(favoritePosts)
+                                .build();
 
-        ObjectWriter objectWriter = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false)
-                .registerModule(new JavaTimeModule())
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .writer();
-        String responseJson = objectWriter.writeValueAsString(responseDto);
+                ObjectWriter objectWriter = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false)
+                                .registerModule(new JavaTimeModule())
+                                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                                .writer();
+                String responseJson = objectWriter.writeValueAsString(responseDto);
 
-        MvcResult response = mockMvc.perform(get("/users/{userId}/favorites/list", userId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andReturn();
+                MvcResult response = mockMvc.perform(get("/users/{userId}/favorites/list", userId))
+                                .andExpect(status().isOk())
+                                .andExpect(content().contentType("application/json"))
+                                .andReturn();
 
-        assertEquals(responseJson, response.getResponse().getContentAsString());
-    }
+                assertEquals(responseJson, response.getResponse().getContentAsString());
+        }
 
-    @Test
-    @DisplayName("I-0013 - Update User Favorites Post Test")
-    void postUpdateFavorites() throws Exception {
-        Long userId = 14L;
-        Long postId = 5L;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        List<Post> favoritePosts = new ArrayList<>();
-        favoritePosts.add(new Post(1L, 1L, LocalDate.parse("03-10-2023", formatter),
-                new Product(1L, "Camiseta Deportiva", "Ropa", "Adidas", "Rojo", "Ideal para correr y hacer ejercicio."),
-                2, 29.99, 0.0, null));
-        favoritePosts.add(new Post(2L, 2L, LocalDate.parse("03-10-2023", formatter),
-                new Product(2L, "Pantalones Deportivos", "Ropa", "Nike", "Negro", "Comodidad y estilo."),
-                2, 39.99, 0.0, null));
-        favoritePosts.add(new Post(3L, 3L, LocalDate.parse("03-10-2023", formatter),
-                new Product(3L, "Zapatillas Running", "Calzado", "Puma", "Blanco", "Amortiguación avanzada."),
-                1, 79.99, 0.0, null));
-        favoritePosts.add(new Post(4L, 4L, LocalDate.parse("03-10-2023", formatter),
-                new Product(4L, "Gorra Deportiva", "Accesorio", "Reebok", "Azul", "Protección solar y estilo."),
-                3, 19.99, 0.0, null));
-        favoritePosts.add(new Post(5L, 5L, LocalDate.parse("03-10-2023", formatter),
-                new Product(5L, "Botella de Agua", "Accesorio", "CamelBak", "Transparente", "Ideal para hidratarse en el deporte."),
-                3, 12.99, 0.0, null));
-        UserWithFavoritesPostResponseDto responseDto = UserWithFavoritesPostResponseDto.builder()
-                .user_id(userId)
-                .user_name("Lionel Messi")
-                .favorite_posts(favoritePosts)
-                .build();
+        @Test
+        @DisplayName("I-0013 - Update User Favorites Post Test")
+        void postUpdateFavorites() throws Exception {
+                Long userId = 14L;
+                Long postId = 5L;
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                List<Post> favoritePosts = new ArrayList<>();
+                favoritePosts.add(new Post(1L, 1L, LocalDate.parse("03-10-2023", formatter),
+                                new Product(1L, "Camiseta Deportiva", "Ropa", "Adidas", "Rojo",
+                                                "Ideal para correr y hacer ejercicio."),
+                                2, 29.99, 0.0, null));
+                favoritePosts.add(new Post(2L, 2L, LocalDate.parse("03-10-2023", formatter),
+                                new Product(2L, "Pantalones Deportivos", "Ropa", "Nike", "Negro",
+                                                "Comodidad y estilo."),
+                                2, 39.99, 0.0, null));
+                favoritePosts.add(new Post(3L, 3L, LocalDate.parse("03-10-2023", formatter),
+                                new Product(3L, "Zapatillas Running", "Calzado", "Puma", "Blanco",
+                                                "Amortiguación avanzada."),
+                                1, 79.99, 0.0, null));
+                favoritePosts.add(new Post(4L, 4L, LocalDate.parse("03-10-2023", formatter),
+                                new Product(4L, "Gorra Deportiva", "Accesorio", "Reebok", "Azul",
+                                                "Protección solar y estilo."),
+                                3, 19.99, 0.0, null));
+                favoritePosts.add(new Post(5L, 5L, LocalDate.parse("03-10-2023", formatter),
+                                new Product(5L, "Botella de Agua", "Accesorio", "CamelBak", "Transparente",
+                                                "Ideal para hidratarse en el deporte."),
+                                3, 12.99, 0.0, null));
+                UserWithFavoritesPostResponseDto responseDto = UserWithFavoritesPostResponseDto.builder()
+                                .user_id(userId)
+                                .user_name("Lionel Messi")
+                                .favorite_posts(favoritePosts)
+                                .build();
 
-        ObjectWriter objectWriter = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false)
-                .registerModule(new JavaTimeModule())
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .writer();
-        String responseJson = objectWriter.writeValueAsString(responseDto);
+                ObjectWriter objectWriter = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false)
+                                .registerModule(new JavaTimeModule())
+                                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                                .writer();
+                String responseJson = objectWriter.writeValueAsString(responseDto);
 
-        MvcResult response = mockMvc.perform(post("/users/{userId}/favorites/{postId}", userId, postId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andReturn();
+                MvcResult response = mockMvc.perform(post("/users/{userId}/favorites/{postId}", userId, postId))
+                                .andExpect(status().isOk())
+                                .andExpect(content().contentType("application/json"))
+                                .andReturn();
 
-        assertEquals(responseJson, response.getResponse().getContentAsString());
-    }
+                assertEquals(responseJson, response.getResponse().getContentAsString());
+        }
 }

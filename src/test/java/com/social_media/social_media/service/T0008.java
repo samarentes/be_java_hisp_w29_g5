@@ -49,6 +49,8 @@ public class T0008 {
         void searchFollowersSuccessAsc() {
                 User userFollowed = TestUtils.createRandomUser();
 
+                userFollowed.setUserId(99L);
+
                 Post post = TestUtils.createRandomPost(userFollowed.getUserId());
 
                 List<User> userFollowers = TestUtils.createTenRandomUsers();

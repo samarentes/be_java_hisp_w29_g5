@@ -1,5 +1,7 @@
 package com.social_media.social_media.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.social_media.social_media.TestUtils;
 import com.social_media.social_media.dto.request.PostPromoRequestDto;
 import com.social_media.social_media.dto.response.PostPromoResponseDto;
@@ -50,15 +52,17 @@ public class T0013 {
         // Arrange
         List<Post> favoritePosts = createListRandomPosts(5);
         List<Long> idFavoritePosts = favoritePosts.stream().mapToLong(Post::getPostId).boxed().toList();
-        List<PostPromoResponseDto> favoritePostsDto = favoritePosts.stream().map(TestUtils::convertPostPromoToResponseDto).toList();
+        List<PostPromoResponseDto> favoritePostsDto = favoritePosts.stream()
+                .map(TestUtils::convertPostPromoToResponseDto).toList();
         User user = createRandomUser();
         user.setFavoritePosts(idFavoritePosts);
 
-        UserFavoritesResponseDto expectedResponse = UserFavoritesResponseDto.builder().favorites(favoritePostsDto).build();
+        UserFavoritesResponseDto expectedResponse = UserFavoritesResponseDto.builder().favorites(favoritePostsDto)
+                .build();
 
         when(userRepository.findById(user.getUserId())).thenReturn(Optional.of(user));
         when(userRepository.findFavoritePostsById(user.getUserId())).thenReturn(idFavoritePosts);
-        for(int i = 0; i < idFavoritePosts.size(); i++) {
+        for (int i = 0; i < idFavoritePosts.size(); i++) {
             when(postRepository.findById(idFavoritePosts.get(i))).thenReturn(Optional.of(favoritePosts.get(i)));
         }
 
@@ -113,15 +117,17 @@ public class T0013 {
         when(userRepository.findFavoritePostsById(user.getUserId())).thenReturn(idFavoritePosts);
 
         List<Post> favoritePostsUpdated = Stream.concat(favoritePosts.stream(), Stream.of(post)).toList();
-        List<Long> idFavoritePostsUpdated = Stream.concat(idFavoritePosts.stream(), Stream.of(post.getPostId())).toList();
+        List<Long> idFavoritePostsUpdated = Stream.concat(idFavoritePosts.stream(), Stream.of(post.getPostId()))
+                .toList();
         User userUpdated = User.builder()
                 .userId(user.getUserId())
                 .name(user.getName())
                 .favoritePosts(idFavoritePostsUpdated)
                 .build();
         when(userRepository.update(user.getUserId(), post.getPostId())).thenReturn(userUpdated);
-        for(int i = 0; i < idFavoritePostsUpdated.size(); i++) {
-            when(postRepository.findById(idFavoritePostsUpdated.get(i))).thenReturn(Optional.of(favoritePostsUpdated.get(i)));
+        for (int i = 0; i < idFavoritePostsUpdated.size(); i++) {
+            when(postRepository.findById(idFavoritePostsUpdated.get(i)))
+                    .thenReturn(Optional.of(favoritePostsUpdated.get(i)));
         }
         UserWithFavoritesPostResponseDto expectedResponse = UserWithFavoritesPostResponseDto.builder()
                 .user_id(user.getUserId())
@@ -130,10 +136,13 @@ public class T0013 {
                 .build();
 
         // Act
-        UserWithFavoritesPostResponseDto actualResponse = userService.updateUserFavoritesPost(user.getUserId(), post.getPostId());
+        UserWithFavoritesPostResponseDto actualResponse = userService.updateUserFavoritesPost(user.getUserId(),
+                post.getPostId());
 
         // Assert
-        assertEquals(expectedResponse, actualResponse);
+        assertThat(actualResponse)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedResponse);
         verify(userRepository).update(user.getUserId(), post.getPostId());
     }
 
