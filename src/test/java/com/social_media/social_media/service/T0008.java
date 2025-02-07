@@ -87,7 +87,9 @@ public class T0008 {
                         UserResponseDto actualUser = response.getFollowers().get(i);
                         UserResponseDto expectedUser = expectedResponse.getFollowers().get(i);
 
-                        assertEquals(expectedUser, actualUser);
+                        assertThat(actualUser)
+                                        .usingRecursiveComparison()
+                                        .isEqualTo(expectedUser);
                 }
 
         }

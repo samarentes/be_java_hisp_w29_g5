@@ -19,6 +19,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 public class TestUtils {
 
     private static final Faker faker = new Faker();
@@ -85,14 +86,14 @@ public class TestUtils {
 
     public static User createRandomUser() {
         return new User(
-                faker.number().randomNumber(),
+                Math.max(faker.number().randomNumber(), 20),
                 faker.name().username(),
                 new ArrayList<>());
     }
 
     public static User createRandomUserWithFavorites(List<Long> favoritePosts) {
         return new User(
-                faker.number().randomNumber(),
+                Math.max(faker.number().randomNumber(), 20),
                 faker.name().username(),
                 favoritePosts);
     }
@@ -285,14 +286,13 @@ public class TestUtils {
                 .build();
     }
 
-    public static FollowedResponseDto convertFollowedToResponseDto(User userFollowed, List<User> followers){
+    public static FollowedResponseDto convertFollowedToResponseDto(User userFollowed, List<User> followers) {
         return FollowedResponseDto.builder()
                 .user_id(userFollowed.getUserId())
                 .user_name(userFollowed.getName())
                 .followed(followers.stream().map(TestUtils::convertUserToResponseDto).toList())
                 .build();
     }
-
 
     public static UserResponseDto convertUserToResponseDto(User user) {
         return UserResponseDto.builder()
