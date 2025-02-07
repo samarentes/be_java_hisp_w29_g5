@@ -29,7 +29,7 @@ public class I0006 {
     private FollowRepositoryImpl followRepository;
 
     @Test
-    void testGetSuggestions() throws Exception {
+    void testGetPostForLastTwoWeeks() throws Exception {
 
         Post recentPostOne = TestUtils.createRandomPost(11L);
         Post recentPostTwo = TestUtils.createRandomPost(11L);
