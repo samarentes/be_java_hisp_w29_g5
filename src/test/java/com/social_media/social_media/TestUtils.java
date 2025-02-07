@@ -15,23 +15,14 @@ import com.social_media.social_media.entity.Product;
 import com.social_media.social_media.entity.User;
 
 import java.util.Random;
-import com.social_media.social_media.exception.NotFoundException;
-import com.social_media.social_media.utils.MessagesExceptions;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 public class TestUtils {
 
