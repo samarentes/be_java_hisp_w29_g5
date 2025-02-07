@@ -1,6 +1,7 @@
 package com.social_media.social_media.integration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -45,6 +46,10 @@ public class I0014 {
                 .content(requestBody))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.units").value(10));
+
+        mockMvc.perform(get("/products/post/" + post.getPostId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.stock.units").value(10));
     }
 
     @Test

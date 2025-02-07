@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.social_media.social_media.dto.request.PostPromoRequestDto;
+import com.social_media.social_media.dto.request.PostPromoEndDateRequestDto;
 import com.social_media.social_media.entity.Post;
 import com.social_media.social_media.entity.Product;
 import org.junit.jupiter.api.DisplayName;
@@ -24,16 +24,16 @@ import java.time.format.DateTimeFormatter;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class I0010 {
+public class I0012 {
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("I-0010 - Create Post Promo Test")
-    void postNewPromo() throws Exception {
-        Product product = new Product(7L, "Camiseta de la Seleccion Argentina", "Ropa", "Adidas", "Blanco", "Tira facha");
-        Post postPromo = new Post(7L, 7L, LocalDate.now(), product, 1, 7.00, 25.00, null);
-        PostPromoRequestDto payloadDto = convertPostPromoToRequestDto(postPromo);
+    @DisplayName("I-0012 - Create Post Promo With End Date Test")
+    void postNewPromoEndDate() throws Exception {
+        Product product = new Product(3L, "Camiseta de la Seleccion Colombiana", "Ropa", "Adidas", "Amarillo", "Muy fachera");
+        Post postPromo = new Post(3L, 3L, LocalDate.now(), product, 1, 3.00, 15.00, LocalDate.of(2025, 3, 3));
+        PostPromoEndDateRequestDto payloadDto = convertPostPromoEndDateToRequestDto(postPromo);
         ObjectWriter objectWriter = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false)
                 .registerModule(new JavaTimeModule())
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -41,10 +41,10 @@ public class I0010 {
 
         String payloadJson = objectWriter.writeValueAsString(payloadDto);
 
-        mockMvc.perform(post("/products/promo-post")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(payloadJson))
-                .andExpect(status().isOk())
+        mockMvc.perform(post("/products/promo-post-end-date")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payloadJson))
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.user_id").value(payloadDto.getUser_id()))
                 .andExpect(jsonPath("$.date").value(payloadDto.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))))
